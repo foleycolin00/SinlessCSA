@@ -35,5 +35,5 @@ jobs:
       - name: Document the Code
         run: |
           pip install pdoc3
-          pdoc3 --output-dir docs --force --html --template-dir docs .
+          pdoc3 --output-dir docs --force --html --template-dir docs src
       - run: echo "🍏 This job's status is ${{ job.status }}."

@@ -44,7 +44,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "github-actions"
           git add --all
-          if ["$(git status --porcelain)"]; then
+          if "$(git status --porcelain)"; then
              echo "::set-output name=push::false"
           else
              git commit -m "Save Documentation" -a

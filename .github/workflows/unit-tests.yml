@@ -44,8 +44,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "github-actions"
           git add --all
-          echo git status --short
-          if git status --short; then
+          if $(git status --short); then
             git commit -m "Save Documentation" -a
             echo "::set-output name=push::true"
           else

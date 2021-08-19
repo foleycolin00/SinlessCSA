@@ -13,6 +13,8 @@ jobs:
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: List files in the repository
         run: |
-          ls ${{ github.workspace }}; /
+          ls ${{ github.workspace }}
+      - name: Document the Code
+        run: |
           pdoc3 -o ../docs --force --html --template-dir ../docs file
       - run: echo "🍏 This job's status is ${{ job.status }}."

@@ -1,4 +1,5 @@
 # content of test_sample.py
+''' This is a function'''
 def func(x):
     return x + 1
 

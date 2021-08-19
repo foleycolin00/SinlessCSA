@@ -34,6 +34,6 @@ jobs:
           pytest
       - name: Document the Code
         run: |
-          pip install pydoc3
+          pip install pdoc3
           pdoc3 -o ../docs --force --html --template-dir ../docs file
       - run: echo "🍏 This job's status is ${{ job.status }}."

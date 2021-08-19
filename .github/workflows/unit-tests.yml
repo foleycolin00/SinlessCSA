@@ -44,11 +44,11 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "github-actions"
           git add --all
-          if git status --porcelain; then
-             echo "::set-output name=push::false"
+          if git status --short; then
+            git commit -m "Save Documentation" -a
           else
-             git commit -m "Save Documentation" -a
              echo "::set-output name=push::true"
+             echo "::set-output name=push::false"
           fi
         shell: bash
       - name: Push changes

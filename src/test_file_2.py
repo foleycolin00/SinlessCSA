@@ -1,3 +1,4 @@
+'''This is also a function 2'''
 def temp(a):
   return a+"!"
 

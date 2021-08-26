@@ -1,8 +1,8 @@
 '''Reads in a CSV file
 Parses it
 Prints errors for the bad lines
-:param file the file to read
-:return an array of arrays containing all of the valid rows'''
+:param file: the file to read
+:return: an array of arrays containing all of the valid rows'''
 def readCSV(file):
   array = []
   with open(file, 'r') as reader:

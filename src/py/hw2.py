@@ -1,3 +1,5 @@
+import time
+
 '''Reads in a CSV file
 Parses it
 Prints errors for the bad lines
@@ -52,19 +54,20 @@ def readCSV(file):
             #Incorrect number of cells
             if len(headers) != len(split):
               print(f'Error on line {i}: incorrect number of cells')
-              
-            for j in range(len(headers)):
-              #Remove any ignored columns
-              if '?' not in headers[j]:
-                #Should be number
-                if headers[j][0].isupper():
-                  split[j] = convertNumber(split[j])
-                  if not isinstance(split[j], int) and not isinstance(split[j], float):
-                    errors = True
-                    print(f'Error on line {i}: string where number should be')
-                    print(headers[j])
-                    print(split[j])
-                row.append(split[j])   
+              errors = True
+            else:  
+              for j in range(len(headers)):
+                #Remove any ignored columns
+                if '?' not in headers[j]:
+                  #Should be number
+                  if headers[j][0].isupper():
+                    split[j] = convertNumber(split[j])
+                    if not isinstance(split[j], int) and not isinstance(split[j], float):
+                      errors = True
+                      print(f'Error on line {i}: string where number should be')
+                      print(headers[j])
+                      print(split[j])
+                  row.append(split[j])   
             if not errors:
               array.append(row)
       i+=1
@@ -84,11 +87,14 @@ def convertNumber(num):
 
 
 def main():
-  array = readCSV("hw2.csv")
-  for line in array:
+  time1 = time.time()
+  array = readCSV("pom3a.csv")
+  time2 = time.time()
+  print(time2-time1)
+  '''for line in array:
     for value in line:
       print(value, end = ",")
-    print()
+    print()'''
 
 if __name__ == "__main__":
    # stuff only to run when not called via 'import' here

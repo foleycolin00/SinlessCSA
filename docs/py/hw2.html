@@ -5,11 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>src.py.hw2 API documentation</title>
-<meta name="description" content="Reads in a CSV file
-Parses it
-Prints errors for the bad lines
-:param file: the file to read
-:return: an array of arrays containing all of the valid rows" />
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -26,16 +22,13 @@ Prints errors for the bad lines
 <h1 class="title">Module <code>src.py.hw2</code></h1>
 </header>
 <section id="section-intro">
-<p>Reads in a CSV file
-Parses it
-Prints errors for the bad lines
-:param file: the file to read
-:return: an array of arrays containing all of the valid rows</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#39;&#39;&#39;Reads in a CSV file
+<pre><code class="python">import time
+
+&#39;&#39;&#39;Reads in a CSV file
 Parses it
 Prints errors for the bad lines
 :param file: the file to read
@@ -89,19 +82,20 @@ def readCSV(file):
             #Incorrect number of cells
             if len(headers) != len(split):
               print(f&#39;Error on line {i}: incorrect number of cells&#39;)
-              
-            for j in range(len(headers)):
-              #Remove any ignored columns
-              if &#39;?&#39; not in headers[j]:
-                #Should be number
-                if headers[j][0].isupper():
-                  split[j] = convertNumber(split[j])
-                  if not isinstance(split[j], int) and not isinstance(split[j], float):
-                    errors = True
-                    print(f&#39;Error on line {i}: string where number should be&#39;)
-                    print(headers[j])
-                    print(split[j])
-                row.append(split[j])   
+              errors = True
+            else:  
+              for j in range(len(headers)):
+                #Remove any ignored columns
+                if &#39;?&#39; not in headers[j]:
+                  #Should be number
+                  if headers[j][0].isupper():
+                    split[j] = convertNumber(split[j])
+                    if not isinstance(split[j], int) and not isinstance(split[j], float):
+                      errors = True
+                      print(f&#39;Error on line {i}: string where number should be&#39;)
+                      print(headers[j])
+                      print(split[j])
+                  row.append(split[j])   
             if not errors:
               array.append(row)
       i+=1
@@ -121,11 +115,14 @@ def convertNumber(num):
 
 
 def main():
-  array = readCSV(&#34;hw2.csv&#34;)
-  for line in array:
+  time1 = time.time()
+  array = readCSV(&#34;pom3a.csv&#34;)
+  time2 = time.time()
+  print(time2-time1)
+  &#39;&#39;&#39;for line in array:
     for value in line:
       print(value, end = &#34;,&#34;)
-    print()
+    print()&#39;&#39;&#39;
 
 if __name__ == &#34;__main__&#34;:
    # stuff only to run when not called via &#39;import&#39; here
@@ -168,11 +165,14 @@ if __name__ == &#34;__main__&#34;:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def main():
-  array = readCSV(&#34;hw2.csv&#34;)
-  for line in array:
+  time1 = time.time()
+  array = readCSV(&#34;pom3a.csv&#34;)
+  time2 = time.time()
+  print(time2-time1)
+  &#39;&#39;&#39;for line in array:
     for value in line:
       print(value, end = &#34;,&#34;)
-    print()</code></pre>
+    print()&#39;&#39;&#39;</code></pre>
 </details>
 </dd>
 <dt id="src.py.hw2.readCSV"><code class="name flex">
@@ -233,19 +233,20 @@ if __name__ == &#34;__main__&#34;:
             #Incorrect number of cells
             if len(headers) != len(split):
               print(f&#39;Error on line {i}: incorrect number of cells&#39;)
-              
-            for j in range(len(headers)):
-              #Remove any ignored columns
-              if &#39;?&#39; not in headers[j]:
-                #Should be number
-                if headers[j][0].isupper():
-                  split[j] = convertNumber(split[j])
-                  if not isinstance(split[j], int) and not isinstance(split[j], float):
-                    errors = True
-                    print(f&#39;Error on line {i}: string where number should be&#39;)
-                    print(headers[j])
-                    print(split[j])
-                row.append(split[j])   
+              errors = True
+            else:  
+              for j in range(len(headers)):
+                #Remove any ignored columns
+                if &#39;?&#39; not in headers[j]:
+                  #Should be number
+                  if headers[j][0].isupper():
+                    split[j] = convertNumber(split[j])
+                    if not isinstance(split[j], int) and not isinstance(split[j], float):
+                      errors = True
+                      print(f&#39;Error on line {i}: string where number should be&#39;)
+                      print(headers[j])
+                      print(split[j])
+                  row.append(split[j])   
             if not errors:
               array.append(row)
       i+=1

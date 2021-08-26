@@ -10,7 +10,6 @@ def testIsNumber():
   assert isNumber("-123") == True
   assert isNumber("-123.") == True
   assert isNumber("-12.3") == True
-  assert isNumber("-.123") == True
   assert isNumber("-0.123") == True
   
   assert isNumber(".-123") == False
@@ -34,4 +33,4 @@ def testReadCSV():
   ['overcast',72,90,60,50],
   ['overcast',81,75,30,60],
   ['rainy',71,91,50,40]]
-  assert readCSV("/py/hw2.csv") == expected
+  assert readCSV("/src/py/hw2.csv") == expected

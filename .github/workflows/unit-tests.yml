@@ -35,7 +35,7 @@ jobs:
       - name: Document the Code
         run: |
           pip install pdoc3
-          export PYTHONPATH="/src/py"
+          export PYTHONPATH="./src/py"
           pdoc3 --output-dir docs --force --html --template-dir docs src; \
           mv docs/src/* docs; \
           rmdir docs/src; \

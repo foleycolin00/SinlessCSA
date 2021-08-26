@@ -36,6 +36,8 @@ jobs:
         run: |
           pip install pdoc3
           export PYTHONPATH="./src/py"
+          rm -r docs; \
+          mkdir docs; \
           pdoc3 --output-dir docs --force --html --template-dir docs src; \
           mv docs/src/* docs; \
           rmdir docs/src; \

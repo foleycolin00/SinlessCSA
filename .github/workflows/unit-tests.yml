@@ -36,8 +36,8 @@ jobs:
         run: |
           pip install pdoc3
           export PYTHONPATH="./src/py"
-          pdoc3 --output-dir docs --force --html --template-dir docs src; \
           rm -r docs; \
+          pdoc3 --output-dir docs --force --html --template-dir docs src; \
           mv docs/src/* docs; \
           rmdir docs/src; \
       - name: Commit files

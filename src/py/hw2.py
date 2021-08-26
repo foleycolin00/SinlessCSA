@@ -84,8 +84,13 @@ def isNumber(num):
     except ValueError:
       return False
 
-array = readCSV("hw2.csv")
-for line in array:
-  for value in line:
-    print(value, end = ",")
-  print()
+def main():
+  array = readCSV("hw2.csv")
+  for line in array:
+    for value in line:
+      print(value, end = ",")
+    print()
+
+if __name__ == "__main__":
+   # stuff only to run when not called via 'import' here
+   main()

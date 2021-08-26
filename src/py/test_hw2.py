@@ -1,4 +1,4 @@
-from hw2 import *
+from hw2 import readCSV
 
 '''Test function isNumber()'''
 def testIsNumber():
@@ -34,4 +34,4 @@ def testReadCSV():
   ['overcast',72,90,60,50],
   ['overcast',81,75,30,60],
   ['rainy',71,91,50,40]]
-  assert readCSV("hw2.csv") == expected
+  assert readCSV("/py/hw2.csv") == expected

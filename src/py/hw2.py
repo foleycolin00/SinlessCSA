@@ -54,35 +54,34 @@ def readCSV(file):
               print(f'Error on line {i}: incorrect number of cells')
               
             for j in range(len(headers)):
-            
-              #Should be number
-              if headers[j][0].isupper():
-                if not isNumber(split[j]):
-                  errors = True
-                  print(f'Error on line {i}: string where number should be')
-              
               #Remove any ignored columns
               if '?' not in headers[j]:
-                row.append(split[j])
-                
-            
+                #Should be number
+                if headers[j][0].isupper():
+                  split[j] = convertNumber(split[j])
+                  if not isinstance(split[j], int) and not isinstance(split[j], float):
+                    errors = True
+                    print(f'Error on line {i}: string where number should be')
+                    print(headers[j])
+                    print(split[j])
+                row.append(split[j])   
             if not errors:
-              array.append(split)
-      
+              array.append(row)
       i+=1
   return array
 
-'''Returns if the string is a number (int/float)
+'''Convert the string to a number
 :param num: the string
-:return: if the string is a number'''
-def isNumber(num):
+:return: the number or string as a result'''
+def convertNumber(num):
   try:
-    return True
+    return int(num)
   except ValueError:
     try: 
-      return True
+      return float(num)
     except ValueError:
-      return False
+      return str(num)
+
 
 def main():
   array = readCSV("hw2.csv")

@@ -1,4 +1,4 @@
-from hw2 import readCSV
+from hw2 import readCSV, isNumber
 
 '''Test function isNumber()'''
 def testIsNumber():

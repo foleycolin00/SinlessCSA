@@ -21,6 +21,7 @@ def readCSV(file):
       
       #remove all whitespace
       line = line.replace(' ', '')
+      line = line.replace('\t', '')
       line = line.replace('\n', '')
       
       #dont print empty lines

@@ -1,4 +1,5 @@
 import time
+import os
 
 '''Reads in a CSV file
 Parses it
@@ -88,8 +89,9 @@ def convertNumber(num):
 
 
 def main():
+  myPath = os.path.dirname(os.path.abspath(__file__))
   time1 = time.time()
-  array = readCSV("../../data/pom3a.csv")
+  array = readCSV(myPath + "../../data/pom3a.csv")
   time2 = time.time()
   print(time2-time1)
   '''for line in array:

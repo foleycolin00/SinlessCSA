@@ -27,6 +27,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import time
+import os
 
 &#39;&#39;&#39;Reads in a CSV file
 Parses it
@@ -45,11 +46,12 @@ def readCSV(file):
       line = lines[i]
     
       #clear the comments
-      line = line[:line.find(&#39;#&#39;)] + &#34;\n&#34;
+      line = line[:line.find(&#39;#&#39;)]# + &#34;\n&#34;
       
       #remove all whitespace
       line = line.replace(&#39; &#39;, &#39;&#39;)
       line = line.replace(&#39;\n&#39;, &#39;&#39;)
+      line = line.replace(&#39;\t&#39;, &#39;&#39;)
       
       #dont print empty lines
       if len(line) &gt; 0:
@@ -115,8 +117,9 @@ def convertNumber(num):
 
 
 def main():
+  myPath = os.path.dirname(os.path.abspath(__file__))
   time1 = time.time()
-  array = readCSV(&#34;pom3a.csv&#34;)
+  array = readCSV(myPath + &#34;../../data/pom3a.csv&#34;)
   time2 = time.time()
   print(time2-time1)
   &#39;&#39;&#39;for line in array:
@@ -165,8 +168,9 @@ if __name__ == &#34;__main__&#34;:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def main():
+  myPath = os.path.dirname(os.path.abspath(__file__))
   time1 = time.time()
-  array = readCSV(&#34;pom3a.csv&#34;)
+  array = readCSV(myPath + &#34;../../data/pom3a.csv&#34;)
   time2 = time.time()
   print(time2-time1)
   &#39;&#39;&#39;for line in array:
@@ -196,11 +200,12 @@ if __name__ == &#34;__main__&#34;:
       line = lines[i]
     
       #clear the comments
-      line = line[:line.find(&#39;#&#39;)] + &#34;\n&#34;
+      line = line[:line.find(&#39;#&#39;)]# + &#34;\n&#34;
       
       #remove all whitespace
       line = line.replace(&#39; &#39;, &#39;&#39;)
       line = line.replace(&#39;\n&#39;, &#39;&#39;)
+      line = line.replace(&#39;\t&#39;, &#39;&#39;)
       
       #dont print empty lines
       if len(line) &gt; 0:

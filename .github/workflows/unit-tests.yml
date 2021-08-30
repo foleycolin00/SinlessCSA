@@ -39,10 +39,10 @@ jobs:
           tar -xvf lua-5.4.3.tar.gz; \
           cd lua-5.4.3; \
           make all test 
-      - name: Run tests  
+      - name: Test with lua  
         run: |
           cd ${{ github.workspace }}/test/lua; \
-          ../../lua-5.4.3/src/lua tools.lua
+          ../../lua-5.4.3/src/lua hw2_test.lua
       - name: Document the Code
         run: |
           pip install pdoc3

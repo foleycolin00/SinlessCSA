@@ -46,7 +46,8 @@ def readCSV(file):
       line = lines[i]
     
       #clear the comments
-      line = line[:line.find(&#39;#&#39;)]# + &#34;\n&#34;
+      if &#39;#&#39; in line:
+        line = line[:line.find(&#39;#&#39;)]# + &#34;\n&#34;
       
       #remove all whitespace
       line = line.replace(&#39; &#39;, &#39;&#39;)
@@ -200,7 +201,8 @@ if __name__ == &#34;__main__&#34;:
       line = lines[i]
     
       #clear the comments
-      line = line[:line.find(&#39;#&#39;)]# + &#34;\n&#34;
+      if &#39;#&#39; in line:
+        line = line[:line.find(&#39;#&#39;)]# + &#34;\n&#34;
       
       #remove all whitespace
       line = line.replace(&#39; &#39;, &#39;&#39;)

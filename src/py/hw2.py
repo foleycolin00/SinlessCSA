@@ -17,11 +17,13 @@ def readCSV(file):
       line = lines[i]
     
       #clear the comments
-      line = line[:line.find('#')] + "\n"
+      if '#' in line:
+        line = line[:line.find('#')] + "\n"
       
       #remove all whitespace
       line = line.replace(' ', '')
       line = line.replace('\n', '')
+      
       
       #dont print empty lines
       if len(line) > 0:
@@ -88,13 +90,13 @@ def convertNumber(num):
 
 def main():
   time1 = time.time()
-  array = readCSV("pom3a.csv")
+  array = readCSV("hw2.csv")
   time2 = time.time()
   print(time2-time1)
-  '''for line in array:
+  for line in array:
     for value in line:
       print(value, end = ",")
-    print()'''
+    print()
 
 if __name__ == "__main__":
    # stuff only to run when not called via 'import' here

@@ -41,8 +41,8 @@ jobs:
           make all test 
       - name: Run tests  
         run: |
-          cd ${{ github.workspace }}/test; \
-          ../lua-5.4.3/src/lua tools.lua
+          cd ${{ github.workspace }}/test/lua; \
+          ../../lua-5.4.3/src/lua tools.lua
       - name: Document the Code
         run: |
           pip install pdoc3

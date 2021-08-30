@@ -4,9 +4,10 @@ tools = require('tools')
 
 myTableHeaders, myTableRows = tools.csv('../../data/weather.csv')
 
-print(table.concat(myTableHeaders, ','))
-
+assert(#myTableHeaders == 6, 'wrong number of header columns')
 
 for i = 1, #myTableRows do
-  --print(table.concat(myTableRows[i], ','))
+  assert(#myTableRows[i] == #myTableHeaders,
+    string.format('row %d: %d number cols does not match header number cols %d',
+      i, #myTableRows[i], #myTableHeaders))
 end

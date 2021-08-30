@@ -51,7 +51,7 @@ function tools.csv(fileName)
     end
     
     -- split by commas
-    v = stringToTable(v, ',')
+    v = tools.stringToTable(v, ',')
     
     -- empty if it is empty and also not a continuation
     if #v == 0 and #savedVal == 0 then print(string.format('Empty at line %d', i)) end
@@ -59,7 +59,9 @@ function tools.csv(fileName)
     -- when headers is empty, it is first one, fill headers
     if #headers == 0 then
       -- remove these symbols ?!+-
-      v = string.gsub(v, '[?!]*+*-*', '')
+      for j = 1, #v do
+        v[j] = string.gsub(v[j], '[?!]*+*-*', '')
+      end
       headers = v
     elseif #v == #headers then table.insert(rows, v)
     elseif #savedVal == 0 then print(string.format('Number of columns does not match at line %d', i))

@@ -7,9 +7,7 @@ Prints errors for the bad lines
 :param file: the file to read
 :return: an array of arrays containing all of the valid rows'''
 def readCSV(file):
-  array = []
   with open(file, 'r') as reader:
-  
     lines = reader.readlines()
     i = 0
     headers = None
@@ -46,8 +44,8 @@ def readCSV(file):
             for col in split:
               if '?' not in col:
                 result.append(col)
-            array.append(result)
             
+            yield result
           else:
             row = []
             
@@ -72,9 +70,8 @@ def readCSV(file):
                       print(split[j])
                   row.append(split[j])   
             if not errors:
-              array.append(row)
+              yield row
       i+=1
-  return array
 
 '''Convert the string to a number
 :param num: the string
@@ -91,14 +88,10 @@ def convertNumber(num):
 
 def main():
   myPath = os.path.dirname(os.path.abspath(__file__))
-  time1 = time.time()
-  array = readCSV(myPath + "../../data/pom3a.csv")
-  time2 = time.time()
-  print(time2-time1)
-  '''for line in array:
-    for value in line:
-      print(value, end = ",")
-    print()'''
+  myPath = myPath[:myPath.rindex("/")]
+  myPath = myPath[:myPath.rindex("/")]
+  for line in readCSV(myPath + "/data/weather.csv"):
+    print(line)
 
 if __name__ == "__main__":
    # stuff only to run when not called via 'import' here

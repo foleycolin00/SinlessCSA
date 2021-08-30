@@ -38,4 +38,11 @@ def testReadCSV():
   ['overcast',72,'TRUE',60,50],
   ['overcast',81,'FALSE',30,60],
   ['rainy',71,'TRUE',50,40]]
-  assert readCSV(myPath + '/../../data/weather.csv') == expected
+  
+  myPath = os.path.dirname(os.path.abspath(__file__))
+  myPath = myPath[:myPath.rindex("/")]
+  myPath = myPath[:myPath.rindex("/")]
+  i = 0
+  for line in readCSV(myPath + '/data/weather.csv'):
+    assert line == expected[i]
+    i+=1

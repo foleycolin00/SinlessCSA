@@ -38,4 +38,4 @@ def testReadCSV():
   ['overcast',72,'TRUE',60,50],
   ['overcast',81,'FALSE',30,60],
   ['rainy',71,'TRUE',50,40]]
-  assert readCSV("../../data/weather.csv") == expected
+  assert readCSV(myPath + '/../../data/weather.csv') == expected

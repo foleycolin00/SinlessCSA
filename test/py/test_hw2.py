@@ -1,9 +1,9 @@
-import sys
+import sys, os
 
-sys.path.insert(1, '../../src/py')
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/../../src/py')
 
 from hw2 import readCSV, convertNumber
-import os
 
 '''Test function convertNumber()'''
 def testConvertNumber():

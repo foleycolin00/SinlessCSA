@@ -1,3 +1,7 @@
+import sys
+
+sys.path.insert(1, '../../src/py')
+
 from hw2 import readCSV, convertNumber
 import os
 
@@ -34,4 +38,4 @@ def testReadCSV():
   ['overcast',72,'TRUE',60,50],
   ['overcast',81,'FALSE',30,60],
   ['rainy',71,'TRUE',50,40]]
-  assert readCSV("src/py/hw2.csv") == expected
+  assert readCSV("../../data/weather.csv") == expected

@@ -17,12 +17,12 @@ def readCSV(file):
       line = lines[i]
     
       #clear the comments
-      line = line[:line.find('#')] + "\n"
+      line = line[:line.find('#')]# + "\n"
       
       #remove all whitespace
       line = line.replace(' ', '')
       line = line.replace('\n', '')
-      line = line.replate('\t', '')
+      line = line.replace('\t', '')
       
       #dont print empty lines
       if len(line) > 0:

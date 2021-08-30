@@ -35,9 +35,7 @@ Prints errors for the bad lines
 :param file: the file to read
 :return: an array of arrays containing all of the valid rows&#39;&#39;&#39;
 def readCSV(file):
-  array = []
   with open(file, &#39;r&#39;) as reader:
-  
     lines = reader.readlines()
     i = 0
     headers = None
@@ -74,8 +72,8 @@ def readCSV(file):
             for col in split:
               if &#39;?&#39; not in col:
                 result.append(col)
-            array.append(result)
             
+            yield result
           else:
             row = []
             
@@ -100,9 +98,8 @@ def readCSV(file):
                       print(split[j])
                   row.append(split[j])   
             if not errors:
-              array.append(row)
+              yield row
       i+=1
-  return array
 
 &#39;&#39;&#39;Convert the string to a number
 :param num: the string
@@ -119,14 +116,10 @@ def convertNumber(num):
 
 def main():
   myPath = os.path.dirname(os.path.abspath(__file__))
-  time1 = time.time()
-  array = readCSV(myPath + &#34;../../data/pom3a.csv&#34;)
-  time2 = time.time()
-  print(time2-time1)
-  &#39;&#39;&#39;for line in array:
-    for value in line:
-      print(value, end = &#34;,&#34;)
-    print()&#39;&#39;&#39;
+  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+  for line in readCSV(myPath + &#34;/data/weather.csv&#34;):
+    print(line)
 
 if __name__ == &#34;__main__&#34;:
    # stuff only to run when not called via &#39;import&#39; here
@@ -170,14 +163,10 @@ if __name__ == &#34;__main__&#34;:
 </summary>
 <pre><code class="python">def main():
   myPath = os.path.dirname(os.path.abspath(__file__))
-  time1 = time.time()
-  array = readCSV(myPath + &#34;../../data/pom3a.csv&#34;)
-  time2 = time.time()
-  print(time2-time1)
-  &#39;&#39;&#39;for line in array:
-    for value in line:
-      print(value, end = &#34;,&#34;)
-    print()&#39;&#39;&#39;</code></pre>
+  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+  for line in readCSV(myPath + &#34;/data/weather.csv&#34;):
+    print(line)</code></pre>
 </details>
 </dd>
 <dt id="src.py.hw2.readCSV"><code class="name flex">
@@ -190,9 +179,7 @@ if __name__ == &#34;__main__&#34;:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def readCSV(file):
-  array = []
   with open(file, &#39;r&#39;) as reader:
-  
     lines = reader.readlines()
     i = 0
     headers = None
@@ -229,8 +216,8 @@ if __name__ == &#34;__main__&#34;:
             for col in split:
               if &#39;?&#39; not in col:
                 result.append(col)
-            array.append(result)
             
+            yield result
           else:
             row = []
             
@@ -255,9 +242,8 @@ if __name__ == &#34;__main__&#34;:
                       print(split[j])
                   row.append(split[j])   
             if not errors:
-              array.append(row)
-      i+=1
-  return array</code></pre>
+              yield row
+      i+=1</code></pre>
 </details>
 </dd>
 </dl>

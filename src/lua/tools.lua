@@ -1,4 +1,6 @@
-function stringToTable(inputString, delimiter)
+local tools = {}
+
+function tools.stringToTable(inputString, delimiter)
   retTable = {}
   local i = 1
   
@@ -12,7 +14,7 @@ end
 
 -- take in a csv
 -- return column headers, and rows that match
-function csv(fileName)
+function tools.csv(fileName)
   headers = {}
   rows = {}
   
@@ -54,13 +56,11 @@ function csv(fileName)
     -- empty if it is empty and also not a continuation
     if #v == 0 and #savedVal == 0 then print(string.format('Empty at line %d', i)) end
     
-    -- remove these symbols ?!+-
-    for i = 1, #v do
-      v[i] = string.gsub(v[i], '[?!]*+*-*', '')
-    end
-    
     -- when headers is empty, it is first one, fill headers
-    if #headers == 0 then headers = v
+    if #headers == 0 then
+      -- remove these symbols ?!+-
+      v = string.gsub(v, '[?!]*+*-*', '')
+      headers = v
     elseif #v == #headers then table.insert(rows, v)
     elseif #savedVal == 0 then print(string.format('Number of columns does not match at line %d', i))
     end
@@ -81,14 +81,4 @@ function csv(fileName)
   return headers, rows
 end
 
-myTableHeaders, myTableRows = csv('weather.csv')
-
---print(table.concat(myTableHeaders, ','))
-
-
-for i = 1, #myTableRows do
-  --print(table.concat(myTableRows[i], ','))
-end
-
-
-  
+return tools

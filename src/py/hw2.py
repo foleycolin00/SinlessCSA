@@ -22,6 +22,7 @@ def readCSV(file):
       #remove all whitespace
       line = line.replace(' ', '')
       line = line.replace('\n', '')
+      line = line.replate('\t', '')
       
       #dont print empty lines
       if len(line) > 0:
@@ -88,7 +89,7 @@ def convertNumber(num):
 
 def main():
   time1 = time.time()
-  array = readCSV("pom3a.csv")
+  array = readCSV("../../data/pom3a.csv")
   time2 = time.time()
   print(time2-time1)
   '''for line in array:

@@ -32,6 +32,17 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
+      - name: Install lua
+        run: |
+          cd ${{ github.workspace }}; \
+          curl -R -O http://www.lua.org/ftp/lua-5.4.3.tar.gz; \
+          tar -xvf lua-5.4.3.tar.gz; \
+          cd lua-5.4.3; \
+          make all test 
+      - name: Run tests  
+        run: |
+          cd ${{ github.workspace }}/test; \
+          ../lua-5.4.3/src/lua tools.lua
       - name: Document the Code
         run: |
           pip install pdoc3

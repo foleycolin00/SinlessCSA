@@ -17,15 +17,12 @@ class Sym:
     self.name = name
     self.n = 0
     self.has = {}
-    self.mode = ''
+    self.mode = 0
     self._most = 0
 
   def add(self, x):
     if x != '?':
       self.n += 1
-      if x in self.has.keys():
-        self.has[x] = self.has[x] + 1
-      else:
-        self.has[x] = 1
+      self.has[x] = self.has[x] + 1 if self.has[x] else 1
       if self.has[x] > self._most:
-        self._most, self.mode = self.has[x], x
+        self._most, self.most = self.has[x], x

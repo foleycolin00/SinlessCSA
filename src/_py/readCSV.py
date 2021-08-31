@@ -63,7 +63,7 @@ def readCSV(file):
                   #Should be number
                   if headers[j][0].isupper():
                     split[j] = convertNumber(split[j])
-                    if not isinstance(split[j], int) and not isinstance(split[j], float) and split[j] != '?':
+                    if not isinstance(split[j], int) and not isinstance(split[j], float):
                       errors = True
                       print(f'Error on line {i}: string where number should be')
                       print(headers[j])

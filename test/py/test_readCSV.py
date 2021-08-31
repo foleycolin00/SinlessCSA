@@ -3,7 +3,7 @@ import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../../src/py')
 
-from hw2 import readCSV, convertNumber
+from readCSV import readCSV, convertNumber
 
 '''Test function convertNumber()'''
 def testConvertNumber():

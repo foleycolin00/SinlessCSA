@@ -43,7 +43,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/test/lua; \
           ../../lua-5.4.3/src/lua hw2_test.lua
-      - name: Document the Code
+      - name: Document the Python Code
         run: |
           pip install pdoc3
           export PYTHONPATH="./src/py"
@@ -53,7 +53,7 @@ jobs:
       - name: Remove Lua Files
         run: |
           rm -r lua-5.4.3 \
-          rm lua-5.4.3.tar.gz
+          rm *.tar.gz
       - name: Commit files
         id: commit
         run: |

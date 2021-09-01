@@ -52,7 +52,8 @@ jobs:
           rm -r docs/src; \
       - name: Remove Lua Files
         run: |
-          rm -r lua-5.4.3
+          rm -r lua-5.4.3 \
+          rm lua-5.4.3.tar.gz
       - name: Commit files
         id: commit
         run: |

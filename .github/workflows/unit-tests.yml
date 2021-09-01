@@ -46,8 +46,9 @@ jobs:
       - name: Get LuaRocks
         run: |
           cd ${{ github.workspace }}; \
+          cd lua-5.4.3/src; \
           wget http://luarocks.org/releases/luarocks-3.7.0.tar.gz; \
-          tar -xvf luarocks-3.7.0.tar.gz; \
+          tar zxpf luarocks-3.7.0.tar.gz; \
           cd luarocks-3.7.0; \
           ./configure && make ** sudo make install; \
           sudo luarocks install luasocket;

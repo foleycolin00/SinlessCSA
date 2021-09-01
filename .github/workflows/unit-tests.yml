@@ -48,6 +48,9 @@ jobs:
           pdoc3 --output-dir docs --force --html --template-dir docs src; \
           rsync -a docs/src/* docs; \
           rm -r docs/src; \
+      - name: Remove Lua Files
+        run: |
+          rm -r lua-5.4.3
       - name: Commit files
         id: commit
         run: |

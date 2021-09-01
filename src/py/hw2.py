@@ -18,7 +18,8 @@ def readCSV(file):
       line = lines[i]
     
       #clear the comments
-      line = line[:line.find('#')]# + "\n"
+      if '#' in line:
+        line = line[:line.find('#')]# + "\n"
       
       #remove all whitespace
       line = line.replace(' ', '')

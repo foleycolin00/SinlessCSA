@@ -1,1 +1,3 @@
-
+brew install lua
+brew install lua luarocks pandoc
+luarocks install penlight

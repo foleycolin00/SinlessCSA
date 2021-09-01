@@ -32,7 +32,7 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
-        - name: Install lua
+      - name: Install lua
         run: |
           cd ${{ github.workspace }}; \
           curl -R -O http://www.lua.org/ftp/lua-5.4.3.tar.gz; \

@@ -1,3 +1,2 @@
-brew install lua
-brew install lua luarocks pandoc
+$ sudo apt-get install lua5.4.3 liblua5.4.3-dev luarocks
 luarocks install penlight

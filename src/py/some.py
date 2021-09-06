@@ -52,7 +52,7 @@ class Some:
   '''
   def per(self, p = .5):
     a = self.getAll()
-    return a[max(0, floor(len(a) * p))]
+    return a[max(0, math.floor(len(a) * p))]
   
   '''
   Standard Deviation

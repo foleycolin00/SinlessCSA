@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>src.py API documentation</title>
+<title>src.py.num API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,53 +19,220 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>src.py</code></h1>
+<h1 class="title">Module <code>src.py.num</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from some import *
+from readCSV import *
+
+&#39;&#39;&#39;
+ Num class
+ &#39;&#39;&#39;
+class Num:
+
+  &#39;&#39;&#39;
+  Returns whether the given string is a Weight (-1 if negative)
+  We must already know it is a goal
+  :param: s the string
+  :return: 1 if +, -1 if -
+  &#39;&#39;&#39;
+  def getWeight(self):
+    return -1 if &#39;-&#39; in self.name else 1
+
+  &#39;&#39;&#39;
+  Initializes the variables
+  some = resevoir
+  n = counter of things seen so far
+  lo = lowest value
+  hi = highest value
+  mu = greek letter mu
+  m2 = ?
+  sd = standard deviation
+  w = weight
+  :param at: column index
+  :param name: column name
+  &#39;&#39;&#39;
+  def __init__(self, at = 0, name = &#39;&#39;):
+    self.some = Some()
+    self.n  = 0
+    self.at = at
+    self.name = name
+    self.lo = 1e32
+    self.hi = -1e32
+    self.mu = self.m2 = self.sd = 0
+    self.w = self.getWeight()
+
+  &#39;&#39;&#39;
+  Adds a value to the col
+  :param x: the value to add
+  &#39;&#39;&#39;
+  def add(self, x):
+    if x != &#39;?&#39;:
+      x = convertNumber(x)
+      self.some.add(x)
+      self.n +=1
+      d = x - self.mu
+      self.mu = self.mu + ( d/self.n)
+      self.m2 = self.m2 + ( d* (x - self.mu) )
+      self.sd = 0 if (self.m2&lt;0 or self.n&lt;2) else pow(self.m2/( self.n - 1 ), .5 )
+      self.lo = min(x, self.lo)
+      self.hi = max(x, self.hi)
+  
+  &#39;&#39;&#39;
+  Normalizes the value x for the range lo .. hi
+  :param x: the value to normalize
+  :return: the value normalized
+  &#39;&#39;&#39;
+  def norm(self, x):
+    if x == &#39;?&#39;:
+      return x
+    else:
+      return (x-self.lo) / (self.hi - self.lo + 1e-32)</code></pre>
+</details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="src.py.conftest" href="conftest.html">src.py.conftest</a></code></dt>
+<dt id="src.py.num.Num"><code class="flex name class">
+<span>class <span class="ident">Num</span></span>
+<span>(</span><span>at=0, name='')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns whether the given string is a Weight (-1 if negative)
+We must already know it is a goal
+:param: s the string
+:return: 1 if +, -1 if -</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Num:
+
+  &#39;&#39;&#39;
+  Returns whether the given string is a Weight (-1 if negative)
+  We must already know it is a goal
+  :param: s the string
+  :return: 1 if +, -1 if -
+  &#39;&#39;&#39;
+  def getWeight(self):
+    return -1 if &#39;-&#39; in self.name else 1
+
+  &#39;&#39;&#39;
+  Initializes the variables
+  some = resevoir
+  n = counter of things seen so far
+  lo = lowest value
+  hi = highest value
+  mu = greek letter mu
+  m2 = ?
+  sd = standard deviation
+  w = weight
+  :param at: column index
+  :param name: column name
+  &#39;&#39;&#39;
+  def __init__(self, at = 0, name = &#39;&#39;):
+    self.some = Some()
+    self.n  = 0
+    self.at = at
+    self.name = name
+    self.lo = 1e32
+    self.hi = -1e32
+    self.mu = self.m2 = self.sd = 0
+    self.w = self.getWeight()
+
+  &#39;&#39;&#39;
+  Adds a value to the col
+  :param x: the value to add
+  &#39;&#39;&#39;
+  def add(self, x):
+    if x != &#39;?&#39;:
+      x = convertNumber(x)
+      self.some.add(x)
+      self.n +=1
+      d = x - self.mu
+      self.mu = self.mu + ( d/self.n)
+      self.m2 = self.m2 + ( d* (x - self.mu) )
+      self.sd = 0 if (self.m2&lt;0 or self.n&lt;2) else pow(self.m2/( self.n - 1 ), .5 )
+      self.lo = min(x, self.lo)
+      self.hi = max(x, self.hi)
+  
+  &#39;&#39;&#39;
+  Normalizes the value x for the range lo .. hi
+  :param x: the value to normalize
+  :return: the value normalized
+  &#39;&#39;&#39;
+  def norm(self, x):
+    if x == &#39;?&#39;:
+      return x
+    else:
+      return (x-self.lo) / (self.hi - self.lo + 1e-32)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="src.py.num.Num.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, x)</span>
+</code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add(self, x):
+  if x != &#39;?&#39;:
+    x = convertNumber(x)
+    self.some.add(x)
+    self.n +=1
+    d = x - self.mu
+    self.mu = self.mu + ( d/self.n)
+    self.m2 = self.m2 + ( d* (x - self.mu) )
+    self.sd = 0 if (self.m2&lt;0 or self.n&lt;2) else pow(self.m2/( self.n - 1 ), .5 )
+    self.lo = min(x, self.lo)
+    self.hi = max(x, self.hi)</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="src.py.hw3" href="hw3.html">src.py.hw3</a></code></dt>
+<dt id="src.py.num.Num.getWeight"><code class="name flex">
+<span>def <span class="ident">getWeight</span></span>(<span>self)</span>
+</code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getWeight(self):
+  return -1 if &#39;-&#39; in self.name else 1</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="src.py.num" href="num.html">src.py.num</a></code></dt>
+<dt id="src.py.num.Num.norm"><code class="name flex">
+<span>def <span class="ident">norm</span></span>(<span>self, x)</span>
+</code></dt>
 <dd>
 <div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.readCSV" href="readCSV.html">src.py.readCSV</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.sample" href="sample.html">src.py.sample</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.skip" href="skip.html">src.py.skip</a></code></dt>
-<dd>
-<div class="desc"><p>Skip class
-Always does nothing on add</p></div>
-</dd>
-<dt><code class="name"><a title="src.py.some" href="some.html">src.py.some</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.sym" href="sym.html">src.py.sym</a></code></dt>
-<dd>
-<div class="desc"><p>Sym class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def norm(self, x):
+  if x == &#39;?&#39;:
+    return x
+  else:
+    return (x-self.lo) / (self.hi - self.lo + 1e-32)</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -76,19 +243,19 @@ Always does nothing on add</p></div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src" href="../index.html">src</a></code></li>
+<li><code><a title="src.py" href="index.html">src.py</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="src.py.conftest" href="conftest.html">src.py.conftest</a></code></li>
-<li><code><a title="src.py.hw3" href="hw3.html">src.py.hw3</a></code></li>
-<li><code><a title="src.py.num" href="num.html">src.py.num</a></code></li>
-<li><code><a title="src.py.readCSV" href="readCSV.html">src.py.readCSV</a></code></li>
-<li><code><a title="src.py.sample" href="sample.html">src.py.sample</a></code></li>
-<li><code><a title="src.py.skip" href="skip.html">src.py.skip</a></code></li>
-<li><code><a title="src.py.some" href="some.html">src.py.some</a></code></li>
-<li><code><a title="src.py.sym" href="sym.html">src.py.sym</a></code></li>
+<li>
+<h4><code><a title="src.py.num.Num" href="#src.py.num.Num">Num</a></code></h4>
+<ul class="">
+<li><code><a title="src.py.num.Num.add" href="#src.py.num.Num.add">add</a></code></li>
+<li><code><a title="src.py.num.Num.getWeight" href="#src.py.num.Num.getWeight">getWeight</a></code></li>
+<li><code><a title="src.py.num.Num.norm" href="#src.py.num.Num.norm">norm</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

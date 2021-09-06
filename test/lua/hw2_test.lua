@@ -22,7 +22,7 @@ end
 
 for row in tools.csvStream('../../data/weather.csv') do
   for i = 1, #row do
-    ---io.write(row[i], ', ')
+    io.write(row[i], ', ')
   end
-  ---print()
+  print()
 end

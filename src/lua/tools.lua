@@ -83,4 +83,34 @@ function tools.csv(fileName)
   return headers, rows
 end
 
+-- take in a csv
+-- return column headers, and rows that match
+function tools.csvStream(fileName)
+  stream = fileName and io.input(fileName) or io.input()
+  tmp = io.read()
+  
+  return function()
+    if tmp then
+      tmp = tmp:gsub('[\t\r ]*', ''):gsub('#.*','')
+      t = {}
+      
+      for y in tmp:gmatch('[^,]+') do
+        t[#t + 1] = y
+      end
+      
+      tmp = io.read()
+      
+      if #t > 0 then
+        for key, value in pairs(t) do
+          value = tonumber(value) or value
+        end
+        return t
+      end
+      return t
+    else
+      io.close(stream)
+    end
+  end  
+end
+
 return tools

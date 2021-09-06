@@ -41,11 +41,8 @@ function Sample:load(fileName)
     else
       local tmp = {}
       for i = 1, #row do
-        --io.write(self.headers[i]:add(row[i]), ' ')
         table.insert(tmp, self.headers[i]:add(row[i]))
       end
-      print()
-    --maybe an end will be a problem later
       table.insert(self.rows, tmp)
     end
   end

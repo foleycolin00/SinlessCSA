@@ -2,18 +2,19 @@ from some import *
 from readCSV import *
 
 '''
-Returns whether the given string is a Weight (-1 if negative)
-We must already know it is a goal
-:param: s the string
-:return: 1 if +, -1 if -
-'''
-def isWeight(s):
-  return -1 if '-' in s else 1
-
-'''
  Num class
  '''
 class Num:
+
+  '''
+  Returns whether the given string is a Weight (-1 if negative)
+  We must already know it is a goal
+  :param: s the string
+  :return: 1 if +, -1 if -
+  '''
+  def getWeight(self):
+    return -1 if '-' in self.name else 1
+
   '''
   Initializes the variables
   some = resevoir
@@ -35,7 +36,7 @@ class Num:
     self.lo = 1e32
     self.hi = -1e32
     self.mu = self.m2 = self.sd = 0
-    self.w = isWeight(name)
+    self.w = self.getWeight()
 
   '''
   Adds a value to the col
@@ -52,4 +53,15 @@ class Num:
       self.sd = 0 if (self.m2<0 or self.n<2) else pow(self.m2/( self.n - 1 ), .5 )
       self.lo = min(x, self.lo)
       self.hi = max(x, self.hi)
+  
+  '''
+  Normalizes the value x for the range lo .. hi
+  :param x: the value to normalize
+  :return: the value normalized
+  '''
+  def norm(self, x):
+    if x == '?':
+      return x
+    else:
+      return (x-self.lo) / (self.hi - self.lo + 1e-32)
 

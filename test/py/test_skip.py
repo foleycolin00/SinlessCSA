@@ -1,3 +1,5 @@
+from skip import *
+
 '''
 Test class for Skip
 '''
@@ -6,7 +8,7 @@ Test class for Skip
 Test Skip init
 '''
 def testSkipInit():
-  skip = sinless.Skip()
+  skip = Skip()
   assert skip.at == 0
   assert skip.name == ''
   skip = Skip(1, '123')

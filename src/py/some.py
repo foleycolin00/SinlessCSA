@@ -35,7 +35,7 @@ class Some:
       #else, randomly replace a value, less likely the more values we have
       elif random.random() < len(self._all)/self.n:
         self._sorted = False
-        self._all[math.floor(random.random()*len(self._all)+1)]
+        self._all[math.floor(random.random()*len(self._all))] = x
   
   '''
   Get all of the values as sorted

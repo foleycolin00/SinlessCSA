@@ -71,7 +71,7 @@ class Sample:
   :param lst: the row to add
   '''
   def add(self, lst):
-    self.data(lst) if len(self.names) > 0 else self.header(lst)
+    self.header(lst) if len(self.names) <= 0 else self.data(lst)
   
   '''
   Adds the header
@@ -122,3 +122,39 @@ class Sample:
   def read(self, f):
     for row in readCSV(f):
       self.add(row)
+      
+  '''
+  Query to get the better row using Zitler's continuous domination indicator
+  "row1 is better than row2"
+  :param row1: the first row
+  :param row2: the second row
+  :return: the comparison
+  '''
+  def better(self, row1, row2):
+    s1 = 0
+    s2 = 0
+    n = len(self.y)
+    e = 2.71828
+    
+    for col in self.y:
+      w = col.w
+      x = col.norm(row1[col.at])
+      y = col.norm(row2[col.at])
+      s1 = s1 - math.pow(e, w * (x-y)/n)
+      s2 = s2 - math.pow(e, w * (y-x)/n)
+    #"row1 is better than row2"
+    return s1/n < s2/n
+  
+  '''
+  Compare function using better
+  "row1 is better than row2"
+  :param row1: the first row
+  :param row2: the second row
+  :return: the comparison
+  '''
+  def betterCompare(self, row1, row2):
+    #if row1 is better than row2, then no switch is needed
+    if self.better(row1, row2):
+      return -1
+    else:
+      return 1

@@ -1,9 +1,5 @@
 import sys, os
-
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + '/../../src/py')
-
-from readCSV import readCSV, convertNumber
+from readCSV import *
 
 '''Test function convertNumber()'''
 def testConvertNumber():

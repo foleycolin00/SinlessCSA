@@ -16,20 +16,22 @@ num = require('num')
 sym = require('sym')
 goal = require('goal')
 
-function Sample.new()
-  newObj = {headers = {}, rows = {}}
+function Sample:new()
+  local o = {}
+  setmetatable(o, self)
   self.__index = self
-  return setmetatable(newObj, self)
+  self.headers = {}
+  self.rows = {}
+  return o
 end
 
 
 
-function Sample.load(fileName)
-  print("got here")
-  for row in tools.csv(fileName) do
+function Sample:load(fileName)
+  for row in tools:csv(fileName) do
     if #self.headers == 0 then
+      if #row > 0 then Sample:header(row) end
       
-      Sample.header(row)
         -- if ? then add skip
         -- if + or - then add goal
         -- if starts cap then add Num
@@ -37,35 +39,36 @@ function Sample.load(fileName)
         -- self.headers = row
         
     else
-      tmp = {}
-      for i = 0, #row do
-        table.insert(tmp, self.headers[i].add(row[i]))
+      local tmp = {}
+      for i = 1, #row do
+        --io.write(self.headers[i]:add(row[i]), ' ')
+        table.insert(tmp, self.headers[i]:add(row[i]))
       end
+      print()
     --maybe an end will be a problem later
-      table.insert(rows, tmp)
+      table.insert(self.rows, tmp)
     end
-    
   end
 end
 
-function Sample.header(list)
+function Sample:header(list)
   -- equivalent to isSkip, isGoal, isNum 
   -- ask about isKlass, what's klass goal in this context?
-  
-  self.headers = #list
 
-  for item in list do 
-
+  for key, item in pairs(list) do 
     if string.find(item, '?') then -- isSkip
-      return skip
+      table.insert(self.headers, skip)
+      --return skip
     elseif string.find(item, '+') or string.find(item, '-') then -- weight: max or min
-      return goal 
+      table.insert(self.headers, goal)
+      --return goal 
     elseif string.sub(1,1):match('%u') then -- uppercase isNum
-      return num
+      table.insert(self.headers, num)
+      --return num
     else
-      return sym
+      table.insert(self.headers, sym)
+      --return sym
     end
-    
   end
 end
 

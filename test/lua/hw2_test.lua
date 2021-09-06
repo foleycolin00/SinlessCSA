@@ -20,7 +20,7 @@ for i = 1, #myTableRows do
 end
 ]]
 
-for row in tools.csv('../../data/weather.csv') do
+for row in tools:csv('../../data/weather.csv') do
   for i = 1, #row do
     io.write(row[i], ', ')
   end

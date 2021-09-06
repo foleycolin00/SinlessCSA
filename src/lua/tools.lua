@@ -87,12 +87,12 @@ end
 
 -- take in a csv
 -- return column headers, and rows that match
-function tools.csv(fileName)
+function tools:csv(fileName)
   --- read the file or input
-  headersize = 0
+  local headersize = 0
 
-  stream = fileName and io.input(fileName) or io.input()
-  tmp = io.read()
+  local stream = fileName and io.input(fileName) or io.input()
+  local tmp = io.read()
   
   return function()
     
@@ -100,10 +100,9 @@ function tools.csv(fileName)
 
       if tmp then
 
-        t = {}
+        local t = {}
         while true do
           tmp = tmp:gsub('[\t\r ]*', ''):gsub('#.*','')
-          
           
           for y in tmp:gmatch('[^,]+') do
             table.insert(t, y)
@@ -115,11 +114,7 @@ function tools.csv(fileName)
           end
 
           tmp = io.read()
-  
-
-
         end 
-        
         if headersize == 0 then headersize = #t end
 
         if #t > 0 then

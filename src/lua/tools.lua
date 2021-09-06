@@ -86,29 +86,50 @@ end
 -- take in a csv
 -- return column headers, and rows that match
 function tools.csvStream(fileName)
+  --- read the file or input
+  headersize = 0
+
   stream = fileName and io.input(fileName) or io.input()
   tmp = io.read()
   
   return function()
-    if tmp then
-      tmp = tmp:gsub('[\t\r ]*', ''):gsub('#.*','')
-      t = {}
-      
-      for y in tmp:gmatch('[^,]+') do
-        t[#t + 1] = y
-      end
-      
-      tmp = io.read()
-      
-      if #t > 0 then
-        for key, value in pairs(t) do
-          value = tonumber(value) or value
+    
+    while true do
+
+      if tmp then
+
+        t = {}
+        while true do
+          tmp = tmp:gsub('[\t\r ]*', ''):gsub('#.*','')
+          
+          
+          for y in tmp:gmatch('[^,]+') do
+            table.insert(t, y)
+          end
+          
+          if string.sub(tmp, #tmp) ~= ',' then 
+            tmp = io.read()
+            break
+          end
+
+          tmp = io.read()
+  
+
+
+        end 
+        
+        if headersize == 0 then headersize = #t end
+
+        if #t > 0 then
+          for key, value in pairs(t) do
+            value = tonumber(value) or value
+          end
+          if #t == headersize then return t else print("This line number of columns does not equal the header number of columns") end
         end
-        return t
+      else
+        io.close(stream)
+        break
       end
-      return t
-    else
-      io.close(stream)
     end
   end  
 end

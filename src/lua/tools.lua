@@ -1,5 +1,6 @@
 local tools = {}
 
+--[[
 function tools.stringToTable(inputString, delimiter)
   retTable = {}
   local i = 1
@@ -82,10 +83,11 @@ function tools.csv(fileName)
   
   return headers, rows
 end
+]]
 
 -- take in a csv
 -- return column headers, and rows that match
-function tools.csvStream(fileName)
+function tools.csv(fileName)
   --- read the file or input
   headersize = 0
 

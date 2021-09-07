@@ -8,7 +8,7 @@
 
 package.path = '?.lua;' .. package.path
 
-local Sample = {}
+local sample = {}
 
 tools = require('tools')
 skip = require('skip')
@@ -16,7 +16,7 @@ num = require('num')
 sym = require('sym')
 goal = require('goal')
 
-function Sample:new()
+function sample:new()
   local o = {}
   setmetatable(o, self)
   self.__index = self
@@ -27,10 +27,10 @@ end
 
 
 
-function Sample:load(fileName)
+function sample:load(fileName)
   for row in tools:csv(fileName) do
     if #self.headers == 0 then
-      if #row > 0 then Sample:header(row) end
+      if #row > 0 then sample:header(row) end
       
         -- if ? then add skip
         -- if + or - then add goal
@@ -48,27 +48,36 @@ function Sample:load(fileName)
   end
 end
 
-function Sample:header(list)
+function sample:header(list)
   -- equivalent to isSkip, isGoal, isNum 
   -- ask about isKlass, what's klass goal in this context?
 
   for key, item in pairs(list) do 
     if string.find(item, '?') then -- isSkip
-      table.insert(self.headers, skip)
+      table.insert(self.headers, skip:new())
       --return skip
     elseif string.find(item, '+') or string.find(item, '-') then -- weight: max or min
-      table.insert(self.headers, goal)
+      table.insert(self.headers, goal:new())
       --return goal 
-    elseif string.sub(1,1):match('%u') then -- uppercase isNum
-      table.insert(self.headers, num)
+    elseif string.sub(item,1,1):match('[A-Z]') then -- uppercase isNum
+      table.insert(self.headers, num:new())
       --return num
     else
-      table.insert(self.headers, sym)
+      table.insert(self.headers, sym:new())
       --return sym
     end
   end
 end
 
+--[[
+  function sample:clone()
+    local ret_sample = sample:new()
+  
+    for key, value in pairs(self.headers) do
+      ret_sample.header
+  
+]]
 
-return Sample
+
+return sample
 

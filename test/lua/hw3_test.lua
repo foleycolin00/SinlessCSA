@@ -5,7 +5,23 @@ skip = require('skip')
 num = require('num')
 sym = require('sym')
 goal = require('goal')
-Sample = require('Sample')
+sample = require('sample')
 
-samplobj = Sample:new()
+samplobj = sample:new()
 samplobj:load('../../data/weather.csv')
+
+for key, value in pairs(samplobj.headers) do
+    if getmetatable(value) == num then 
+        print(value.min) 
+        print(value.max)
+        print(value.mean)
+    end
+
+    if getmetatable(value) == sym then 
+        print(value.mode)
+        print(value.mode_frequency)
+    end
+
+end
+
+

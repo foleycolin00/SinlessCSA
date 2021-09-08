@@ -147,7 +147,7 @@ class Sample:
   Uses readCSV from HW2
   :param f: the file to read
   &#39;&#39;&#39;
-  def read(self, f):
+  def fromFile(self, f):
     for row in readCSV(f):
       self.add(row)
       
@@ -347,7 +347,7 @@ klass = klass value</p></div>
   Uses readCSV from HW2
   :param f: the file to read
   &#39;&#39;&#39;
-  def read(self, f):
+  def fromFile(self, f):
     for row in readCSV(f):
       self.add(row)
       
@@ -462,6 +462,20 @@ klass = klass value</p></div>
     self.rows.append(lst)</code></pre>
 </details>
 </dd>
+<dt id="src.py.sample.Sample.fromFile"><code class="name flex">
+<span>def <span class="ident">fromFile</span></span>(<span>self, f)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fromFile(self, f):
+  for row in readCSV(f):
+    self.add(row)</code></pre>
+</details>
+</dd>
 <dt id="src.py.sample.Sample.header"><code class="name flex">
 <span>def <span class="ident">header</span></span>(<span>self, lst)</span>
 </code></dt>
@@ -497,20 +511,6 @@ klass = klass value</p></div>
     at+=1</code></pre>
 </details>
 </dd>
-<dt id="src.py.sample.Sample.read"><code class="name flex">
-<span>def <span class="ident">read</span></span>(<span>self, f)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def read(self, f):
-  for row in readCSV(f):
-    self.add(row)</code></pre>
-</details>
-</dd>
 </dl>
 </dd>
 </dl>
@@ -544,8 +544,8 @@ klass = klass value</p></div>
 <li><code><a title="src.py.sample.Sample.better" href="#src.py.sample.Sample.better">better</a></code></li>
 <li><code><a title="src.py.sample.Sample.betterCompare" href="#src.py.sample.Sample.betterCompare">betterCompare</a></code></li>
 <li><code><a title="src.py.sample.Sample.data" href="#src.py.sample.Sample.data">data</a></code></li>
+<li><code><a title="src.py.sample.Sample.fromFile" href="#src.py.sample.Sample.fromFile">fromFile</a></code></li>
 <li><code><a title="src.py.sample.Sample.header" href="#src.py.sample.Sample.header">header</a></code></li>
-<li><code><a title="src.py.sample.Sample.read" href="#src.py.sample.Sample.read">read</a></code></li>
 </ul>
 </li>
 </ul>

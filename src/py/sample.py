@@ -119,7 +119,7 @@ class Sample:
   Uses readCSV from HW2
   :param f: the file to read
   '''
-  def read(self, f):
+  def fromFile(self, f):
     for row in readCSV(f):
       self.add(row)
       

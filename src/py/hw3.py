@@ -6,7 +6,7 @@ s = Sample()
 myPath = os.path.dirname(os.path.abspath(__file__))
 myPath = myPath[:myPath.rindex("/")]
 myPath = myPath[:myPath.rindex("/")]
-s.read(myPath + "/data/auto93.csv")
+s.fromFile(myPath + "/data/auto93.csv")
 
 s.rows.sort(key=functools.cmp_to_key(s.betterCompare))
 

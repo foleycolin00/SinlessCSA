@@ -1,25 +1,22 @@
 local num = {}
 
+num.__index = num
+
 -- create a new num object
 function num:new(col_name)
-    local o = {}
+    local o = { name = col_name or '',
+                count = 0,
+                min = nil,
+                max = nil,
+                mean = 0,
+                stdev = 0,
+                m2 = 0 }
     setmetatable(o, self)
-    self.__index = self
-    self.count = 0
-    self.min = nil
-    self.max = nil
-    --self.mode = 0
-    self.mean = 0
-    self.stdev = 0 
-    self.m2 = 0
-    self.name = col_name
     return o
   
 end
 
 function num:add(x)
-
-    
     self.count = self.count + 1
     
     local delta = x - self.mean
@@ -36,16 +33,18 @@ function num:add(x)
     --https://github.com/timm/keys/blob/main/src/num.lua & https://www.youtube.com/watch?v=p5xThuN3P0I
     if self.count > 1 then  
         self.stdev = ((self.m2 / self.count - 1))^0.5 end
-
-
-
     
     return x
 end
 
 function num:clone()
     local return_val = num:new(self.name) 
-    
+    return_val.count = self.count
+    return_val.min = self.min
+    return_val.max = self.max
+    return_val.mean = self.mean
+    return_val.stdev = self.stdev
+    return_val.m2 = self.m2
     return return_val
 end
 

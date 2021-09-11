@@ -1,11 +1,11 @@
 local skip = {}
 
+skip.__index = skip
+
 function skip:new(col_name)
-    self.name = col_name or ''    
-    local o = {}
+    local o = { name = col_name or '',
+                count = 0 }
     setmetatable(o, self)
-    self.__index = self
-    self.count = 0
     return o
 end
 
@@ -14,5 +14,11 @@ function skip:add(x)
     return x
 end
 
+function skip:clone()
+    local return_val = skip:new(self.name) 
+    return_val.count = self.count
+
+    return return_val
+end
 
 return skip

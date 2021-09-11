@@ -82,7 +82,7 @@ def testSampleAdd():
   assert s.names == names
 
 '''Test function better'''
-def testBetter():
+def testSampleBetter():
     s = Sample([["abc", "A+", "def"]])
     s.add(["a", 1, "a"])
     s.add(["b", 2, "b"])
@@ -102,3 +102,54 @@ def testBetter():
     assert s.rows[0][0] == "b"
     assert s.rows[1][0] == "a"
 
+'''Test function dist'''
+def testSampleDist():
+  s = Sample([["abc", "A+", "def"]])
+  s.add(["a", 0, "a"])
+  s.add(["b", 1, "b"])
+  
+  assert s.dist(["a", 0, "a"], ["a", 0, "a"]) == 0
+  assert s.dist(["a", 0, "a"], ["b", 1, "b"]) == 1
+  assert s.dist(["b", 1, "b"], ["a", 0, "a"]) == 1
+  assert s.dist(["a", 1, "a"], ["a", 0, "a"]) == pow(1/3, 1/2)
+
+'''Test function neighbors'''
+def testSampleNeighbors():
+  s = Sample([["abc", "A+", "def"]])
+  s.add(["a", 0, "a"])
+  s.add(["b", 1, "b"])
+  
+  a = s.neighbors(["a", 0, "a"])
+  assert a[0][1] == ["b", 1, "b"]
+  
+  a = s.neighbors(["a", 0, "a"], [["b", 1, "b"]])
+  assert len(a) == 1
+  assert a[0][1] == ["b", 1, "b"]
+  
+'''Test function faraway'''
+def testSampleFaraway():
+  s = Sample()
+  myPath = os.path.dirname(os.path.abspath(__file__))
+  myPath = myPath[:myPath.rindex("/")]
+  myPath = myPath[:myPath.rindex("/")]
+  s.fromFile(myPath + "/data/auto93.csv")
+  
+  random.seed(0)
+  
+  f = s.faraway(s.rows[0])
+  assert round(s.rows.index(f)/len(s.rows), 1) == .9
+
+'''Test function divs'''
+def testSampleDivs():
+  s = Sample()
+  myPath = os.path.dirname(os.path.abspath(__file__))
+  myPath = myPath[:myPath.rindex("/")]
+  myPath = myPath[:myPath.rindex("/")]
+  s.fromFile(myPath + "/data/auto93.csv")
+  
+  random.seed(0)
+  
+  leafs = s.divs()
+  
+  for leaf in leafs:
+    assert len(leaf) == 23

@@ -3,8 +3,10 @@ from skip import *
 from sym import *
 from some import *
 from num import *
+from config import *
 import random
 import math
+import functools
 
 '''
 Returns whether the given string is a Klass (contains !)
@@ -158,3 +160,91 @@ class Sample:
       return -1
     else:
       return 1
+  
+  '''
+  Distance function between two rows
+  :param row1: the first row
+  :param row2: the second row
+  :return: the distance
+  '''
+  def dist(self, row1, row2):
+    d = 0
+    n = 1e-32
+    for col in self.cols:
+      n = n + 1
+      a = row1[col.at]
+      b = row2[col.at]
+      if a == '?' and b == '?':
+        d = d + 1
+      else:
+        d = d + pow(col.dist(a,b),Config.p)
+    return pow( d/n , 1/Config.p )
+  
+  '''
+  Neighbors function to get an array of tuples
+  :param r1: the row to compare
+  :param rows: the rows to compare to, or default all of the rows
+  '''
+  def neighbors(self, r1, rows = {}):
+    if not rows:
+      rows = self.rows
+    a = []
+    for r2 in rows:
+      if self.dist(r1, r2) != 0:
+        a.append((self.dist(r1, r2), r2))
+    a = sorted(a, key=lambda row: row[0])
+    return a
+  
+  '''
+  Faraway function finds the point that is Confix.far% away 
+  :param row: the row to find a point far away from
+  :return: that far point
+  '''
+  def faraway(self, row):
+    print(row)
+    a = self.neighbors(row, random.sample(self.rows, Config.samples))
+    return a[math.floor(Config.far*len(a))][1]
+    
+  '''
+  Does 1 random projection based on 2 distant points
+  :param rows: the rows we are using
+  '''
+  def div1(self, rows):
+    one = self.faraway(random.choice(rows))
+    two = self.faraway(one)
+    c = self.dist(one, two)
+    tmp = []
+    for row in rows:
+      a = self.dist(row, one)
+      b = self.dist(row, two)
+      x = (pow(a,2) + pow(c,2) - pow(b,2)) / (2*c)
+      tmp.append((x, row))
+    tmp = sorted(tmp, key=lambda row: row[0])
+    mid = math.floor(len(rows)/2)
+    return [x[1] for x in tmp[1:mid]], [x[1] for x in tmp[mid+1:]]
+  
+  '''
+  Recurrsive helper method for div
+  :param rows: the rows we are splitting
+  :param level: the level we are on
+  :param leafs: the leafs array
+  :param enough: how we know when to stop
+  '''
+  def divR(self, rows, level, leafs, enough):
+    if Config.loud:
+      print(f"Level: {level} #Rows: {len(rows)}")
+    if len(rows) < 2*enough:
+      leafs.append(rows)
+    else:
+      left, right = self.div1(rows)
+      self.divR(left, level+1, leafs, enough)
+      self.divR(right, level+1, leafs, enough)
+  
+  '''
+  Does many random projections (until size hits Config.enough)
+  '''
+  def divs(self):
+    leafs = []
+    enough = pow(len(self.rows), Config.enough)
+    self.divR(self.rows, 0, leafs, enough)
+    return leafs

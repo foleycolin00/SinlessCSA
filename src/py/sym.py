@@ -19,7 +19,11 @@ class Sym:
     self.has = {}
     self.mode = ''
     self._most = 0
-
+    
+  '''
+  Adds a symbol to this col
+  :param x: the symbol to add
+  '''
   def add(self, x):
     if x != '?':
       self.n += 1
@@ -29,3 +33,15 @@ class Sym:
         self.has[x] = 1
       if self.has[x] > self._most:
         self._most, self.mode = self.has[x], x
+  
+  '''
+  Distance function between two symbols
+  :param x: the first symbol
+  :param y: the second symbol
+  :return: 0 if equal and 1 if not
+  '''
+  def dist(self, x,y):
+    if x == y:
+      return 0
+    else:
+      return 1

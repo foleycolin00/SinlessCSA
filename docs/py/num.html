@@ -91,7 +91,31 @@ class Num:
     if x == &#39;?&#39;:
       return x
     else:
-      return (x-self.lo) / (self.hi - self.lo + 1e-32)</code></pre>
+      return (x-self.lo) / (self.hi - self.lo + 1e-32)
+  
+  &#39;&#39;&#39;
+  Distance function
+  :param x: the first value
+  :param y: the second value
+  :return: the distance
+  &#39;&#39;&#39;
+  def dist(self, x,y):
+    if x == &#39;?&#39;:
+      y = self.norm(y)
+      if y&gt;.5:
+        x = 0
+      else:
+        x = 1
+    elif y == &#39;?&#39;:
+      x = self.norm(x)
+      if x&gt;.5:
+        y = 0
+      else:
+        y = 1
+    else:
+      x = self.norm(x)
+      y = self.norm(y)
+    return abs(x-y)</code></pre>
 </details>
 </section>
 <section>
@@ -175,7 +199,31 @@ We must already know it is a goal
     if x == &#39;?&#39;:
       return x
     else:
-      return (x-self.lo) / (self.hi - self.lo + 1e-32)</code></pre>
+      return (x-self.lo) / (self.hi - self.lo + 1e-32)
+  
+  &#39;&#39;&#39;
+  Distance function
+  :param x: the first value
+  :param y: the second value
+  :return: the distance
+  &#39;&#39;&#39;
+  def dist(self, x,y):
+    if x == &#39;?&#39;:
+      y = self.norm(y)
+      if y&gt;.5:
+        x = 0
+      else:
+        x = 1
+    elif y == &#39;?&#39;:
+      x = self.norm(x)
+      if x&gt;.5:
+        y = 0
+      else:
+        y = 1
+    else:
+      x = self.norm(x)
+      y = self.norm(y)
+    return abs(x-y)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -199,6 +247,34 @@ We must already know it is a goal
     self.sd = 0 if (self.m2&lt;0 or self.n&lt;2) else pow(self.m2/( self.n - 1 ), .5 )
     self.lo = min(x, self.lo)
     self.hi = max(x, self.hi)</code></pre>
+</details>
+</dd>
+<dt id="src.py.num.Num.dist"><code class="name flex">
+<span>def <span class="ident">dist</span></span>(<span>self, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dist(self, x,y):
+  if x == &#39;?&#39;:
+    y = self.norm(y)
+    if y&gt;.5:
+      x = 0
+    else:
+      x = 1
+  elif y == &#39;?&#39;:
+    x = self.norm(x)
+    if x&gt;.5:
+      y = 0
+    else:
+      y = 1
+  else:
+    x = self.norm(x)
+    y = self.norm(y)
+  return abs(x-y)</code></pre>
 </details>
 </dd>
 <dt id="src.py.num.Num.getWeight"><code class="name flex">
@@ -252,6 +328,7 @@ We must already know it is a goal
 <h4><code><a title="src.py.num.Num" href="#src.py.num.Num">Num</a></code></h4>
 <ul class="">
 <li><code><a title="src.py.num.Num.add" href="#src.py.num.Num.add">add</a></code></li>
+<li><code><a title="src.py.num.Num.dist" href="#src.py.num.Num.dist">dist</a></code></li>
 <li><code><a title="src.py.num.Num.getWeight" href="#src.py.num.Num.getWeight">getWeight</a></code></li>
 <li><code><a title="src.py.num.Num.norm" href="#src.py.num.Num.norm">norm</a></code></li>
 </ul>

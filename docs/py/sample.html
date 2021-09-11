@@ -31,6 +31,7 @@ from skip import *
 from sym import *
 from some import *
 from num import *
+from config import *
 import random
 import math
 
@@ -185,7 +186,35 @@ class Sample:
     if self.better(row1, row2):
       return -1
     else:
-      return 1</code></pre>
+      return 1
+  
+  &#39;&#39;&#39;
+  Distance function between two rows
+  Parameters
+  ----------
+    row1: the first row
+    row2: the second row
+  Returns
+  -------
+    the distance
+  &#39;&#39;&#39;
+  def dist(self, row1, row2):
+    d = 0
+    n = 1e-32
+    for col in self.cols:
+      n = n + 1
+      a = row1[col.at]
+      b = row2[col.at]
+      if a == &#39;?&#39; and b == &#39;?&#39;:
+        d = d + 1
+      else:
+        d = d + pow(col.dist(a,b),Config.p)
+    return pow( d/n , 1/Config.p )
+  
+  &#39;&#39;&#39;
+  Neighbors function to get a dictionary of distances from a given row
+  :param r1: the row to compare
+  &#39;&#39;&#39;</code></pre>
 </details>
 </section>
 <section>
@@ -385,7 +414,35 @@ klass = klass value</p></div>
     if self.better(row1, row2):
       return -1
     else:
-      return 1</code></pre>
+      return 1
+  
+  &#39;&#39;&#39;
+  Distance function between two rows
+  Parameters
+  ----------
+    row1: the first row
+    row2: the second row
+  Returns
+  -------
+    the distance
+  &#39;&#39;&#39;
+  def dist(self, row1, row2):
+    d = 0
+    n = 1e-32
+    for col in self.cols:
+      n = n + 1
+      a = row1[col.at]
+      b = row2[col.at]
+      if a == &#39;?&#39; and b == &#39;?&#39;:
+        d = d + 1
+      else:
+        d = d + pow(col.dist(a,b),Config.p)
+    return pow( d/n , 1/Config.p )
+  
+  &#39;&#39;&#39;
+  Neighbors function to get a dictionary of distances from a given row
+  :param r1: the row to compare
+  &#39;&#39;&#39;</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -460,6 +517,29 @@ klass = klass value</p></div>
   
   if self.keep:
     self.rows.append(lst)</code></pre>
+</details>
+</dd>
+<dt id="src.py.sample.Sample.dist"><code class="name flex">
+<span>def <span class="ident">dist</span></span>(<span>self, row1, row2)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dist(self, row1, row2):
+  d = 0
+  n = 1e-32
+  for col in self.cols:
+    n = n + 1
+    a = row1[col.at]
+    b = row2[col.at]
+    if a == &#39;?&#39; and b == &#39;?&#39;:
+      d = d + 1
+    else:
+      d = d + pow(col.dist(a,b),Config.p)
+  return pow( d/n , 1/Config.p )</code></pre>
 </details>
 </dd>
 <dt id="src.py.sample.Sample.fromFile"><code class="name flex">
@@ -544,6 +624,7 @@ klass = klass value</p></div>
 <li><code><a title="src.py.sample.Sample.better" href="#src.py.sample.Sample.better">better</a></code></li>
 <li><code><a title="src.py.sample.Sample.betterCompare" href="#src.py.sample.Sample.betterCompare">betterCompare</a></code></li>
 <li><code><a title="src.py.sample.Sample.data" href="#src.py.sample.Sample.data">data</a></code></li>
+<li><code><a title="src.py.sample.Sample.dist" href="#src.py.sample.Sample.dist">dist</a></code></li>
 <li><code><a title="src.py.sample.Sample.fromFile" href="#src.py.sample.Sample.fromFile">fromFile</a></code></li>
 <li><code><a title="src.py.sample.Sample.header" href="#src.py.sample.Sample.header">header</a></code></li>
 </ul>

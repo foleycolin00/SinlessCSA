@@ -1,21 +1,17 @@
 local goal = {}
 
+num = require('num')
+
 goal.__index = goal
+setmetatable(goal, num)
 
 -- create a new goal object
 function goal:new(col_name, min_or_max)
-    local o = { weight = min_or_max }
-    setmetatable(o, self)
-    
-    return o
+  local o = num:new(col_name)
+  setmetatable(o, self)
+  o.weight = min_or_max
+  return o
 end
-
---[[
-function goal:add(x)
-    self.count = self.count + 1
-    return x
-end
-]]
 
 function goal:clone()
     local return_val = goal:new(self.name, self.weight)

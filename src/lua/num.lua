@@ -4,15 +4,15 @@ num.__index = num
 
 -- create a new num object
 function num:new(col_name)
-    local o = { name = col_name or '',
-                count = 0,
-                min = nil,
-                max = nil,
-                mean = 0,
-                stdev = 0,
-                m2 = 0 }
-    setmetatable(o, self)
-    return o
+  local o = { name = col_name or '',
+              count = 0,
+              min = nil,
+              max = nil,
+              mean = 0,
+              stdev = 0,
+              m2 = 0 }
+  setmetatable(o, self)
+  return o
   
 end
 

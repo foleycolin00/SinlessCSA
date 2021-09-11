@@ -1,6 +1,7 @@
 local sym = {}
 
-function sym:new()
+function sym:new(col_name)
+    self.name = col_name or ''
     local o = {}
     setmetatable(o, self)
     self.__index = self

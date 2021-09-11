@@ -1,10 +1,13 @@
 local goal = {}
 
-function goal:new()
+-- create a new goall object
+function goal:new(col_name)
     local o = {}
     setmetatable(o, self)
     self.__index = self
     self.count = 0
+    self.name = col_name
+    
     return o
   
 end

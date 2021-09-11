@@ -16,7 +16,10 @@ num = require('num')
 sym = require('sym')
 goal = require('goal')
 
-function sample:new()
+
+-- create a new sample object
+function sample:new(col_name)
+  self.name = col_name
   local o = {}
   setmetatable(o, self)
   self.__index = self
@@ -31,26 +34,27 @@ function sample:load(fileName)
   for row in tools:csv(fileName) do
     if #self.headers == 0 then
       if #row > 0 then sample:header(row) end
-      
-        -- if ? then add skip
-        -- if + or - then add goal
-        -- if starts cap then add Num
-        -- all other are Sym
-        -- self.headers = row
-        
     else
       local tmp = {}
       for i = 1, #row do
+        --unsure about this line of code
         table.insert(tmp, self.headers[i]:add(row[i]))
       end
+      -- loads rows in temporary array
       table.insert(self.rows, tmp)
     end
   end
 end
 
+function sample:copysample(other_sample)
+  for row in other_sample.rows do 
+  end
+
+  
+  
 function sample:header(list)
   -- equivalent to isSkip, isGoal, isNum 
-  -- ask about isKlass, what's klass goal in this context?
+  -- ask about isKlass, what's klass in this context?
 
   for key, item in pairs(list) do 
     if string.find(item, '?') then -- isSkip
@@ -69,14 +73,14 @@ function sample:header(list)
   end
 end
 
---[[
+
   function sample:clone()
     local ret_sample = sample:new()
   
     for key, value in pairs(self.headers) do
-      ret_sample.header
+      value:clone()
+    end
   
-]]
 
 
 return sample

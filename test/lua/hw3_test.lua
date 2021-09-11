@@ -15,6 +15,9 @@ for key, value in pairs(samplobj.headers) do
         print(value.min) 
         print(value.max)
         print(value.mean)
+        print(value.stdev)
+        print(value.count)
+        print(value)
     end
 
     if getmetatable(value) == sym then 

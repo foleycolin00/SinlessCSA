@@ -48,7 +48,7 @@ def testNumAdd():
   assert num.n == 2
 
 '''Test function norm'''
-def testNorm():
+def testNumNorm():
   num = Num()
   num.add(0)
   num.add('?')
@@ -58,3 +58,11 @@ def testNorm():
   assert num.norm(1) == 1
   assert num.norm(0) == 0
   assert num.norm(.5) == .5
+  
+'''Test function dist'''
+def testNumDist():
+  num = Num()
+  num.add(0)
+  num.add(100)
+  assert num.dist(0, 100) == 1
+  assert num.dist(0, 50) == .5

@@ -64,4 +64,28 @@ class Num:
       return x
     else:
       return (x-self.lo) / (self.hi - self.lo + 1e-32)
+  
+  '''
+  Distance function
+  :param x: the first value
+  :param y: the second value
+  :return: the distance
+  '''
+  def dist(self, x,y):
+    if x == '?':
+      y = self.norm(y)
+      if y>.5:
+        x = 0
+      else:
+        x = 1
+    elif y == '?':
+      x = self.norm(x)
+      if x>.5:
+        y = 0
+      else:
+        y = 1
+    else:
+      x = self.norm(x)
+      y = self.norm(y)
+    return abs(x-y)
 

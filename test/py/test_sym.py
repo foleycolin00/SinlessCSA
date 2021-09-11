@@ -30,3 +30,11 @@ def testSymAdd():
   assert sym.has['123'] == 2
   assert sym.mode == '123'
   assert sym._most == 2
+
+'''
+Test Sym dist
+'''
+def testSymDist():
+  sym = Sym()
+  assert sym.dist('c', 'c') == 0
+  assert sym.dist('c', 'd') == 1

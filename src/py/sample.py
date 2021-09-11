@@ -3,6 +3,7 @@ from skip import *
 from sym import *
 from some import *
 from num import *
+from config import *
 import random
 import math
 
@@ -158,3 +159,31 @@ class Sample:
       return -1
     else:
       return 1
+  
+  '''
+  Distance function between two rows
+  Parameters
+  ----------
+    row1: the first row
+    row2: the second row
+  Returns
+  -------
+    the distance
+  '''
+  def dist(self, row1, row2):
+    d = 0
+    n = 1e-32
+    for col in self.cols:
+      n = n + 1
+      a = row1[col.at]
+      b = row2[col.at]
+      if a == '?' and b == '?':
+        d = d + 1
+      else:
+        d = d + pow(col.dist(a,b),Config.p)
+    return pow( d/n , 1/Config.p )
+  
+  '''
+  Neighbors function to get a dictionary of distances from a given row
+  :param r1: the row to compare
+  '''

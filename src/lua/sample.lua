@@ -52,12 +52,12 @@ function sample:header(list)
   -- ask about isKlass, what's klass in this context?
   
   for key, item in pairs(list) do
-    
     if string.find(item, '?') then -- isSkip
       table.insert(self.headers, skip:new(item))
       --return skip
     elseif string.find(item, '+') or string.find(item, '-') then -- weight: max or min
-      table.insert(self.headers, goal:new(item))
+      local weight = string.find(item, '+') and 1 or -1
+      table.insert(self.headers, goal:new(item, weight))
       --return goal 
     elseif string.sub(item,1,1):match('[A-Z]') then -- uppercase isNum
       table.insert(self.headers, num:new(item))

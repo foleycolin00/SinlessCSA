@@ -21,7 +21,6 @@ for key, value in pairs(samplobj.headers) do
         print(value.mean)
         print(value.stdev)
         print(value.count)
-        print(value)
     end
     
     if getmetatable(value) == sym then 
@@ -33,6 +32,14 @@ for key, value in pairs(samplobj.headers) do
       print(value.count)
     end
     
+    if getmetatable(value) == goal then 
+        print(value.min) 
+        print(value.max)
+        print(value.mean)
+        print(value.stdev)
+        print(value.count)
+        print(value.weight)
+    end
     
     print()
 end
@@ -56,7 +63,6 @@ for key, value in pairs(new_samplobj.headers) do
         print(value.mean)
         print(value.stdev)
         print(value.count)
-        print(value)
     end
     
     if getmetatable(value) == sym then 
@@ -66,6 +72,15 @@ for key, value in pairs(new_samplobj.headers) do
     
     if getmetatable(value) == skip then
       print(value.count)
+    end
+    
+    if getmetatable(value) == goal then 
+        print(value.min) 
+        print(value.max)
+        print(value.mean)
+        print(value.stdev)
+        print(value.count)
+        print(value.weight)
     end
     
     

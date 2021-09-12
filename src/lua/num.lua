@@ -16,7 +16,10 @@ function num:new(col_name)
   
 end
 
-function num:add(x)
+function num:add(x) 
+
+    --if type(x) ~= "number" then x = 0 end -- FIX THIS SRSLY!!!
+    
     self.count = self.count + 1
     
     local delta = x - self.mean
@@ -47,5 +50,13 @@ function num:clone()
     return_val.m2 = self.m2
     return return_val
 end
+
+function num:norm(x)
+    if self.max == self.min then print("Normalization Error: Divide by zero") return 1 end 
+
+    return (x - self.min) / (self.max - self.min)
+end 
+
+
 
 return num

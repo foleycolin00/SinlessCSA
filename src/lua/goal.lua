@@ -24,4 +24,5 @@ function goal:clone()
     return return_val
 end
 
+
 return goal

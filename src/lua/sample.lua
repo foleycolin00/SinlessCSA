@@ -38,6 +38,7 @@ function sample:load(fileName)
       local tmp = {}
       for i = 1, #row do
         --unsure about this line of code
+        if getmetatable(self.headers[i]) == num or getmetatable(self.headers[i]) == goal then row[i] = tonumber(row[i]) or 0 end
         table.insert(tmp, self.headers[i]:add(row[i]))
       end
       -- loads rows in temporary array
@@ -88,5 +89,47 @@ function sample:clone()
   return ret_sample
 end
 
+function sample:zitler(row1, row2)
+  local s1 = 0
+  local s2 = 0
+  local e = math.exp(1)
+  local goal_count = 0
+
+
+  for i = 1, #self.headers do
+    local column = self.headers[i]
+    if getmetatable(column) == goal then
+      local goal_count = goal_count + 1
+      local w = column.weight 
+      local x = column:norm(row1[i])
+      local y = column:norm(row2[i])
+
+      s1 = s1 - e^(w * (x - y) / column.count)
+
+      s2 = s2 - e^(w * (x - y) / column.count)
+    end
+  end
+  
+  if goal_count == 0 then print("Error: Goals were not specified") return false end
+
+  return (s1 / goal_count) < (s2 / goal_count) 
+
+end
+
+function sample:sort_by_goal()
+  return table.sort(self.rows, self:zitler())
+end
+
+function og_sort()
+  local aTable = {}
+
+  local min = 1
+
+  for i = 2, #self.rows do
+     if zitler(self.rows[i], self.rows[min]) then min = i end
+  end
+
+  table.insert(aTable, self.rows, min)
+  
 return sample
 

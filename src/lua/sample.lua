@@ -17,6 +17,7 @@ skip = require('skip')
 num = require('num')
 sym = require('sym')
 goal = require('goal')
+klass = require('klass')
 
 
 -- create a new sample object
@@ -24,7 +25,6 @@ function sample:new()
   local o = { headers = {},
               rows = {} }
   setmetatable(o, self)
-
   return o
 end
 
@@ -49,9 +49,7 @@ end
   
   
 function sample:header(list)
-  -- equivalent to isSkip, isGoal, isNum 
-  -- ask about isKlass, what's klass in this context?
-  
+  -- equivalent to isSkip, isGoal, isNum, isKlass
   for key, item in pairs(list) do
     if string.find(item, '?') then -- isSkip
       table.insert(self.headers, skip:new(item))
@@ -66,6 +64,11 @@ function sample:header(list)
     else
       table.insert(self.headers, sym:new(item))
       --return sym
+    end
+    -- has to be outside of the if statement (else if can't do num and sym)
+    if string.find(item, '!')  then
+      table.insert(self.headers, klass:new(item))
+      --return klass
     end
   end
 end

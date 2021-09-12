@@ -6,6 +6,7 @@ num = require('num')
 sym = require('sym')
 goal = require('goal')
 sample = require('sample')
+klass = require('klass')
 
 samplobj = sample:new()
 samplobj:load('../../data/weather.csv')
@@ -82,6 +83,10 @@ for key, value in pairs(new_samplobj.headers) do
         print(value.count)
         print(value.weight)
     end
+    if getmetatable(value) == klass then 
+      print("HERE! HERE! HERE!")
+    end
+
     
     
     print()

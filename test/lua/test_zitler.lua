@@ -6,6 +6,7 @@ num = require('num')
 sym = require('sym')
 goal = require('goal')
 sample = require('sample')
+klass = require('klass')
 
 autoSample = sample:new()
 autoSample:load('../../data/auto93.csv')

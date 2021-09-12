@@ -7,17 +7,56 @@ sym = require('sym')
 goal = require('goal')
 sample = require('sample')
 
-samplobj = sample:new()
-samplobj:load('../../data/auto93.csv')
+autoSample = sample:new()
+autoSample:load('../../data/auto93.csv')
 
-for key, value in pairs(samplobj.rows) do
-    for i = 1, #value do 
-        io.write(value[i], ' ')
+weatherSample = sample:new()
+weatherSample:load('../../data/weather.csv')
+
+pomSample = sample:new()
+pomSample:load('../../data/pom3a.csv')
+
+
+autoSample:og_sort()
+
+print('autoSample \n')
+for i = 1, 5 do
+    for j = 1, #autoSample.rows[i] do 
+        io.write(autoSample.rows[i][j], ' ')
     end
+    
+    print()
+end
+print()
+
+for i = #autoSample.rows - 5, #autoSample.rows do
+    for j = 1, #autoSample.rows[i] do 
+        io.write(autoSample.rows[i][j], ' ')
+    end
+    
     print()
 end
 
+-- weatherSample:og_sort()
 
---table.sort(samplobj.rows, samplobj:zitler())
+print('weatherSample \n')
+for i = 1, #weatherSample.rows do
+    for j = 1, #weatherSample.rows[i] do 
+        io.write(weatherSample.rows[i][j], ' ')
+    end
+    
+    print()
+end
+print()
 
-print(unpack(samplobj:sort_by_goal()))
+-- pomSample:og_sort()
+
+print('pomSample \n')
+for i = 1, 5 do
+    for j = 1, #pomSample.rows[i] do 
+        io.write(pomSample.rows[i][j], ' ')
+    end
+    
+    print()
+end
+print()

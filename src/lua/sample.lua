@@ -99,37 +99,45 @@ function sample:zitler(row1, row2)
   for i = 1, #self.headers do
     local column = self.headers[i]
     if getmetatable(column) == goal then
-      local goal_count = goal_count + 1
+      goal_count = goal_count + 1
       local w = column.weight 
       local x = column:norm(row1[i])
       local y = column:norm(row2[i])
 
-      s1 = s1 - e^(w * (x - y) / column.count)
+      s1 = s1 - e^( w * ((x - y) / column.count) )
 
-      s2 = s2 - e^(w * (x - y) / column.count)
+      s2 = s2 - e^(w * ((y - x) / column.count) )
     end
   end
   
   if goal_count == 0 then print("Error: Goals were not specified") return false end
-
   return (s1 / goal_count) < (s2 / goal_count) 
 
 end
 
+-- doesnt work
+--[[
 function sample:sort_by_goal()
-  return table.sort(self.rows, self:zitler())
+  table.sort(self.rows, self:zitler)
 end
+]]
 
-function og_sort()
-  local aTable = {}
-
-  local min = 1
-
-  for i = 2, #self.rows do
-     if zitler(self.rows[i], self.rows[min]) then min = i end
+-- inefficient sort method
+function sample:og_sort()
+  for i = 1, #self.rows do
+    local min = i
+    
+    for j = i + 1, #self.rows do
+      if self:zitler(self.rows[j], self.rows[min]) then
+        min = j
+      end
+    end
+    
+    local temp = self.rows[i]
+    self.rows[i] = self.rows[min]
+    self.rows[min] = temp
   end
-
-  table.insert(aTable, self.rows, min)
+end
   
 return sample
 

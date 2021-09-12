@@ -88,20 +88,21 @@ end
 -- take in a csv
 -- return column headers, and rows that match
 function tools:csv(fileName)
-  --- read the file or input
+
   local headersize = 0
 
   local stream = fileName and io.input(fileName) or io.input()
   local tmp = io.read()
   
   return function()
-    
+
     while true do
 
       if tmp then
 
         local t = {}
         while true do
+          
           tmp = tmp:gsub('[\t\r ]*', ''):gsub('#.*','')
           
           for y in tmp:gmatch('[^,]+') do

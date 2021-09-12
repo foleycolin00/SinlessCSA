@@ -38,7 +38,7 @@ function sample:load(fileName)
       local tmp = {}
       for i = 1, #row do
         --unsure about this line of code
-        if getmetatable(self.headers[i]) == num or getmetatable(self.headers[i]) == goal then row[i] = tonumber(row[i]) or 0 end
+        --if getmetatable(self.headers[i]) == num or getmetatable(self.headers[i]) == goal then row[i] = tonumber(row[i]) or 0 end
         table.insert(tmp, self.headers[i]:add(row[i]))
       end
       -- loads rows in temporary array

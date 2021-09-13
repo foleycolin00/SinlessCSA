@@ -1,3 +1,5 @@
+local b4={}; for k,_ in pairs(_ENV) do b4[k]=k end -- first line
+
 local klass = {}
 
 sym = require('sym')
@@ -13,5 +15,5 @@ function klass:new(col_name)
 end
 
 
-
+for k,_ in pairs(_ENV) do if not b4[k] then print("?? "..k) end end -- last lines before return
 return klass

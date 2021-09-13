@@ -126,6 +126,7 @@ end
 ]]
 
 -- inefficient sort method
+--[[
 function sample:og_sort()
   for i = 1, #self.rows do
     local min = i
@@ -141,6 +142,7 @@ function sample:og_sort()
     self.rows[min] = temp
   end
 end
-  
+]]
+
 return sample
 

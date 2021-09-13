@@ -37,12 +37,21 @@ function sample:load(fileName)
     else
       local tmp = {}
       for i = 1, #row do
-        --unsure about this line of code
-        --if getmetatable(self.headers[i]) == num or getmetatable(self.headers[i]) == goal then row[i] = tonumber(row[i]) or 0 end
-        table.insert(tmp, self.headers[i]:add(row[i]))
+        
+        local val = self.headers[i]:add(row[i])
+        
+        if val == nil then 
+          tmp = nil
+          break
+        end
+        
+        table.insert(tmp, val)
       end
-      -- loads rows in temporary array
-      table.insert(self.rows, tmp)
+      
+      if tmp ~= nil then
+        -- loads rows in temporary array
+        table.insert(self.rows, tmp)
+      end
     end
   end
 end
@@ -53,22 +62,15 @@ function sample:header(list)
   for key, item in pairs(list) do
     if string.find(item, '?') then -- isSkip
       table.insert(self.headers, skip:new(item))
-      --return skip
     elseif string.find(item, '+') or string.find(item, '-') then -- weight: max or min
       local weight = string.find(item, '+') and 1 or -1
       table.insert(self.headers, goal:new(item, weight))
-      --return goal 
+    elseif string.find(item, '!')  then
+      table.insert(self.headers, klass:new(item))
     elseif string.sub(item,1,1):match('[A-Z]') then -- uppercase isNum
       table.insert(self.headers, num:new(item))
-      --return num
     else
       table.insert(self.headers, sym:new(item))
-      --return sym
-    end
-    -- has to be outside of the if statement (else if can't do num and sym)
-    if string.find(item, '!')  then
-      table.insert(self.headers, klass:new(item))
-      --return klass
     end
   end
 end
@@ -126,7 +128,6 @@ end
 ]]
 
 -- inefficient sort method
---[[
 function sample:og_sort()
   for i = 1, #self.rows do
     local min = i
@@ -142,7 +143,6 @@ function sample:og_sort()
     self.rows[min] = temp
   end
 end
-]]
 
 return sample
 

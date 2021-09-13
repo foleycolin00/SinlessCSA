@@ -18,7 +18,7 @@ pomSample = sample:new()
 pomSample:load('../../data/pom3a.csv')
 
 
-autoSample:og_sort()
+--autoSample:og_sort()
 
 print('autoSample \n')
 for i = 1, 5 do

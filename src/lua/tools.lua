@@ -94,6 +94,8 @@ function tools:csv(fileName)
   local stream = fileName and io.input(fileName) or io.input()
   local tmp = io.read()
   
+  local line_number = 1
+  
   return function()
 
     while true do
@@ -109,6 +111,8 @@ function tools:csv(fileName)
             table.insert(t, y)
           end
           
+          line_number = line_number + 1
+          
           if string.sub(tmp, #tmp) ~= ',' then 
             tmp = io.read()
             break
@@ -119,10 +123,10 @@ function tools:csv(fileName)
         if headersize == 0 then headersize = #t end
 
         if #t > 0 then
-          for key, value in pairs(t) do
-            value = tonumber(value) or value
+          if #t == headersize then
+            return t 
+          else print(string.format("%s - Line %d: Number of columns does not match title row.", fileName, line_number - 1))
           end
-          if #t == headersize then return t else print("This line number of columns does not equal the header number of columns") end
         end
       else
         io.close(stream)

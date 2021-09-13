@@ -17,29 +17,32 @@ for key, value in pairs(samplobj.headers) do
   print('col_name ' .. value.name .. '\n')
   
     if getmetatable(value) == num then 
-        print(value.min) 
-        print(value.max)
-        print(value.mean)
-        print(value.stdev)
-        print(value.count)
+        --print(value.min) 
+        --print(value.max)
+        --print(value.mean)
+        --print(value.stdev)
+        --print(value.count)
+        --for i = 1, #value.sample_list.sample_list do
+          -- print('hello')
+        --end
     end
     
     if getmetatable(value) == sym then 
-        print(value.mode)
-        print(value.mode_frequency)
+        --print(value.mode)
+        --print(value.mode_frequency)
     end
     
     if getmetatable(value) == skip then
-      print(value.count)
+      --print(value.count)
     end
     
     if getmetatable(value) == goal then 
-        print(value.min) 
-        print(value.max)
-        print(value.mean)
-        print(value.stdev)
-        print(value.count)
-        print(value.weight)
+        --print(value.min) 
+        --print(value.max)
+        --print(value.mean)
+        --print(value.stdev)
+        --print(value.count)
+        --print(value.weight)
     end
     
     print()
@@ -52,6 +55,7 @@ for key, value in pairs(samplobj.rows) do
   print()
 end
 
+--[[
 new_samplobj = samplobj:clone()
 
 print('Copy of first obj')
@@ -119,4 +123,5 @@ for key, value in pairs(new_samplobj.rows) do
   end
   print()
 end
+]]
 

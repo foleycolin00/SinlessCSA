@@ -7,4 +7,8 @@ href="https://github.com/foleycolin00/SinlessColinAndSteven/actions"><img src="h
 
 # SinlessColinAndSteven
 
-## <a href="https://htmlpreview.github.io/?https://github.com/foleycolin00/SinlessColinAndSteven/blob/main/docs/index.html">Documentation</a>
+## <a href="https://htmlpreview.github.io/?https://github.com/foleycolin00/SinlessColinAndSteven/blob/main/docs/index.html">Python Documentation</a>
+
+## <a href="/docs/lua/lua-doc.md">Lua Documentation</a>
+
+

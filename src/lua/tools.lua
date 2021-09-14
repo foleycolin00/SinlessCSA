@@ -102,9 +102,9 @@ function tools:csv(fileName)
 
         local t = {}
         while true do
-          
+          -- remove white space and comments
           tmp = tmp:gsub('[\t\r ]*', ''):gsub('#.*','')
-          
+          -- sepreate by comma
           for y in tmp:gmatch('[^,]+') do
             table.insert(t, y)
           end

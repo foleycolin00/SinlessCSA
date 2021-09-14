@@ -1,3 +1,5 @@
+local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
+
 -- stores rows, which are simple lists made up of columns
 
 -- stores headers, which define the name and type of a column
@@ -12,12 +14,12 @@ local sample = {}
 
 sample.__index = sample
 
-tools = require('tools')
-skip = require('skip')
-num = require('num')
-sym = require('sym')
-goal = require('goal')
-klass = require('klass')
+local tools = require('tools')
+local skip = require('skip')
+local num = require('num')
+local sym = require('sym')
+local goal = require('goal')
+local klass = require('klass')
 
 
 -- create a new sample object
@@ -25,6 +27,7 @@ function sample:new()
   local o = { headers = {},
               rows = {} }
   setmetatable(o, self)
+  
   return o
 end
 
@@ -37,21 +40,9 @@ function sample:load(fileName)
     else
       local tmp = {}
       for i = 1, #row do
-        
-        local val = self.headers[i]:add(row[i])
-        
-        if val == nil then 
-          tmp = nil
-          break
-        end
-        
-        table.insert(tmp, val)
+        table.insert(tmp, self.headers[i]:add(row[i]))
       end
-      
-      if tmp ~= nil then
-        -- loads rows in temporary array
-        table.insert(self.rows, tmp)
-      end
+      table.insert(self.rows, tmp)
     end
   end
 end
@@ -116,18 +107,17 @@ function sample:zitler(row1, row2)
   end
   
   if goal_count == 0 then print("Error: Goals were not specified") return false end
+  
   return (s1 / goal_count) < (s2 / goal_count) 
-
 end
 
--- doesnt work
---[[
 function sample:sort_by_goal()
-  table.sort(self.rows, self:zitler)
+  table.sort(self.rows, function (a, b) return self:zitler(a, b) end)
 end
-]]
 
--- inefficient sort method
+
+--[[
+-- inefficient sort method, not used anymore
 function sample:og_sort()
   for i = 1, #self.rows do
     local min = i
@@ -143,6 +133,9 @@ function sample:og_sort()
     self.rows[min] = temp
   end
 end
+]]
+
+for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return sample
 

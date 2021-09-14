@@ -1,3 +1,5 @@
+local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
+
 local sym = {}
 
 sym.__index = sym
@@ -14,15 +16,17 @@ function sym:new(col_name)
 end
 
 function sym:add(x)
-    self.count = self.count + 1
-    self.symbol_list[x] = (self.symbol_list[x] or 0) + 1
+  if x == '?' then return x end
+  
+  self.count = self.count + 1
+  self.symbol_list[x] = (self.symbol_list[x] or 0) + 1
 
-    if self.symbol_list[x] > self.mode_frequency then 
-        self.mode_frequency = self.symbol_list[x]
-        self.mode = x
-    end
-    
-    return x
+  if self.symbol_list[x] > self.mode_frequency then 
+      self.mode_frequency = self.symbol_list[x]
+      self.mode = x
+  end
+  
+  return x
 end
 
 function sym:clone()
@@ -38,5 +42,7 @@ function sym:clone()
 
     return return_val
 end
+
+for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return sym

@@ -1,8 +1,10 @@
+local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
+
 package.path = '../../src/lua/?.lua;' .. package.path
 
-tools = require('tools')
+local tools = require('tools')
 
-timeStart = os.clock()
+local timeStart = os.clock()
 
 -- while os.clock() - timeStart <= 1 do end
 
@@ -26,3 +28,5 @@ for row in tools:csv('../../data/weather.csv') do
   end
   print()
 end
+
+for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

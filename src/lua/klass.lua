@@ -1,6 +1,8 @@
+local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
+
 local klass = {}
 
-sym = require('sym')
+local sym = require('sym')
 
 klass.__index = klass
 setmetatable(klass, sym)
@@ -9,6 +11,7 @@ setmetatable(klass, sym)
 function klass:new(col_name)
   local o = sym:new(col_name)
   setmetatable(o, self)
+  
   return o
 end
 
@@ -25,5 +28,7 @@ function klass:clone()
 
     return return_val
 end
+
+for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return klass

@@ -1,8 +1,10 @@
+local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
+
 local num = {}
 
 num.__index = num
 
-some = require('some')
+local some = require('some')
 
 -- create a new num object
 function num:new(col_name)
@@ -12,24 +14,21 @@ function num:new(col_name)
               max = nil,
               mean = 0,
               stdev = 0,
-              m2 = 0 }--,
-              --sample_list = some:new() }
+              m2 = 0,
+              sample_list = some:new() }
   setmetatable(o, self)
-  return o
   
+  return o
 end
 
 function num:add(x)
   x = tonumber(x) or x
   
   if type(x) ~= 'number' then
-    if x == '?' then return nil
-    else
-      return nil
-    end
+    return x
   end
   
-  --self.sample_list:add(x)
+  self.sample_list:add(x)
   
   self.count = self.count + 1
   
@@ -63,11 +62,14 @@ function num:clone()
 end
 
 function num:norm(x)
-    if self.max == self.min then --[[print("Normalization Error: Divide by zero")]] return 1 end 
+  if type(x) ~= 'number' then return x end
+  
+  if self.max == self.min then --[[print("Normalization Error: Divide by zero")]] return 1 end 
 
-    return (x - self.min) / (self.max - self.min)
+  return (x - self.min) / (self.max - self.min)
 end 
 
 
+for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return num

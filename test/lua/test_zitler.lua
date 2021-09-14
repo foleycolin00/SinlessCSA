@@ -1,24 +1,27 @@
+local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
+
 package.path = '../../src/lua/?.lua;' .. package.path
 
-tools = require('tools')
-skip = require('skip')
-num = require('num')
-sym = require('sym')
-goal = require('goal')
-sample = require('sample')
-klass = require('klass')
+local tools = require('tools')
+local skip = require('skip')
+local num = require('num')
+local sym = require('sym')
+local goal = require('goal')
+local sample = require('sample')
+local klass = require('klass')
 
-autoSample = sample:new()
+local autoSample = sample:new()
 autoSample:load('../../data/auto93.csv')
 
-weatherSample = sample:new()
+local weatherSample = sample:new()
 weatherSample:load('../../data/weather.csv')
 
-pomSample = sample:new()
+local pomSample = sample:new()
 pomSample:load('../../data/pom3a.csv')
 
 
 --autoSample:og_sort()
+--autoSample:sort_by_goal()
 
 print('autoSample \n')
 for i = 1, 5 do
@@ -50,7 +53,9 @@ for i = 1, #weatherSample.rows do
 end
 print()
 
--- pomSample:og_sort()
+--pomSample:og_sort()
+--pomSample:sort_by_goal()
+-- table.sort(pomSample.rows, function(a, b) return pomSample:zitler(a, b) end)
 
 print('pomSample \n')
 for i = 1, 5 do
@@ -61,3 +66,5 @@ for i = 1, 5 do
     print()
 end
 print()
+
+for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

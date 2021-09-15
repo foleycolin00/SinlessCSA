@@ -107,9 +107,13 @@ function tools:csv(fileName)
         local t = {}
         while true do
           
+          -- remove whitespace and anything after comment characters
           tmp = tmp:gsub('[\t\r ]*', ''):gsub('#.*','')
           
+          -- insert elements that are after commas into a table
           for y in tmp:gmatch('[^,]+') do
+            -- convert to type number if possible 
+            y = tonumber(y) or y
             table.insert(t, y)
           end
           

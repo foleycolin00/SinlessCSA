@@ -44,10 +44,10 @@ function some:insert_sorted(item)
   end
   
   for i = 1, #self.sample_list do
-    print(self.sample_list[i])
+  --  print(self.sample_list[i])
   end
   
-  print()
+  --print()
   
 end
 

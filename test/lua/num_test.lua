@@ -22,11 +22,24 @@ for key, value in pairs(numSample.headers) do
     if getmetatable(value) == num then 
         assert(value.min == 6)
         assert(value.max == 85)
-        print(value.mean)
         assert(math.floor(value.mean) == 69)
         assert(math.floor(value.stdev) == 18)
         assert(value.count == 14)
-        -- tests normalize
     end
 end
+
+-- test clone
+local numSampleClone = numSample:clone()
+
+for key, value in pairs(numSampleClone.headers) do
+      if getmetatable(value) == num then 
+          assert(value.min == 6)
+          assert(value.max == 85)
+          assert(math.floor(value.mean) == 69)
+          assert(math.floor(value.stdev) == 18)
+          assert(value.count == 14)
+      end
+end
+
+
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

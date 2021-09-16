@@ -1,6 +1,8 @@
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 local sym = {}
+local max = 0
+local multimodal = {}
 
 sym.__index = sym
 
@@ -16,16 +18,28 @@ function sym:new(col_name)
 end
 
 function sym:add(x)
+  -- skip if entry is a question mark
   if x == '?' then return x end
   
   self.count = self.count + 1
   self.symbol_list[x] = (self.symbol_list[x] or 0) + 1
 
   if self.symbol_list[x] > self.mode_frequency then 
+ --[[     max = max + 1
+  if max == self.mode_frequency then 
+    table.insert(x, multimodal[x])
+  end
+]]
       self.mode_frequency = self.symbol_list[x]
       self.mode = x
   end
-  
+
+
+
+  --print(multimodal[x])
+  --print(max)
+  --print(self.symbol_list[x])
+ -- print(self.mode_frequency)
   return x
 end
 

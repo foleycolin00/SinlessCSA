@@ -131,7 +131,7 @@ function tools:csv(fileName)
         if #t > 0 then
           if #t == headersize then
             return t 
-          else print(string.format("%s - Line %d: Number of columns does not match title row.", fileName, line_number - 1))
+          else print(string.format("%s - Line %d: Number of columns does not match title row.", fileName, line_number - 2))
           end
         end
       else

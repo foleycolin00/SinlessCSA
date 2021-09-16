@@ -91,7 +91,6 @@ function sample:zitler(row1, row2)
   local e = math.exp(1)
   local goal_count = 0
 
-
   for i = 1, #self.headers do
     local column = self.headers[i]
     if getmetatable(column) == goal then
@@ -106,34 +105,12 @@ function sample:zitler(row1, row2)
     end
   end
   
-  if goal_count == 0 then print("Error: Goals were not specified") return false end
-  
-  return (s1 / goal_count) < (s2 / goal_count) 
+  return s1 < s2 
 end
 
 function sample:sort_by_goal()
   table.sort(self.rows, function (a, b) return self:zitler(a, b) end)
 end
-
-
---[[
--- inefficient sort method, not used anymore
-function sample:og_sort()
-  for i = 1, #self.rows do
-    local min = i
-    
-    for j = i + 1, #self.rows do
-      if self:zitler(self.rows[j], self.rows[min]) then
-        min = j
-      end
-    end
-    
-    local temp = self.rows[i]
-    self.rows[i] = self.rows[min]
-    self.rows[min] = temp
-  end
-end
-]]
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 

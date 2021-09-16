@@ -13,6 +13,10 @@ function skip:new(col_name)
 end
 
 function skip:add(x)
+    if x == '?' then
+      return x
+    end
+    
     self.count = self.count + 1
     return x
 end

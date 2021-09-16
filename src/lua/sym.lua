@@ -25,21 +25,10 @@ function sym:add(x)
   self.symbol_list[x] = (self.symbol_list[x] or 0) + 1
 
   if self.symbol_list[x] > self.mode_frequency then 
- --[[     max = max + 1
-  if max == self.mode_frequency then 
-    table.insert(x, multimodal[x])
-  end
-]]
       self.mode_frequency = self.symbol_list[x]
       self.mode = x
   end
 
-
-
-  --print(multimodal[x])
-  --print(max)
-  --print(self.symbol_list[x])
- -- print(self.mode_frequency)
   return x
 end
 
@@ -50,8 +39,8 @@ function sym:clone()
     return_val.mode_frequency = self.mode_frequency
     
     -- copy symbols over
-    for i = 1, #self.symbol_list do
-      return_val.symbol_list[i] = self.symbol_list[i]
+    for key, value in pairs(self.symbol_list) do
+      return_val.symbol_list[key] = value
     end
 
     return return_val

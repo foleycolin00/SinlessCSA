@@ -22,9 +22,10 @@ function klass:clone()
     return_val.mode_frequency = self.mode_frequency
     
     -- copy symbols over
-    for i = 1, #self.symbol_list do
-      return_val.symbol_list[i] = self.symbol_list[i]
+    for key, value in pairs(self.symbol_list) do
+      return_val.symbol_list[key] = value
     end
+
 
     return return_val
 end

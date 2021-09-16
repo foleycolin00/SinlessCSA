@@ -5,77 +5,49 @@ package.path = '../../src/lua/?.lua;' .. package.path
 local tools = require('tools')
 
 local a = {}
+local b = {}
 
 -- putting the contens of the csv file in a table
-for row in tools:csv('../../data/toolsTest.csv') do
-  for i = 1, #row do
-    table.insert(a, row[i])
-  end
-end
-  
-
-for key, value in pairs(a) do
-  -- assert that the table does not contain whitespace
-  assert(string.find(a[key], ' ') == nil)
-  -- assert that the table does not contain a pound sign
-  assert(string.find(a[key], '#') == nil)
-  -- assert that an element that of type number is a number 
-  assert(type(a[15]) == "number")
-  --assert that an element that is of type string is a string 
-  assert(type(a[13]) == "string")
+for row in tools:csv('../data/csv1_good.csv') do  
+  table.insert(a, row)
 end
 
-
---[[
--- testing nonexistent file
-for row in tools:csv('../../data/sunny.csv') do
-  for i = 1, #row do
-    print()
-  end
+-- putting the contens of the csv file in a table
+for row in tools:csv('../data/csv2_diabolical.csv') do
+  table.insert(b, row)
 end
-]]
+
+-- check first
+
+assert(table.concat(a[1]) == table.concat({'outlook', 'Temp', '?Humidity', 'windy!', 'Wins+', 'Play-'}))
+assert(table.concat(a[2]) == table.concat({'sunny', '85', '85', 'FALSE', '10', '20'}))
+assert(table.concat(a[3]) == table.concat({'sunny', '80', '90', 'TRUE', '12', '40'}))
+assert(table.concat(a[4]) == table.concat({'overcast', '83', '86', 'FALSE', '40', '40'}))
+assert(table.concat(a[5]) == table.concat({'rainy', '70', '96', 'FALSE', '40', '50'}))
+assert(table.concat(a[6]) == table.concat({'rainy', '65', '70', 'TRUE', '4', '10'}))
+assert(table.concat(a[7]) == table.concat({'overcast', '64', '65', 'TRUE', '30', '60'}))
+assert(table.concat(a[8]) == table.concat({'sunny', '72', '95', 'FALSE', '7', '20'}))
+assert(table.concat(a[9]) == table.concat({'sunny', '69', '70', 'FALSE', '70', '70'}))
+assert(table.concat(a[10]) == table.concat({'rainy', '75', '80', 'FALSE', '80', '40'}))
+assert(table.concat(a[11]) == table.concat({'sunny', '75', '70', 'TRUE', '30', '50'}))
+assert(table.concat(a[12]) == table.concat({'overcast', '72', '90', 'TRUE', '60', '50'}))
+assert(table.concat(a[13]) == table.concat({'overcast', '81', '75', 'FALSE', '30', '60'}))
+assert(table.concat(a[14]) == table.concat({'rainy', '71', '91', 'TRUE', '50', '40'}))
+
+-- check second
+
+assert(table.concat(b[1]) == table.concat({'outlook', 'Temp', '?Humidity', 'windy!', 'Wins+', 'Play-'}))
+assert(table.concat(b[2]) == table.concat({'sunny', '85', '85', 'FALSE', '10', '20'}))
+assert(table.concat(b[3]) == table.concat({'sunny', '80', '90', 'TRUE', '12', '40'}))
+assert(table.concat(b[4]) == table.concat({'overcast', '83', '86', 'FALSE', '40', '40'}))
+assert(table.concat(b[5]) == table.concat({'rainy', '70', '96', 'FALSE', '40', '50'}))
+assert(table.concat(b[6]) == table.concat({'rainy', '65', '70', 'TRUE', '4', '10'}))
+assert(table.concat(b[7]) == table.concat({'overcast', '64', '65', 'TRUE', '30', '60'}))
+assert(table.concat(b[8]) == table.concat({'sunny', '72', '95', 'FALSE', '7', '20'}))
+assert(table.concat(b[9]) == table.concat({'sunny', '69', '70', 'FALSE', '70', '70'}))
+assert(table.concat(b[10]) == table.concat({'rainy', '75', '80', 'FALSE', '80', '40'}))
+assert(table.concat(b[11]) == table.concat({'overcast', '72', '90', 'TRUE', '60', '50'}))
+assert(table.concat(b[12]) == table.concat({'overcast', '81', '75', 'FALSE', '30', '60'}))
+assert(table.concat(b[13]) == table.concat({'rainy', '71', '91', 'TRUE', '50', '40'}))
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
-
-
-
-
-
-
-
--- while os.clock() - timeStart <= 1 do end
-
---[[
-  local timeStart = os.clock()
-myTableHeaders, myTableRows = tools.csv('../../data/weather.csv')
-
-print(string.format('Elapsed time: %f', os.clock() - timeStart))
-
-assert(#myTableHeaders == 6, 'wrong number of header columns')
-
-for i = 1, #myTableRows do
-  assert(#myTableRows[i] == #myTableHeaders,
-    string.format('row %d: %d number cols does not match header number cols %d',
-      i, #myTableRows[i], #myTableHeaders))
-end
-]]
-
--- work in progress 
---[[
-expected = {{'# weather'},
-{'outlook', 'Temp!', '?Humidity', 'windy','Wins+','Play-'},
-{'sunny','85','85','FALSE','10','20'},
-{'sunny','80','90','TRUE','12','40'},
-{'overcast','83','86','FALSE','40','40'},
-{'rainy','70','96','FALSE','40','50'},
-{'rainy','68','80','FALSE','#30','30'},
-{'rainy','65','70','TRUE','4','10'},
-{'overcast','64','65','TRUE','30','60'},
-{'sunny','72','95','FALSE','7','20 #adsas'},
-{'sunny','69','70','FALSE','70','70'},
-{'rainy','75','80','FALSE','80','40'},
-{'sunny','75','70','TRUE','30','50'},
-{'overcast','72','90','TRUE','60','50'},
-{'overcast','81','75','FALSE','30','60'},
-{'rainy','71', '91', 'TRUE','50','40'}}
-]]

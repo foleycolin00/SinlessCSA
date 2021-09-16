@@ -15,6 +15,7 @@ for key, value in pairs(numSample.headers) do
   -- tests min, max, mean, stdev, count 
     if getmetatable(value) == num then
         print("in here") 
+        -- whathappend?
         print(value.min)
         print(value.max)
         assert(value.min == 6)

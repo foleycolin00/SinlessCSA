@@ -24,9 +24,9 @@ for key, value in pairs(samplobj.headers) do
         print(value.mean)
         print(value.stdev)
         print(value.count)
-        --for i = 1, #value.sample_list.sample_list do
-           --print('hello')
-        --end
+        print(value.sample_list:sd())
+        print(value.sample_list:sd_true())
+        print(table.concat(value.sample_list.sample_list, ' '))
     end
     
     if getmetatable(value) == sym then 

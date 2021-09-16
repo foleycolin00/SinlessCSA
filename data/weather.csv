@@ -1,5 +1,5 @@
 # weather
-outlook, Temp!, ?Humidity, windy,Wins+,Play-
+outlook, Temp, ?Humidity, windy,Wins+,Play-
 sunny,85,85,FALSE,10,20
 sunny,80,90,TRUE, 12,40
 overcast,83,86,FALSE,40,40

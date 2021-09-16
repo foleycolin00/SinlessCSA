@@ -10,7 +10,7 @@ local goal = require('goal')
 local klass = require('klass')
 
 local sampleTest = sample:new()
-sampleTest:load('../data/csv1_good.csv')
+sampleTest:load('../data/csv_good.csv')
 
 -- make another sample after load, just to make sure we can have multiple and dont overwrite
 local clonedSample = sample:new()

@@ -29,7 +29,7 @@ function num:add(x)
   end
   
   self.sample_list:add(x)
-  
+    
   self.count = self.count + 1
   
   local delta = x - self.mean

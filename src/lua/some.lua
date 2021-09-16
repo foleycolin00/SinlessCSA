@@ -18,37 +18,64 @@ function some:new(sample_list_max)
 end
 
 function some:add(item)
+  -- increase number of items seen overall
+  self.overall_items = self.overall_items + 1
+  
+  -- if number of items in list is less than the max items allowed, then just insert
+  -- else if at a decreasing rate as the number of items seen increases, bump items
+  -- out of the list and replace them with a new one in sorted order
   if #self.sample_list < self.max_items then
-    self.overall_items = self.overall_items + 1
     self:insert_sorted(item)
-  elseif some:rand() < #self.sample_list / self.overall_items then
-    for i = math.floor( some:rand() * #self.sample_list + 1), #self.sample_list do
-      self.sample_list[i] = self.sample_list[i + 1]
-      self:insert_sorted(item)
-    end
+  elseif self:rand() < self.max_items / self.overall_items then
+    table.remove(self.sample_list, math.floor(self:rand() * self.max_items) + 1)
+    self:insert_sorted(item)
   end
 end
 
 function some:insert_sorted(item)
-  
-  if #self.sample_list == 0 then self.sample_list[1] = item
+  if #self.sample_list == 0 then
+    table.insert(self.sample_list, item)
   else
-    for i = #self.sample_list, 1, -1 do
-      if item <= self.sample_list[i] or i == 1 then
-        for j = #self.sample_list + 1, i + 1, -1 do
-          self.sample_list[j] = self.sample_list[j - 1]
-        end
-        self.sample_list[i] = item
+    local placed = false
+    
+    for key, value in pairs(self.sample_list) do
+      if item < value then
+        table.insert(self.sample_list, key, item)
+        placed = true
+        break
       end
     end
+    
+    if not placed then table.insert(self.sample_list, item) end
   end
-  
+end
+
+function some:sd()
+  return (self:per(.9) - self:per(.1)) / 2.56
+end
+
+function some:sd_true()
+  local mean = 0
   for i = 1, #self.sample_list do
-  --  print(self.sample_list[i])
+    mean = mean + self.sample_list[i]
   end
   
-  --print()
+  mean = mean / #self.sample_list
   
+  local sum = 0
+  for i = 1, #self.sample_list do
+    sum = sum + (self.sample_list[i] - mean)^2
+  end
+  
+  sum = (sum / (#self.sample_list - 1))^0.5
+  
+  return sum  
+end
+
+function some:per(p)
+  -- percentile
+  p= p or .5
+  return self.sample_list[math.max(1, math.floor(#self.sample_list * p))]
 end
 
 --- https://github.com/timm/keys/blob/main/src/rand.lua

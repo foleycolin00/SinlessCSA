@@ -8,12 +8,12 @@ local a = {}
 local b = {}
 
 -- putting the contens of the csv file in a table
-for row in tools:csv('../data/csv1_good.csv') do  
+for row in tools:csv('../data/csv_good.csv') do  
   table.insert(a, row)
 end
 
 -- putting the contens of the csv file in a table
-for row in tools:csv('../data/csv2_diabolical.csv') do
+for row in tools:csv('../data/csv_diabolical.csv') do
   table.insert(b, row)
 end
 

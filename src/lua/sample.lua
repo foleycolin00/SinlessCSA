@@ -1,3 +1,6 @@
+--- This sample class is used for classification.
+-- @module sample.lua
+-- @author Steven Jones & Azeeza Eagal
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 -- stores rows, which are simple lists made up of columns
@@ -22,17 +25,19 @@ local goal = require('goal')
 local klass = require('klass')
 
 
--- create a new sample object
+--- This function creates a new sample object.
+-- @function new
+-- @return a new sample object
 function sample:new()
   local o = { headers = {},
               rows = {} }
   setmetatable(o, self)
-  
   return o
 end
 
-
-
+--- This function loads in data from a file.
+-- @function load
+-- @param filename the file path
 function sample:load(fileName)
   for row in tools:csv(fileName) do
     if #self.headers == 0 then
@@ -47,7 +52,9 @@ function sample:load(fileName)
   end
 end
   
-  
+--- This function discerns the attributes of the columns.
+-- @function header
+-- @param list a list of the headers
 function sample:header(list)
   -- equivalent to isSkip, isGoal, isNum, isKlass
   for key, item in pairs(list) do
@@ -66,7 +73,9 @@ function sample:header(list)
   end
 end
 
-
+--- This function clones sample object.
+-- @function clone
+-- @return a clone of a sample object
 function sample:clone()
   local ret_sample = sample:new()
   -- clone the header value
@@ -85,6 +94,11 @@ function sample:clone()
   return ret_sample
 end
 
+--- This function performs the zitler continous domination predicate.
+-- @function zitler
+-- @param row1 a row to compare
+-- @param row2 another row to compare
+-- @return the value to determine the better row
 function sample:zitler(row1, row2)
   local s1 = 0
   local s2 = 0
@@ -108,6 +122,7 @@ function sample:zitler(row1, row2)
   return s1 < s2 
 end
 
+--- This function sorts a table by its goal using the zitler continous domination predicate. 
 function sample:sort_by_goal()
   table.sort(self.rows, function (a, b) return self:zitler(a, b) end)
 end

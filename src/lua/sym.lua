@@ -1,11 +1,16 @@
+--- This sym class is used to handle general sym values.
+-- @module sym.lua
+-- @author Steven Jones & Azeeza Eagal
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 local sym = {}
-local max = 0
-local multimodal = {}
 
 sym.__index = sym
 
+--- This function creates a new sym object.
+-- @function new
+-- @param col_name the column name
+-- @return a new sym object
 function sym:new(col_name)
     local o = { name = col_name or '',
                 count = 0,
@@ -17,6 +22,10 @@ function sym:new(col_name)
     return o
 end
 
+--- This function adds a element, updates the count and the mode.
+-- @function add
+-- @param x a value
+-- @return the input value
 function sym:add(x)
   -- skip if entry is a question mark
   if x == '?' then return x end
@@ -32,6 +41,9 @@ function sym:add(x)
   return x
 end
 
+--- This function clones a sym object.
+-- @function clone
+-- @return a clone of a sym object
 function sym:clone()
     local return_val = sym:new(self.name) 
     return_val.count = self.count

@@ -12,7 +12,7 @@ local some = require('some')
 --- This function creates a new num object.
 -- @function new
 -- @param col_name the column name
--- @return returns a new num object
+-- @return a new num object
 function num:new(col_name)
   local o = { name = col_name or '',
               count = 0,
@@ -30,7 +30,7 @@ end
 --- This function adds a element, updates the count, min, max, and standard deviation.
 -- @function add
 -- @param x a value
--- @return x the value
+-- @return the input value
 function num:add(x)
   x = tonumber(x) or x
   
@@ -60,9 +60,8 @@ function num:add(x)
   return x
 end
 
---- This function clones num object.
+--- This function clones a num object.
 -- @function clone
--- @param col_name the column name
 -- @return a clone of a num object
 function num:clone()
     local return_val = num:new(self.name) 

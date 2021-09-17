@@ -10,17 +10,17 @@ local sym = require('sym')
 klass.__index = klass
 setmetatable(klass, sym)
 
---- This function creates a new klass object
+--- This function creates a new klass object.
 -- @function new
 -- @param col_name the column name
--- @return returns a new klass object
+-- @return a new klass object
 function klass:new(col_name)
   local o = sym:new(col_name)
   setmetatable(o, self)
   return o
 end
 
---- This function clones klass object
+--- This function clones klass object.
 -- @function clone
 -- @param col_name the column name
 -- @return a clone of a klass object

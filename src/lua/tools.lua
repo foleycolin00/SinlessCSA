@@ -1,3 +1,6 @@
+--- This tools class is used to read in data.
+-- @module tools.lua
+-- @author Steven Jones & Azeeza Eagal
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 local tools = {}
@@ -17,8 +20,9 @@ function tools.stringToTable(inputString, delimiter)
 end
 ]]
 
--- take in a csv
--- return column headers, and rows that match
+--- This function takes in a csv and returns the column headers and rows that match.
+-- @function csv
+-- @param filename the file path 
 function tools:csv(fileName)
 
   local headersize = 0

@@ -9,7 +9,7 @@ local num = require('num')
 
 goal.__index = goal
 setmetatable(goal, num)
---- This function creates a new goal object
+--- This function creates a new goal object.
 -- @function new
 -- @param col_name the column name
 -- @param min_or_max the weight attached to the goal
@@ -21,7 +21,7 @@ function goal:new(col_name, min_or_max)
   return o
 end
 
---- This function creates a clone of a goal object
+--- This function creates a clone of a goal object.
 -- @function clone
 -- @return a clone of a goal object
 function goal:clone()

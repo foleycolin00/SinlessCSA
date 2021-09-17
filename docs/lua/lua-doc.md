@@ -4,7 +4,7 @@
 
 ### Tools.lua
 
-<ul><details><summary>tools:csv(fileName)</summary>
+<ul><details><summary span style="color:red">tools:csv(fileName)</summary>
 
 
 ```lua
@@ -126,3 +126,6 @@ assert(table.concat(b[13]) == table.concat({'rainy', '71', '91', 'TRUE', '50', '
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 ```
+## Homework 3: Create a Sample Representation
+
+### Sample.lua

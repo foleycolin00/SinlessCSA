@@ -1,3 +1,6 @@
+--- This num class is used to handle general numeric values.
+-- @module num.lua
+-- @author Steven Jones & Azeeza Eagal
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 local num = {}
@@ -6,7 +9,10 @@ num.__index = num
 
 local some = require('some')
 
--- create a new num object
+--- This function creates a new num object.
+-- @function new
+-- @param col_name the column name
+-- @return returns a new num object
 function num:new(col_name)
   local o = { name = col_name or '',
               count = 0,
@@ -21,6 +27,10 @@ function num:new(col_name)
   return o
 end
 
+--- This function adds a element, updates the count, min, max, and standard deviation.
+-- @function add
+-- @param x a value
+-- @return x the value
 function num:add(x)
   x = tonumber(x) or x
   
@@ -50,6 +60,10 @@ function num:add(x)
   return x
 end
 
+--- This function clones num object.
+-- @function clone
+-- @param col_name the column name
+-- @return a clone of a num object
 function num:clone()
     local return_val = num:new(self.name) 
     return_val.count = self.count
@@ -61,6 +75,10 @@ function num:clone()
     return return_val
 end
 
+--- This function normalizes a set of numeric values.
+-- @function norm
+-- @param x a value
+-- @return a normalized value
 function num:norm(x)
   if type(x) ~= 'number' then return x end
   

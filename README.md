@@ -9,4 +9,4 @@ href="https://github.com/foleycolin00/SinlessColinAndSteven/actions"><img src="h
 
 ## <a href="https://htmlpreview.github.io/?https://github.com/foleycolin00/SinlessColinAndSteven/blob/main/docs/index.html">Python Documentation</a>
 
-## <a href="https://htmlpreview.github.io/?https://github.com/foleycolin00/SinlessColinAndSteven/blob/main/docs/lua/doc/index.html">Lua Documentation</a>
+## <a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/foleycolin00/SinlessCSA/hw4-lua/docs/lua/doc/index.html">Lua Documentation</a>

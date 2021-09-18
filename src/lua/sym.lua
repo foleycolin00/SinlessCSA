@@ -58,6 +58,17 @@ function sym:clone()
     return return_val
 end
 
+--- Return distance of symbols
+-- @param x first symbol
+-- @param y second symbol
+-- @return 0 if same, 1 if different
+function sym:distance(x, y)
+  -- unknown should always be max distance
+  if x == '?' or y == '?' then return 1 end
+  
+  return x == y and 0 or 1
+end
+
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return sym

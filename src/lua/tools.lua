@@ -5,10 +5,9 @@ local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 local tools = {}
 
---[[
 -- split function
-function tools.stringToTable(inputString, delimiter)
-  retTable = {}
+function tools:stringToTable(inputString, delimiter)
+  local retTable = {}
   local i = 1
   
   for word in string.gmatch(inputString, string.format('[^%s]+', delimiter)) do
@@ -18,13 +17,11 @@ function tools.stringToTable(inputString, delimiter)
   
   return retTable
 end
-]]
 
 --- This function takes in a csv and returns the column headers and rows that match.
 -- @function csv
 -- @param filename the file path 
 function tools:csv(fileName)
-
   local headersize = 0
 
   local stream = fileName and io.input(fileName) or io.input()

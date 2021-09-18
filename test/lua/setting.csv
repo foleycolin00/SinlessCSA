@@ -1,0 +1,3 @@
+# hyperparameter default file
+name = newSettings            # name of the settings used
+p = 7                         # dimension used for distance calculation

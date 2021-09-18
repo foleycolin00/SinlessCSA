@@ -81,11 +81,28 @@ end
 function num:norm(x)
   if type(x) ~= 'number' then return x end
   
-  if self.max == self.min then --[[print("Normalization Error: Divide by zero")]] return 1 end 
+  if self.max == self.min then --[[print("Normalization Error: Divide by zero")]] return 1 end
 
   return (x - self.min) / (self.max - self.min)
-end 
+end
 
+--- This function returns the normalized disance of the 2 input values
+-- @function distance
+-- @param x first num
+-- @param y second num
+-- @return normalized distance
+function num:distance(x, y)
+  
+  x = self:norm(x)
+  y = self:norm(y)
+  
+  if type(x) ~= 'number' and type(y) ~= 'number' then return 1 end
+    
+  if type(x) ~= 'number' then x = (y > 0.5 and 0 or 1) end
+  if type(y) ~= 'number' then y = (x > 0.5 and 0 or 1) end
+  
+  return math.abs(x - y)
+end
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 

@@ -85,4 +85,25 @@ assert(numSample.mean > 3.16 and numSample.mean < 3.17)
 assert(numSample:norm(3) == 0.5)
 assert(numClone:norm(3) > 0.06896551 and numClone:norm(3) < 0.06896552)
 
+-- test distance
+-- numsample max is 5, min is 1
+numClone:add(33) -- make nicer calcs
+-- numClone max is 33, min is 1
+assert(numSample:distance(2, 3) == 0.25)
+assert(numSample:distance(2, 2) == 0)
+assert(numSample:distance(3, 2) == 0.25)
+assert(numSample:distance(2, '?') == 0.75)
+assert(numSample:distance('?', 2) == 0.75)
+assert(numSample:distance(4, '?') == 0.75)
+assert(numSample:distance('?', 4) == 0.75)
+assert(numSample:distance('?', '?') == 1)
+
+assert(numClone:distance(12, 2) == 0.3125)
+assert(numClone:distance(2, 12) == 0.3125)
+assert(numClone:distance(2, '?') == 0.96875)
+assert(numClone:distance('?', 2) == 0.96875)
+assert(numClone:distance(19, '?') == 0.5625)
+assert(numClone:distance('?', 19) == 0.5625)
+assert(numClone:distance('?', '?') == 1)
+
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

@@ -71,5 +71,11 @@ assert(sampleSym.symbol_list['hello'] == 1)
 assert(sampleSym.symbol_list['world'] == 2)
 assert(sampleSym.symbol_list['!'] == nil)
 
+-- test distance
+assert(sampleSym:distance('hello', 'world') == 1)
+assert(sampleSym:distance('hello', 'Hello') == 1)
+assert(sampleSym:distance('hello', 'hello') == 0)
+assert(sampleSym:distance('?', 'hello') == 1)
+assert(sampleSym:distance('?', '?') == 1)
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

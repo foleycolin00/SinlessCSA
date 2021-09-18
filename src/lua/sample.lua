@@ -23,6 +23,7 @@ local num = require('num')
 local sym = require('sym')
 local goal = require('goal')
 local klass = require('klass')
+local settings = require('settings')
 
 
 --- This function creates a new sample object.
@@ -30,7 +31,8 @@ local klass = require('klass')
 -- @return a new sample object
 function sample:new()
   local o = { headers = {},
-              rows = {} }
+              rows = {},
+              settings = settings:new() }
   setmetatable(o, self)
   return o
 end
@@ -120,6 +122,39 @@ function sample:zitler(row1, row2)
   end
   
   return s1 < s2 
+end
+
+function sample:distance(row1, row2)
+  local sum = 0
+  local n = 0
+  
+  for i = 1, #row1 do
+    if getmetatable(self.headers[i]) ~= skip then
+      n = n + 1
+      sum = sum + (self.headers[i]:distance(row1[i], row2[i]))^self.settings.p
+    end
+  end
+  
+  return (sum / n)^(1 / self.settings.p)
+end
+
+--[[
+function sample:distance_heuristic(row1, row2)
+  
+end
+]]
+
+function sample:neighbors(row)
+  local neighbor_list = {}
+  for key, value in pairs(self.rows) do
+    if value ~= row then
+      table.insert(neighbor_list, {key, self:distance(row, value)})
+    end
+  end
+  
+  table.sort(neighbor_list, function (x, y) return x[2] < y[2] end)
+  
+  return neighbor_list
 end
 
 --- This function sorts a table by its goal using the zitler continous domination predicate. 

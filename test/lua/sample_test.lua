@@ -8,6 +8,7 @@ local num = require('num')
 local sym = require('sym')
 local goal = require('goal')
 local klass = require('klass')
+local settings = require('settings')
 
 local sampleTest = sample:new()
 sampleTest:load('../data/csv_good.csv')
@@ -89,7 +90,12 @@ assert(getmetatable(clonedSample) == getmetatable(sampleTest))
 
 -- need to test zitler sort function
 local zitlerSample = sample:new()
-zitlerSample.headers = {goal:new('goal1', -1), goal:new('goal2', -1), goal:new('goal3', -1), goal:new('goal4', -1)}
+
+table.insert(zitlerSample.headers, goal:new('goal1', -1))
+table.insert(zitlerSample.headers, goal:new('goal2', -1))
+table.insert(zitlerSample.headers, goal:new('goal3', -1))
+table.insert(zitlerSample.headers, goal:new('goal4', -1))
+
 local zitlerTable = {
   {1, 2, 3, 4}, -- 2 -- base condition
   {1, 1, 3, 4}, -- 1 -- -1 in a single row from base
@@ -107,7 +113,7 @@ local zitlerTableSorted = {
 
 for i = 1, #zitlerTable do
   for j = 1, #zitlerTable[i] do
-    zitlerSample.headers[i]:add(zitlerTable[i][j])
+    zitlerSample.headers[j]:add(zitlerTable[i][j])
   end
 end
 
@@ -120,5 +126,17 @@ for i = 1, #zitlerTable do
     assert(zitlerTable[i][j] == zitlerTableSorted[i][j])
   end
 end
+
+-- test distance
+assert(zitlerSample:distance(zitlerSample.rows[1], zitlerSample.rows[2]) == 0.25)
+
+local neighbors = zitlerSample:neighbors(zitlerSample.rows[1])
+
+for key, value in pairs(neighbors) do
+  print(tostring(value[1]) .. ' ' .. tostring(value[2]))
+end
+
+print(neighbors[1][2])
+print(neighbors[#neighbors][2])
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

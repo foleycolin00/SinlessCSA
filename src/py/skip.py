@@ -22,3 +22,10 @@ class Skip:
   def add(self, x):
     if x != '?':
       self.n += 1
+  
+  '''
+  Gets the mid value of the col
+  :return :
+  '''
+  def mid(self):
+    return "?"

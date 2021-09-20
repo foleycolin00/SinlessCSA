@@ -98,7 +98,7 @@ def testSampleBetter():
     s = Sample([["abc", "A+", "def"]])
     s.add(["a", 1, "a"])
     s.add(["b", 2, "b"])
-    s.rows.sort(key=functools.cmp_to_key(s.betterCompare))
+    s.rows.sort(key=functools.cmp_to_key(s.rowCompare))
     assert s.rows[0][0] == "b"
     assert s.rows[1][0] == "a"
 
@@ -152,4 +152,4 @@ def testSampleDivs():
   leafs = s.divs()
   
   for leaf in leafs:
-    assert len(leaf) == 23
+    assert len(leaf.rows) == 12 or len(leaf.rows) == 13

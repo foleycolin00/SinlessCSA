@@ -5,6 +5,7 @@ class Config:
   bins =  .5            #Bins are of size n**BINS
   bootstrap = 512       #number of bootstrap samples
   cols = 'x'            #Columns to use for inference
+  cohen = .3
   conf =   .05          #confidence for bootstraps
   cliffs = .147         #small effect 
   eg = ""               #'-x ls' lists all, '-x all' runs all

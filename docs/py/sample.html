@@ -96,6 +96,12 @@ class Sample:
     for value in inits:
       self.add(value)
   
+  def __str__(self):
+    goals = []
+    for col in self.y:
+      goals.append(col.mid())
+    return str(goals)
+  
   &#39;&#39;&#39;
   Adds a new row
   :param lst: the row to add
@@ -182,9 +188,29 @@ class Sample:
   :param row2: the second row
   :return: the comparison
   &#39;&#39;&#39;
-  def betterCompare(self, row1, row2):
+  def rowCompare(self, row1, row2):
     #if row1 is better than row2, then no switch is needed
     if self.better(row1, row2):
+      return -1
+    else:
+      return 1
+  
+  &#39;&#39;&#39;
+  Compare function using better
+  &#34;s1 is better than s2&#34;
+  :param s1: the first sample
+  :param s1: the second sample
+  :return: the comparison
+  &#39;&#39;&#39;
+  def sampleCompare(self, s1, s2):
+    #if s1 is better than s2, then no switch is needed
+    s1mid = []
+    for col in s1.cols:
+      s1mid.append(col.mid())
+    s2mid = []
+    for col in s2.cols:
+      s2mid.append(col.mid())
+    if self.better(s1mid, s2mid):
       return -1
     else:
       return 1
@@ -229,7 +255,6 @@ class Sample:
   :return: that far point
   &#39;&#39;&#39;
   def faraway(self, row):
-    print(row)
     a = self.neighbors(row, random.sample(self.rows, Config.samples))
     return a[math.floor(Config.far*len(a))][1]
     
@@ -242,6 +267,10 @@ class Sample:
     two = self.faraway(one)
     c = self.dist(one, two)
     tmp = []
+    
+    if Config.loud:
+      print(&#34;c={:.2} &#34;.format(c))
+    
     for row in rows:
       a = self.dist(row, one)
       b = self.dist(row, two)
@@ -249,7 +278,7 @@ class Sample:
       tmp.append((x, row))
     tmp = sorted(tmp, key=lambda row: row[0])
     mid = math.floor(len(rows)/2)
-    return [x[1] for x in tmp[1:mid]], [x[1] for x in tmp[mid+1:]]
+    return [x[1] for x in tmp[:mid]], [x[1] for x in tmp[mid:]]
   
   &#39;&#39;&#39;
   Recurrsive helper method for div
@@ -260,9 +289,14 @@ class Sample:
   &#39;&#39;&#39;
   def divR(self, rows, level, leafs, enough):
     if Config.loud:
-      print(f&#34;Level: {level} #Rows: {len(rows)}&#34;)
-    if len(rows) &lt; 2*enough:
-      leafs.append(rows)
+        for i in range(level + 1):
+          print(&#34;|.. &#34;, end=&#39;&#39;)
+        print(f&#34;n={len(rows)} &#34;, end=&#39;&#39;)
+    if len(rows) &lt; enough:
+      s = Sample([self.names] + rows)
+      if Config.loud:
+        print(s)
+      leafs.append(s)
     else:
       left, right = self.div1(rows)
       self.divR(left, level+1, leafs, enough)
@@ -275,7 +309,22 @@ class Sample:
     leafs = []
     enough = pow(len(self.rows), Config.enough)
     self.divR(self.rows, 0, leafs, enough)
-    return leafs</code></pre>
+    
+    leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
+    return leafs
+  
+  &#39;&#39;&#39;
+  Discretize values
+  &#39;&#39;&#39;
+  def discretize(self):
+    arr = []
+    clusters = self.divs()
+    best, worst = clusters[0], clusters[-1]
+    for good, bad in zip(best.x, worst.x):
+      for d in good.discretize(good, bad):
+        arr.append(d)
+    return arr
+    </code></pre>
 </details>
 </section>
 <section>
@@ -384,6 +433,12 @@ klass = klass value</p></div>
     for value in inits:
       self.add(value)
   
+  def __str__(self):
+    goals = []
+    for col in self.y:
+      goals.append(col.mid())
+    return str(goals)
+  
   &#39;&#39;&#39;
   Adds a new row
   :param lst: the row to add
@@ -470,9 +525,29 @@ klass = klass value</p></div>
   :param row2: the second row
   :return: the comparison
   &#39;&#39;&#39;
-  def betterCompare(self, row1, row2):
+  def rowCompare(self, row1, row2):
     #if row1 is better than row2, then no switch is needed
     if self.better(row1, row2):
+      return -1
+    else:
+      return 1
+  
+  &#39;&#39;&#39;
+  Compare function using better
+  &#34;s1 is better than s2&#34;
+  :param s1: the first sample
+  :param s1: the second sample
+  :return: the comparison
+  &#39;&#39;&#39;
+  def sampleCompare(self, s1, s2):
+    #if s1 is better than s2, then no switch is needed
+    s1mid = []
+    for col in s1.cols:
+      s1mid.append(col.mid())
+    s2mid = []
+    for col in s2.cols:
+      s2mid.append(col.mid())
+    if self.better(s1mid, s2mid):
       return -1
     else:
       return 1
@@ -517,7 +592,6 @@ klass = klass value</p></div>
   :return: that far point
   &#39;&#39;&#39;
   def faraway(self, row):
-    print(row)
     a = self.neighbors(row, random.sample(self.rows, Config.samples))
     return a[math.floor(Config.far*len(a))][1]
     
@@ -530,6 +604,10 @@ klass = klass value</p></div>
     two = self.faraway(one)
     c = self.dist(one, two)
     tmp = []
+    
+    if Config.loud:
+      print(&#34;c={:.2} &#34;.format(c))
+    
     for row in rows:
       a = self.dist(row, one)
       b = self.dist(row, two)
@@ -537,7 +615,7 @@ klass = klass value</p></div>
       tmp.append((x, row))
     tmp = sorted(tmp, key=lambda row: row[0])
     mid = math.floor(len(rows)/2)
-    return [x[1] for x in tmp[1:mid]], [x[1] for x in tmp[mid+1:]]
+    return [x[1] for x in tmp[:mid]], [x[1] for x in tmp[mid:]]
   
   &#39;&#39;&#39;
   Recurrsive helper method for div
@@ -548,9 +626,14 @@ klass = klass value</p></div>
   &#39;&#39;&#39;
   def divR(self, rows, level, leafs, enough):
     if Config.loud:
-      print(f&#34;Level: {level} #Rows: {len(rows)}&#34;)
-    if len(rows) &lt; 2*enough:
-      leafs.append(rows)
+        for i in range(level + 1):
+          print(&#34;|.. &#34;, end=&#39;&#39;)
+        print(f&#34;n={len(rows)} &#34;, end=&#39;&#39;)
+    if len(rows) &lt; enough:
+      s = Sample([self.names] + rows)
+      if Config.loud:
+        print(s)
+      leafs.append(s)
     else:
       left, right = self.div1(rows)
       self.divR(left, level+1, leafs, enough)
@@ -563,7 +646,21 @@ klass = klass value</p></div>
     leafs = []
     enough = pow(len(self.rows), Config.enough)
     self.divR(self.rows, 0, leafs, enough)
-    return leafs</code></pre>
+    
+    leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
+    return leafs
+  
+  &#39;&#39;&#39;
+  Discretize values
+  &#39;&#39;&#39;
+  def discretize(self):
+    arr = []
+    clusters = self.divs()
+    best, worst = clusters[0], clusters[-1]
+    for good, bad in zip(best.x, worst.x):
+      for d in good.discretize(good, bad):
+        arr.append(d)
+    return arr</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -605,23 +702,6 @@ klass = klass value</p></div>
   return s1/n &lt; s2/n</code></pre>
 </details>
 </dd>
-<dt id="src.py.sample.Sample.betterCompare"><code class="name flex">
-<span>def <span class="ident">betterCompare</span></span>(<span>self, row1, row2)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def betterCompare(self, row1, row2):
-  #if row1 is better than row2, then no switch is needed
-  if self.better(row1, row2):
-    return -1
-  else:
-    return 1</code></pre>
-</details>
-</dd>
 <dt id="src.py.sample.Sample.data"><code class="name flex">
 <span>def <span class="ident">data</span></span>(<span>self, lst)</span>
 </code></dt>
@@ -638,6 +718,25 @@ klass = klass value</p></div>
   
   if self.keep:
     self.rows.append(lst)</code></pre>
+</details>
+</dd>
+<dt id="src.py.sample.Sample.discretize"><code class="name flex">
+<span>def <span class="ident">discretize</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def discretize(self):
+  arr = []
+  clusters = self.divs()
+  best, worst = clusters[0], clusters[-1]
+  for good, bad in zip(best.x, worst.x):
+    for d in good.discretize(good, bad):
+      arr.append(d)
+  return arr</code></pre>
 </details>
 </dd>
 <dt id="src.py.sample.Sample.dist"><code class="name flex">
@@ -677,6 +776,10 @@ klass = klass value</p></div>
   two = self.faraway(one)
   c = self.dist(one, two)
   tmp = []
+  
+  if Config.loud:
+    print(&#34;c={:.2} &#34;.format(c))
+  
   for row in rows:
     a = self.dist(row, one)
     b = self.dist(row, two)
@@ -684,7 +787,7 @@ klass = klass value</p></div>
     tmp.append((x, row))
   tmp = sorted(tmp, key=lambda row: row[0])
   mid = math.floor(len(rows)/2)
-  return [x[1] for x in tmp[1:mid]], [x[1] for x in tmp[mid+1:]]</code></pre>
+  return [x[1] for x in tmp[:mid]], [x[1] for x in tmp[mid:]]</code></pre>
 </details>
 </dd>
 <dt id="src.py.sample.Sample.divR"><code class="name flex">
@@ -698,9 +801,14 @@ klass = klass value</p></div>
 </summary>
 <pre><code class="python">def divR(self, rows, level, leafs, enough):
   if Config.loud:
-    print(f&#34;Level: {level} #Rows: {len(rows)}&#34;)
-  if len(rows) &lt; 2*enough:
-    leafs.append(rows)
+      for i in range(level + 1):
+        print(&#34;|.. &#34;, end=&#39;&#39;)
+      print(f&#34;n={len(rows)} &#34;, end=&#39;&#39;)
+  if len(rows) &lt; enough:
+    s = Sample([self.names] + rows)
+    if Config.loud:
+      print(s)
+    leafs.append(s)
   else:
     left, right = self.div1(rows)
     self.divR(left, level+1, leafs, enough)
@@ -720,6 +828,8 @@ klass = klass value</p></div>
   leafs = []
   enough = pow(len(self.rows), Config.enough)
   self.divR(self.rows, 0, leafs, enough)
+  
+  leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
   return leafs</code></pre>
 </details>
 </dd>
@@ -733,7 +843,6 @@ klass = klass value</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def faraway(self, row):
-  print(row)
   a = self.neighbors(row, random.sample(self.rows, Config.samples))
   return a[math.floor(Config.far*len(a))][1]</code></pre>
 </details>
@@ -807,6 +916,46 @@ klass = klass value</p></div>
   return a</code></pre>
 </details>
 </dd>
+<dt id="src.py.sample.Sample.rowCompare"><code class="name flex">
+<span>def <span class="ident">rowCompare</span></span>(<span>self, row1, row2)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rowCompare(self, row1, row2):
+  #if row1 is better than row2, then no switch is needed
+  if self.better(row1, row2):
+    return -1
+  else:
+    return 1</code></pre>
+</details>
+</dd>
+<dt id="src.py.sample.Sample.sampleCompare"><code class="name flex">
+<span>def <span class="ident">sampleCompare</span></span>(<span>self, s1, s2)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sampleCompare(self, s1, s2):
+  #if s1 is better than s2, then no switch is needed
+  s1mid = []
+  for col in s1.cols:
+    s1mid.append(col.mid())
+  s2mid = []
+  for col in s2.cols:
+    s2mid.append(col.mid())
+  if self.better(s1mid, s2mid):
+    return -1
+  else:
+    return 1</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -838,8 +987,8 @@ klass = klass value</p></div>
 <ul class="two-column">
 <li><code><a title="src.py.sample.Sample.add" href="#src.py.sample.Sample.add">add</a></code></li>
 <li><code><a title="src.py.sample.Sample.better" href="#src.py.sample.Sample.better">better</a></code></li>
-<li><code><a title="src.py.sample.Sample.betterCompare" href="#src.py.sample.Sample.betterCompare">betterCompare</a></code></li>
 <li><code><a title="src.py.sample.Sample.data" href="#src.py.sample.Sample.data">data</a></code></li>
+<li><code><a title="src.py.sample.Sample.discretize" href="#src.py.sample.Sample.discretize">discretize</a></code></li>
 <li><code><a title="src.py.sample.Sample.dist" href="#src.py.sample.Sample.dist">dist</a></code></li>
 <li><code><a title="src.py.sample.Sample.div1" href="#src.py.sample.Sample.div1">div1</a></code></li>
 <li><code><a title="src.py.sample.Sample.divR" href="#src.py.sample.Sample.divR">divR</a></code></li>
@@ -848,6 +997,8 @@ klass = klass value</p></div>
 <li><code><a title="src.py.sample.Sample.fromFile" href="#src.py.sample.Sample.fromFile">fromFile</a></code></li>
 <li><code><a title="src.py.sample.Sample.header" href="#src.py.sample.Sample.header">header</a></code></li>
 <li><code><a title="src.py.sample.Sample.neighbors" href="#src.py.sample.Sample.neighbors">neighbors</a></code></li>
+<li><code><a title="src.py.sample.Sample.rowCompare" href="#src.py.sample.Sample.rowCompare">rowCompare</a></code></li>
+<li><code><a title="src.py.sample.Sample.sampleCompare" href="#src.py.sample.Sample.sampleCompare">sampleCompare</a></code></li>
 </ul>
 </li>
 </ul>

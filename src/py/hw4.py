@@ -9,7 +9,6 @@ myPath = myPath[:myPath.rindex("/")]
 myPath = myPath[:myPath.rindex("/")]
 s.fromFile(myPath + "/data/auto93.csv")
 
-'''
 print("------\nTask 1:")
 print("(showing first 10 rows)")
 
@@ -31,13 +30,10 @@ for i in range(10):
   for data in a[-1][1]:
     print(str(data).ljust(20), end="")
   print("\n\n")
-'''
  
 print("\n\n\n\n\n\n\n------\nTask 3:")
  
 leafs = s.divs()
 
-pprint(leafs)
-
 for leaf in leafs:
-  print(len(leaf))
+  print(len(leaf.rows))

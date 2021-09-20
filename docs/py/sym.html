@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>src.py.sym API documentation</title>
-<meta name="description" content="Sym class" />
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,12 +22,13 @@
 <h1 class="title">Module <code>src.py.sym</code></h1>
 </header>
 <section id="section-intro">
-<p>Sym class</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#39;&#39;&#39;
+<pre><code class="python">from discretization import *
+
+&#39;&#39;&#39;
  Sym class
  &#39;&#39;&#39;
 class Sym:
@@ -73,7 +74,25 @@ class Sym:
     if x == y:
       return 0
     else:
-      return 1</code></pre>
+      return 1
+  
+  &#39;&#39;&#39;
+  Median function
+  :return: the mid value
+  &#39;&#39;&#39;
+  def mid(self):
+    return self.mode
+  
+  &#39;&#39;&#39;
+  Discretize values
+  :param i: 
+  :param j: 
+  &#39;&#39;&#39;
+  def discretize(self, i, j):
+    ittr = i.has
+    ittr.update(j.has)
+    for x in ittr:
+      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))</code></pre>
 </details>
 </section>
 <section>
@@ -144,7 +163,25 @@ _most = frequency of most seen symbol
     if x == y:
       return 0
     else:
-      return 1</code></pre>
+      return 1
+  
+  &#39;&#39;&#39;
+  Median function
+  :return: the mid value
+  &#39;&#39;&#39;
+  def mid(self):
+    return self.mode
+  
+  &#39;&#39;&#39;
+  Discretize values
+  :param i: 
+  :param j: 
+  &#39;&#39;&#39;
+  def discretize(self, i, j):
+    ittr = i.has
+    ittr.update(j.has)
+    for x in ittr:
+      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -168,6 +205,22 @@ _most = frequency of most seen symbol
       self._most, self.mode = self.has[x], x</code></pre>
 </details>
 </dd>
+<dt id="src.py.sym.Sym.discretize"><code class="name flex">
+<span>def <span class="ident">discretize</span></span>(<span>self, i, j)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def discretize(self, i, j):
+  ittr = i.has
+  ittr.update(j.has)
+  for x in ittr:
+    yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))</code></pre>
+</details>
+</dd>
 <dt id="src.py.sym.Sym.dist"><code class="name flex">
 <span>def <span class="ident">dist</span></span>(<span>self, x, y)</span>
 </code></dt>
@@ -182,6 +235,19 @@ _most = frequency of most seen symbol
     return 0
   else:
     return 1</code></pre>
+</details>
+</dd>
+<dt id="src.py.sym.Sym.mid"><code class="name flex">
+<span>def <span class="ident">mid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mid(self):
+  return self.mode</code></pre>
 </details>
 </dd>
 </dl>
@@ -206,7 +272,9 @@ _most = frequency of most seen symbol
 <h4><code><a title="src.py.sym.Sym" href="#src.py.sym.Sym">Sym</a></code></h4>
 <ul class="">
 <li><code><a title="src.py.sym.Sym.add" href="#src.py.sym.Sym.add">add</a></code></li>
+<li><code><a title="src.py.sym.Sym.discretize" href="#src.py.sym.Sym.discretize">discretize</a></code></li>
 <li><code><a title="src.py.sym.Sym.dist" href="#src.py.sym.Sym.dist">dist</a></code></li>
+<li><code><a title="src.py.sym.Sym.mid" href="#src.py.sym.Sym.mid">mid</a></code></li>
 </ul>
 </li>
 </ul>

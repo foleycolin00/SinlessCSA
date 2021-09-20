@@ -38,3 +38,16 @@ def testSymDist():
   sym = Sym()
   assert sym.dist('c', 'c') == 0
   assert sym.dist('c', 'd') == 1
+
+'''
+Test Sym mid
+'''
+def testSymMid():
+  sym = Sym()
+  assert sym.mid() == ""
+  sym.add("123")
+  assert sym.mid() == "123"
+  sym.add("321")
+  assert sym.mid() == "123"
+  sym.add("321")
+  assert sym.mid() == "321"

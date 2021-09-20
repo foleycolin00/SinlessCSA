@@ -1,3 +1,5 @@
+from discretization import *
+
 '''
  Sym class
  '''
@@ -45,3 +47,21 @@ class Sym:
       return 0
     else:
       return 1
+  
+  '''
+  Median function
+  :return: the mid value
+  '''
+  def mid(self):
+    return self.mode
+  
+  '''
+  Discretize values
+  :param i: 
+  :param j: 
+  '''
+  def discretize(self, i, j):
+    ittr = i.has
+    ittr.update(j.has)
+    for x in ittr:
+      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))

@@ -68,6 +68,12 @@ class Sample:
     for value in inits:
       self.add(value)
   
+  def __str__(self):
+    goals = []
+    for col in self.y:
+      goals.append(col.mid())
+    return str(goals)
+  
   '''
   Adds a new row
   :param lst: the row to add
@@ -154,9 +160,29 @@ class Sample:
   :param row2: the second row
   :return: the comparison
   '''
-  def betterCompare(self, row1, row2):
+  def rowCompare(self, row1, row2):
     #if row1 is better than row2, then no switch is needed
     if self.better(row1, row2):
+      return -1
+    else:
+      return 1
+  
+  '''
+  Compare function using better
+  "s1 is better than s2"
+  :param s1: the first sample
+  :param s1: the second sample
+  :return: the comparison
+  '''
+  def sampleCompare(self, s1, s2):
+    #if s1 is better than s2, then no switch is needed
+    s1mid = []
+    for col in s1.cols:
+      s1mid.append(col.mid())
+    s2mid = []
+    for col in s2.cols:
+      s2mid.append(col.mid())
+    if self.better(s1mid, s2mid):
       return -1
     else:
       return 1
@@ -201,7 +227,6 @@ class Sample:
   :return: that far point
   '''
   def faraway(self, row):
-    print(row)
     a = self.neighbors(row, random.sample(self.rows, Config.samples))
     return a[math.floor(Config.far*len(a))][1]
     
@@ -214,6 +239,10 @@ class Sample:
     two = self.faraway(one)
     c = self.dist(one, two)
     tmp = []
+    
+    if Config.loud:
+      print("c={:.2} ".format(c))
+    
     for row in rows:
       a = self.dist(row, one)
       b = self.dist(row, two)
@@ -221,7 +250,7 @@ class Sample:
       tmp.append((x, row))
     tmp = sorted(tmp, key=lambda row: row[0])
     mid = math.floor(len(rows)/2)
-    return [x[1] for x in tmp[1:mid]], [x[1] for x in tmp[mid+1:]]
+    return [x[1] for x in tmp[:mid]], [x[1] for x in tmp[mid:]]
   
   '''
   Recurrsive helper method for div
@@ -232,9 +261,14 @@ class Sample:
   '''
   def divR(self, rows, level, leafs, enough):
     if Config.loud:
-      print(f"Level: {level} #Rows: {len(rows)}")
-    if len(rows) < 2*enough:
-      leafs.append(rows)
+        for i in range(level + 1):
+          print("|.. ", end='')
+        print(f"n={len(rows)} ", end='')
+    if len(rows) < enough:
+      s = Sample([self.names] + rows)
+      if Config.loud:
+        print(s)
+      leafs.append(s)
     else:
       left, right = self.div1(rows)
       self.divR(left, level+1, leafs, enough)
@@ -247,4 +281,19 @@ class Sample:
     leafs = []
     enough = pow(len(self.rows), Config.enough)
     self.divR(self.rows, 0, leafs, enough)
+    
+    leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
     return leafs
+  
+  '''
+  Discretize values
+  '''
+  def discretize(self):
+    arr = []
+    clusters = self.divs()
+    best, worst = clusters[0], clusters[-1]
+    for good, bad in zip(best.x, worst.x):
+      for d in good.discretize(good, bad):
+        arr.append(d)
+    return arr
+    

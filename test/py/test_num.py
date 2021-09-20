@@ -66,3 +66,13 @@ def testNumDist():
   num.add(100)
   assert num.dist(0, 100) == 1
   assert num.dist(0, 50) == .5
+
+'''Test function mid'''
+def testNumMid():
+  num = Num()
+  num.add(0)
+  assert num.mid() == 0
+  num.add(100)
+  assert num.mid() == 50
+  num.add(50)
+  assert num.mid() == 50

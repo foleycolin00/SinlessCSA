@@ -8,7 +8,7 @@ myPath = myPath[:myPath.rindex("/")]
 myPath = myPath[:myPath.rindex("/")]
 s.fromFile(myPath + "/data/auto93.csv")
 
-s.rows.sort(key=functools.cmp_to_key(s.betterCompare))
+s.rows.sort(key=functools.cmp_to_key(s.rowCompare))
 
 for row in s.cols:
   print(row.name.ljust(20), end="")

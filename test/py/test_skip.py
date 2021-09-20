@@ -25,3 +25,14 @@ def testSkipAdd():
   skip.add('?')
   skip.add('abc')
   assert skip.n == 2
+
+'''
+Test Skip mid
+'''
+def testSkipMid():
+  skip = Skip()
+  assert skip.mid() == "?"
+  skip.add('123')
+  skip.add('?')
+  skip.add('abc')
+  assert skip.mid() == "?"

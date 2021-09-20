@@ -117,6 +117,7 @@ for i = 1, #zitlerTable do
   end
 end
 
+
 zitlerSample.rows = zitlerTable
 
 zitlerSample:sort_by_goal()

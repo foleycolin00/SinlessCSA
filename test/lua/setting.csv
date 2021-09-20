@@ -1,3 +1,4 @@
 # hyperparameter default file
 name = newSettings            # name of the settings used
-p = 7                         # dimension used for distance calculation
+p = 2                         # dimension used for distance calculation
+far = 0.9                     # distance of farthest item to take

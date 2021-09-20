@@ -24,6 +24,7 @@ local sym = require('sym')
 local goal = require('goal')
 local klass = require('klass')
 local settings = require('settings')
+local some_sample = require('some_sample')
 
 
 --- This function creates a new sample object.
@@ -34,6 +35,8 @@ function sample:new()
               rows = {},
               settings = settings:new() }
   setmetatable(o, self)
+  
+  o.sample_list = some_sample:new(o)
   return o
 end
 
@@ -50,6 +53,7 @@ function sample:load(fileName)
         table.insert(tmp, self.headers[i]:add(row[i]))
       end
       table.insert(self.rows, tmp)
+      self.sample_list:add(tmp)
     end
   end
 end
@@ -105,12 +109,10 @@ function sample:zitler(row1, row2)
   local s1 = 0
   local s2 = 0
   local e = math.exp(1)
-  local goal_count = 0
 
   for i = 1, #self.headers do
     local column = self.headers[i]
     if getmetatable(column) == goal then
-      goal_count = goal_count + 1
       local w = column.weight 
       local x = column:norm(row1[i])
       local y = column:norm(row2[i])
@@ -129,7 +131,7 @@ function sample:distance(row1, row2)
   local n = 0
   
   for i = 1, #row1 do
-    if getmetatable(self.headers[i]) ~= skip then
+    if getmetatable(self.headers[i]) ~= skip and getmetatable(self.headers[i]) ~= goal and getmetatable(self.headers[i]) ~= klass then
       n = n + 1
       sum = sum + (self.headers[i]:distance(row1[i], row2[i]))^self.settings.p
     end
@@ -144,11 +146,11 @@ function sample:distance_heuristic(row1, row2)
 end
 ]]
 
-function sample:neighbors(row)
+function sample:neighbors(row, rows)
   local neighbor_list = {}
-  for key, value in pairs(self.rows) do
+  for key, value in pairs(rows or self.rows) do
     if value ~= row then
-      table.insert(neighbor_list, {key, self:distance(row, value)})
+      table.insert(neighbor_list, {value, self:distance(row, value)})
     end
   end
   
@@ -161,6 +163,65 @@ end
 function sample:sort_by_goal()
   table.sort(self.rows, function (a, b) return self:zitler(a, b) end)
 end
+
+function sample:faraway(row, rows)
+  local distance_list = self:neighbors(row, rows or self.rows)
+  return distance_list[self.settings.far * #all // 1][1]
+end
+
+--[[
+--- Recursive divide rows down to size #rows^(enough = .5)
+-- return one table per leaf
+function sample:divide()
+  -- adds to set of samples when they are sufficiently small
+  -- or continue splitting
+  function run()
+    if #rows < enough then
+      table.insert(out, self:clone(rows))
+    else
+      -- splits in half
+      l, r = self:div(rows)
+      run(l, lvl + 1)
+      run(r, lvl + 1)
+    end
+  end ----------------------------------------------
+
+  out = {}
+  enough = 2 * self.rows^0.5
+  
+  -- starts the process of splitting
+  run(self.rows, 0)
+  
+  better = function(t1, t2) return self:zitler(t1:mid(), t2:mid()) end
+  -- out are samples
+  -- better is zitler function
+  return table.sort(out, better)
+end
+
+--- split rows via their distance to 2 faraway points
+function sample:div(rows)
+  one = self:faraway(randomRow)
+  two = self:faraway(one)
+  
+  c = self:distance(one, two)
+  
+  tmp = {}
+  for key, value in pairs(rows) do
+    a = self:dist(value, one)
+    b = self:dist(value, two)
+    table.insert(tmp, {value, (a^2 + c^2 - b^2) / (2 * c) })
+  end
+  l, r = {}, {}
+  
+  for key, value in pairs(tmp) do
+    -- put smallest in left and largest on right of tmp[2]
+  end
+  
+  return l, r
+end
+]]
+
+
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 

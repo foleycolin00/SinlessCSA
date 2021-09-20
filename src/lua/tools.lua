@@ -18,6 +18,30 @@ function tools:stringToTable(inputString, delimiter)
   return retTable
 end
 
+-- https://github.com/timm/keys/blob/main/src/rand.lua
+local Seed = 62884 -- beware. do not lose control of your seeds
+
+-- **randi(?lo : int, ?hi : int) : int**  
+-- Return an int between `lo`  and `hi` (default 0..1).
+--- This function returns an integer between the max and min values.
+-- @param lo the minimum value 
+-- @param hi the maximum value 
+-- @return an integer between the max and min values
+function tools:randi(lo,hi) 
+  return math.floor(0.5 + tools:rand(lo,hi)) end
+
+-- **rand(?lo : num, ?hi : num) : float**   
+-- Return a float between `lo`  and `hi` (default 0..1).
+--- This function returns an float between the max and min values.
+-- @param lo the minimum value 
+-- @param hi the maximum value 
+-- @return an value between the max and min values
+function tools:rand(lo,hi,     mult,mod)
+  lo,hi = lo or 0, hi or 1
+  mult, mod = 16807, 2147483647
+  Seed = (mult * Seed) % mod 
+  return lo + (hi-lo) * Seed / mod end 
+
 --- This function takes in a csv and returns the column headers and rows that match.
 -- @function csv
 -- @param filename the file path 

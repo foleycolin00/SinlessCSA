@@ -13,8 +13,9 @@ settings.__index = settings
 -- @param col_name the column name
 -- @return a new sym object
 function settings:new(fileName)
-    local o = { name = default,
-                p = 2 }
+    local o = { name = 'default',
+                p = 2,
+                far = 0.9 }
     
     setmetatable(o, self)
     

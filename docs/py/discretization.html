@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>src.py.hw4 API documentation</title>
-<meta name="description" content="" />
+<title>src.py.discretization API documentation</title>
+<meta name="description" content="Class for holding discretizations created for decision trees" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,52 +19,32 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.py.hw4</code></h1>
+<h1 class="title">Module <code>src.py.discretization</code></h1>
 </header>
 <section id="section-intro">
+<p>Class for holding discretizations created for decision trees</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from sample import *
-import os
-import functools
-from pprint import pprint
-
-s = Sample()
-myPath = os.path.dirname(os.path.abspath(__file__))
-myPath = myPath[:myPath.rindex(&#34;/&#34;)]
-myPath = myPath[:myPath.rindex(&#34;/&#34;)]
-s.fromFile(myPath + &#34;/data/auto93.csv&#34;)
-
-print(&#34;------\nTask 1:&#34;)
-print(&#34;(showing first 10 rows)&#34;)
-
-for row in s.cols:
-  print(row.name.ljust(20), end=&#34;&#34;)
-print()
-
-for i in range(10):
-  print(f&#34;\nRow {i+1}:&#34;)
-  for data in s.rows[i]:
-    print(str(data).ljust(20), end=&#34;&#34;)
-  print(&#34;\nClosest Row:&#34;)
-  a = s.neighbors(s.rows[i])
-  print(f&#34;Distance - {a[0][0]}&#34;)
-  for data in a[0][1]:
-    print(str(data).ljust(20), end=&#34;&#34;)
-  print(&#34;\nFurthest Row:&#34;)
-  print(f&#34;Distance - {a[-1][0]}&#34;)
-  for data in a[-1][1]:
-    print(str(data).ljust(20), end=&#34;&#34;)
-  print(&#34;\n\n&#34;)
- 
-print(&#34;\n\n\n\n\n\n\n------\nTask 3:&#34;)
- 
-leafs = s.divs()
-
-for leaf in leafs:
-  print(len(leaf.rows))</code></pre>
+<pre><code class="python">&#39;&#39;&#39;
+Class for holding discretizations created for decision trees
+&#39;&#39;&#39;
+class Discretization:
+  
+  &#39;&#39;&#39;
+  Initilization for the Discretization class
+  &#39;&#39;&#39;
+  def __init__(self, at, name, lo, hi, best, rest):
+    self.at = at
+    self.name = name
+    self.lo = lo
+    self.hi = hi
+    self.best = best
+    self.rest = rest
+  
+  def __str__(self):
+    return str(f&#34;{{:at {self.at}, :name {self.name}, :lo {self.lo}, :hi {self.hi}, :best {self.best}, :rest {self.rest}}}&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -74,6 +54,36 @@ for leaf in leafs:
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="src.py.discretization.Discretization"><code class="flex name class">
+<span>class <span class="ident">Discretization</span></span>
+<span>(</span><span>at, name, lo, hi, best, rest)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initilization for the Discretization class</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Discretization:
+  
+  &#39;&#39;&#39;
+  Initilization for the Discretization class
+  &#39;&#39;&#39;
+  def __init__(self, at, name, lo, hi, best, rest):
+    self.at = at
+    self.name = name
+    self.lo = lo
+    self.hi = hi
+    self.best = best
+    self.rest = rest
+  
+  def __str__(self):
+    return str(f&#34;{{:at {self.at}, :name {self.name}, :lo {self.lo}, :hi {self.hi}, :best {self.best}, :rest {self.rest}}}&#34;)</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -85,6 +95,13 @@ for leaf in leafs:
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="src.py" href="index.html">src.py</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="src.py.discretization.Discretization" href="#src.py.discretization.Discretization">Discretization</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>

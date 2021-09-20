@@ -28,6 +28,22 @@
 </summary>
 <pre><code class="python">from some import *
 from readCSV import *
+from config import *
+from discretization import *
+
+def variance(i):
+  i = [x[1] for x in i]
+  arr = [i.count(0), i.count(1)]
+  
+  if arr[0] == 0 or arr[1] == 0:
+    return 0
+  
+  e = 0
+  for v in arr:
+     p= v/len(i)      # probability of wanting it
+     w= math.log(p,2) # how hard to find it (via binary chop)
+     e= e - p*w
+  return e
 
 &#39;&#39;&#39;
  Num class
@@ -65,6 +81,18 @@ class Num:
     self.hi = -1e32
     self.mu = self.m2 = self.sd = 0
     self.w = self.getWeight()
+  
+  &#39;&#39;&#39;
+  Gets all of the values
+  &#39;&#39;&#39;
+  def _all(self):
+    return self.some._all
+    
+  &#39;&#39;&#39;
+  Returns the variance
+  &#39;&#39;&#39;
+  def var(self):
+    return self.sd
 
   &#39;&#39;&#39;
   Adds a value to the col
@@ -115,7 +143,96 @@ class Num:
     else:
       x = self.norm(x)
       y = self.norm(y)
-    return abs(x-y)</code></pre>
+    return abs(x-y)
+  
+  &#39;&#39;&#39;
+  Median function
+  :return: the mid value
+  &#39;&#39;&#39;
+  def mid(self):
+    temp = self.some.getAll()
+    middle = math.floor(len(temp)/2)
+    if len(temp) % 2 == 1:
+      return float(temp[middle])
+    else:
+      return (temp[middle] + temp[middle - 1]) / 2
+  
+  &#39;&#39;&#39;
+  Discretize values
+  :param i: 
+  :param j: 
+  &#39;&#39;&#39;
+  def discretize(self, i, j):
+    best, rest = 1,0
+    # list of (number, class)
+    xys=[(good,best) for good in i._all()] + [ (bad, rest) for bad  in j._all()]
+    #
+    # find a minimum break span (.3 * expected value of standard deivation)
+    n1,n2 = len(i._all()), len(j._all())
+    iota = Config.cohen * (i.var()*n1 + j.var()*n2) / (n1 + n2)
+    #
+    # all the real work is in unsuper and merge... which is your problem
+    ranges = self.merge(self.unsuper(xys, len(xys)**Config.bins, iota))
+    # 
+    if len(ranges) &gt; 1:  
+      for r in ranges:
+        rx = [t[0] for t in r]
+        ry = [t[1] for t in r]
+        yield Discretization(at=i.at, name=i.name, lo=sorted(rx)[0], hi=sorted(rx)[-1], 
+                best= ry.count(1), rest=ry.count(0))
+  
+  &#39;&#39;&#39;
+  Unsuper function
+  :return: list of ranges in the values
+  &#39;&#39;&#39;
+  def unsuper(self, xys, binsize, iota):
+    xys.sort(key=lambda s:s[0])
+    split = []
+    i, j = 0, 0
+    while i &lt; len(xys) - 1 and len(xys) - i &gt; binsize:
+      if (
+        #It cannot break ranges uness the i-th+1 value is different to the i-th value
+        ( j &gt;= len(xys) - 1 or xys[j][0] != xys[j + 1][0]) and 
+        #It cannot break unless the break contains more than iota items
+        abs(i-j) &gt; iota and
+        #It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, latter)
+        len(xys) - 1 - j &gt; binsize
+      ):
+        temp = []
+        for k in range(i, j + 1):
+          temp.append(xys[k])
+        split.append(temp)  
+        i = j + 1
+        j = i + 1
+      elif j &lt; len(xys):
+        j+=1
+      else:
+        i+=1
+    #final left
+    temp = []
+    for k in range(i, len(xys)):
+      temp.append(xys[k])
+    split.append(temp)  
+    
+    return split
+  
+  &#39;&#39;&#39;
+  Merge function
+  :return: merge of ranges if possible
+  &#39;&#39;&#39;
+  def merge(self, ranges):
+    i = 0
+    while i &lt; len(ranges)-1:
+      a = ranges[i]
+      b = ranges[i+1]
+      c = a+b
+      
+      if variance(c)*.95 &lt;= (variance(a)*len(a) + variance(b)*len(b))/(len(a) + len(b)):
+        ranges[i+1] = ranges[i] + ranges[i+1]
+        ranges.pop(i)
+      else:
+        i+=1
+    return ranges</code></pre>
 </details>
 </section>
 <section>
@@ -123,6 +240,33 @@ class Num:
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.py.num.variance"><code class="name flex">
+<span>def <span class="ident">variance</span></span>(<span>i)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def variance(i):
+  i = [x[1] for x in i]
+  arr = [i.count(0), i.count(1)]
+  
+  if arr[0] == 0 or arr[1] == 0:
+    return 0
+  
+  e = 0
+  for v in arr:
+     p= v/len(i)      # probability of wanting it
+     w= math.log(p,2) # how hard to find it (via binary chop)
+     e= e - p*w
+  return e</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
@@ -173,6 +317,18 @@ We must already know it is a goal
     self.hi = -1e32
     self.mu = self.m2 = self.sd = 0
     self.w = self.getWeight()
+  
+  &#39;&#39;&#39;
+  Gets all of the values
+  &#39;&#39;&#39;
+  def _all(self):
+    return self.some._all
+    
+  &#39;&#39;&#39;
+  Returns the variance
+  &#39;&#39;&#39;
+  def var(self):
+    return self.sd
 
   &#39;&#39;&#39;
   Adds a value to the col
@@ -223,7 +379,96 @@ We must already know it is a goal
     else:
       x = self.norm(x)
       y = self.norm(y)
-    return abs(x-y)</code></pre>
+    return abs(x-y)
+  
+  &#39;&#39;&#39;
+  Median function
+  :return: the mid value
+  &#39;&#39;&#39;
+  def mid(self):
+    temp = self.some.getAll()
+    middle = math.floor(len(temp)/2)
+    if len(temp) % 2 == 1:
+      return float(temp[middle])
+    else:
+      return (temp[middle] + temp[middle - 1]) / 2
+  
+  &#39;&#39;&#39;
+  Discretize values
+  :param i: 
+  :param j: 
+  &#39;&#39;&#39;
+  def discretize(self, i, j):
+    best, rest = 1,0
+    # list of (number, class)
+    xys=[(good,best) for good in i._all()] + [ (bad, rest) for bad  in j._all()]
+    #
+    # find a minimum break span (.3 * expected value of standard deivation)
+    n1,n2 = len(i._all()), len(j._all())
+    iota = Config.cohen * (i.var()*n1 + j.var()*n2) / (n1 + n2)
+    #
+    # all the real work is in unsuper and merge... which is your problem
+    ranges = self.merge(self.unsuper(xys, len(xys)**Config.bins, iota))
+    # 
+    if len(ranges) &gt; 1:  
+      for r in ranges:
+        rx = [t[0] for t in r]
+        ry = [t[1] for t in r]
+        yield Discretization(at=i.at, name=i.name, lo=sorted(rx)[0], hi=sorted(rx)[-1], 
+                best= ry.count(1), rest=ry.count(0))
+  
+  &#39;&#39;&#39;
+  Unsuper function
+  :return: list of ranges in the values
+  &#39;&#39;&#39;
+  def unsuper(self, xys, binsize, iota):
+    xys.sort(key=lambda s:s[0])
+    split = []
+    i, j = 0, 0
+    while i &lt; len(xys) - 1 and len(xys) - i &gt; binsize:
+      if (
+        #It cannot break ranges uness the i-th+1 value is different to the i-th value
+        ( j &gt;= len(xys) - 1 or xys[j][0] != xys[j + 1][0]) and 
+        #It cannot break unless the break contains more than iota items
+        abs(i-j) &gt; iota and
+        #It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, latter)
+        len(xys) - 1 - j &gt; binsize
+      ):
+        temp = []
+        for k in range(i, j + 1):
+          temp.append(xys[k])
+        split.append(temp)  
+        i = j + 1
+        j = i + 1
+      elif j &lt; len(xys):
+        j+=1
+      else:
+        i+=1
+    #final left
+    temp = []
+    for k in range(i, len(xys)):
+      temp.append(xys[k])
+    split.append(temp)  
+    
+    return split
+  
+  &#39;&#39;&#39;
+  Merge function
+  :return: merge of ranges if possible
+  &#39;&#39;&#39;
+  def merge(self, ranges):
+    i = 0
+    while i &lt; len(ranges)-1:
+      a = ranges[i]
+      b = ranges[i+1]
+      c = a+b
+      
+      if variance(c)*.95 &lt;= (variance(a)*len(a) + variance(b)*len(b))/(len(a) + len(b)):
+        ranges[i+1] = ranges[i] + ranges[i+1]
+        ranges.pop(i)
+      else:
+        i+=1
+    return ranges</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -247,6 +492,35 @@ We must already know it is a goal
     self.sd = 0 if (self.m2&lt;0 or self.n&lt;2) else pow(self.m2/( self.n - 1 ), .5 )
     self.lo = min(x, self.lo)
     self.hi = max(x, self.hi)</code></pre>
+</details>
+</dd>
+<dt id="src.py.num.Num.discretize"><code class="name flex">
+<span>def <span class="ident">discretize</span></span>(<span>self, i, j)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def discretize(self, i, j):
+  best, rest = 1,0
+  # list of (number, class)
+  xys=[(good,best) for good in i._all()] + [ (bad, rest) for bad  in j._all()]
+  #
+  # find a minimum break span (.3 * expected value of standard deivation)
+  n1,n2 = len(i._all()), len(j._all())
+  iota = Config.cohen * (i.var()*n1 + j.var()*n2) / (n1 + n2)
+  #
+  # all the real work is in unsuper and merge... which is your problem
+  ranges = self.merge(self.unsuper(xys, len(xys)**Config.bins, iota))
+  # 
+  if len(ranges) &gt; 1:  
+    for r in ranges:
+      rx = [t[0] for t in r]
+      ry = [t[1] for t in r]
+      yield Discretization(at=i.at, name=i.name, lo=sorted(rx)[0], hi=sorted(rx)[-1], 
+              best= ry.count(1), rest=ry.count(0))</code></pre>
 </details>
 </dd>
 <dt id="src.py.num.Num.dist"><code class="name flex">
@@ -290,6 +564,48 @@ We must already know it is a goal
   return -1 if &#39;-&#39; in self.name else 1</code></pre>
 </details>
 </dd>
+<dt id="src.py.num.Num.merge"><code class="name flex">
+<span>def <span class="ident">merge</span></span>(<span>self, ranges)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def merge(self, ranges):
+  i = 0
+  while i &lt; len(ranges)-1:
+    a = ranges[i]
+    b = ranges[i+1]
+    c = a+b
+    
+    if variance(c)*.95 &lt;= (variance(a)*len(a) + variance(b)*len(b))/(len(a) + len(b)):
+      ranges[i+1] = ranges[i] + ranges[i+1]
+      ranges.pop(i)
+    else:
+      i+=1
+  return ranges</code></pre>
+</details>
+</dd>
+<dt id="src.py.num.Num.mid"><code class="name flex">
+<span>def <span class="ident">mid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mid(self):
+  temp = self.some.getAll()
+  middle = math.floor(len(temp)/2)
+  if len(temp) % 2 == 1:
+    return float(temp[middle])
+  else:
+    return (temp[middle] + temp[middle - 1]) / 2</code></pre>
+</details>
+</dd>
 <dt id="src.py.num.Num.norm"><code class="name flex">
 <span>def <span class="ident">norm</span></span>(<span>self, x)</span>
 </code></dt>
@@ -304,6 +620,60 @@ We must already know it is a goal
     return x
   else:
     return (x-self.lo) / (self.hi - self.lo + 1e-32)</code></pre>
+</details>
+</dd>
+<dt id="src.py.num.Num.unsuper"><code class="name flex">
+<span>def <span class="ident">unsuper</span></span>(<span>self, xys, binsize, iota)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def unsuper(self, xys, binsize, iota):
+  xys.sort(key=lambda s:s[0])
+  split = []
+  i, j = 0, 0
+  while i &lt; len(xys) - 1 and len(xys) - i &gt; binsize:
+    if (
+      #It cannot break ranges uness the i-th+1 value is different to the i-th value
+      ( j &gt;= len(xys) - 1 or xys[j][0] != xys[j + 1][0]) and 
+      #It cannot break unless the break contains more than iota items
+      abs(i-j) &gt; iota and
+      #It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, latter)
+      len(xys) - 1 - j &gt; binsize
+    ):
+      temp = []
+      for k in range(i, j + 1):
+        temp.append(xys[k])
+      split.append(temp)  
+      i = j + 1
+      j = i + 1
+    elif j &lt; len(xys):
+      j+=1
+    else:
+      i+=1
+  #final left
+  temp = []
+  for k in range(i, len(xys)):
+    temp.append(xys[k])
+  split.append(temp)  
+  
+  return split</code></pre>
+</details>
+</dd>
+<dt id="src.py.num.Num.var"><code class="name flex">
+<span>def <span class="ident">var</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def var(self):
+  return self.sd</code></pre>
 </details>
 </dd>
 </dl>
@@ -322,15 +692,25 @@ We must already know it is a goal
 <li><code><a title="src.py" href="index.html">src.py</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="src.py.num.variance" href="#src.py.num.variance">variance</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
 <h4><code><a title="src.py.num.Num" href="#src.py.num.Num">Num</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="src.py.num.Num.add" href="#src.py.num.Num.add">add</a></code></li>
+<li><code><a title="src.py.num.Num.discretize" href="#src.py.num.Num.discretize">discretize</a></code></li>
 <li><code><a title="src.py.num.Num.dist" href="#src.py.num.Num.dist">dist</a></code></li>
 <li><code><a title="src.py.num.Num.getWeight" href="#src.py.num.Num.getWeight">getWeight</a></code></li>
+<li><code><a title="src.py.num.Num.merge" href="#src.py.num.Num.merge">merge</a></code></li>
+<li><code><a title="src.py.num.Num.mid" href="#src.py.num.Num.mid">mid</a></code></li>
 <li><code><a title="src.py.num.Num.norm" href="#src.py.num.Num.norm">norm</a></code></li>
+<li><code><a title="src.py.num.Num.unsuper" href="#src.py.num.Num.unsuper">unsuper</a></code></li>
+<li><code><a title="src.py.num.Num.var" href="#src.py.num.Num.var">var</a></code></li>
 </ul>
 </li>
 </ul>

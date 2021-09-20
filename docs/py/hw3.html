@@ -36,7 +36,7 @@ myPath = myPath[:myPath.rindex(&#34;/&#34;)]
 myPath = myPath[:myPath.rindex(&#34;/&#34;)]
 s.fromFile(myPath + &#34;/data/auto93.csv&#34;)
 
-s.rows.sort(key=functools.cmp_to_key(s.betterCompare))
+s.rows.sort(key=functools.cmp_to_key(s.rowCompare))
 
 for row in s.cols:
   print(row.name.ljust(20), end=&#34;&#34;)

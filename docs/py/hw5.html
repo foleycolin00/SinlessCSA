@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>src.py.hw4 API documentation</title>
+<title>src.py.hw5 API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.py.hw4</code></h1>
+<h1 class="title">Module <code>src.py.hw5</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -38,33 +38,50 @@ myPath = myPath[:myPath.rindex(&#34;/&#34;)]
 s.fromFile(myPath + &#34;/data/auto93.csv&#34;)
 
 print(&#34;------\nTask 1:&#34;)
-print(&#34;(showing first 10 rows)&#34;)
+leafs = s.divs()
+
+print(&#34;------\nTask 2:&#34;)
+for col in s.y:
+  print(col.name.ljust(20), end=&#34;&#34;)
+print(&#34;\n&#34;)
+for leaf in leafs:
+  strings = str(leaf).replace(&#34;[&#34;, &#34;&#34;).replace(&#34;]&#34;, &#34;&#34;).split(&#39;, &#39;)
+  for string in strings:
+    print(string.ljust(20), end=&#39;&#39;)
+  print()
+
+print(&#34;------\nTask 3:&#34;)
+Config.loud = False
+disc = s.discretize()
+for d in disc:
+  print(d)
+Config.loud = True
+
+best, worst = leafs[0], leafs[-1]
 
 for row in s.cols:
   print(row.name.ljust(20), end=&#34;&#34;)
 print()
 
-for i in range(10):
-  print(f&#34;\nRow {i+1}:&#34;)
-  for data in s.rows[i]:
+print(&#34;BEST LEAF:&#34;)
+for i in range(5):
+  for data in best.rows[i]:
     print(str(data).ljust(20), end=&#34;&#34;)
-  print(&#34;\nClosest Row:&#34;)
-  a = s.neighbors(s.rows[i])
-  print(f&#34;Distance - {a[0][0]}&#34;)
-  for data in a[0][1]:
-    print(str(data).ljust(20), end=&#34;&#34;)
-  print(&#34;\nFurthest Row:&#34;)
-  print(f&#34;Distance - {a[-1][0]}&#34;)
-  for data in a[-1][1]:
-    print(str(data).ljust(20), end=&#34;&#34;)
-  print(&#34;\n\n&#34;)
- 
-print(&#34;\n\n\n\n\n\n\n------\nTask 3:&#34;)
- 
-leafs = s.divs()
+  print()
 
-for leaf in leafs:
-  print(len(leaf.rows))</code></pre>
+for row in s.cols:
+  print(str(&#34;...&#34;).ljust(20), end=&#34;&#34;)
+print()
+
+print(&#34;WORST LEAF:&#34;)
+for i in range(5):
+  for data in worst.rows[i]:
+    print(str(data).ljust(20), end=&#34;&#34;)
+  print()
+
+for row in s.cols:
+  print(str(&#34;...&#34;).ljust(20), end=&#34;&#34;)
+print()</code></pre>
 </details>
 </section>
 <section>

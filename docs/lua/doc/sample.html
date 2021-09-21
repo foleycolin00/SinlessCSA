@@ -24,8 +24,7 @@
 
 <div id="navigation">
 <br/>
-<h1>CS 591: Lua Implementation</h1>
-<h2><a href="index.html">Overview</h2>
+<h1>ldoc</h1>
 
 
 <h2>Contents</h2>
@@ -36,14 +35,7 @@
 
 <h2>Modules</h2>
 <ul class="nowrap">
-    <li><strong><a href="klass.html">klass.lua</strong></li>
-        <li><strong><a href="goal.html">goal.lua</strong></li>
-            <li><strong><a href="num.html">num.lua</strong></li>
-                <li><strong><a href="sample.html">sample.lua</strong></li>
-                    <li><strong><a href="skip.html">skip.lua</strong></li>
-                        <li><strong><a href="some.html">some.lua</strong></li>
-                            <li><strong><a href="sym.html">sym.lua</strong></li>
-                                <li><strong><a href="tools.html">tools.lua</strong></li>
+  <li><strong>sample.lua</strong></li>
 </ul>
 
 </div>
@@ -78,12 +70,40 @@
 	<td class="summary">This function clones sample object.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#createSubSample">createSubSample (list)</a></td>
+	<td class="summary">This function creates a sub-sample.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#dendogram">dendogram (inString, the_dendogram)</a></td>
+	<td class="summary">This function creates a dendogram.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#zitler">zitler (row1, row2)</a></td>
 	<td class="summary">This function performs the zitler continous domination predicate.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#sample:sort_by_goal">sample:sort_by_goal ()</a></td>
+	<td class="name" nowrap><a href="#distance">distance (row1, row2)</a></td>
+	<td class="summary">This function returns the distance between two row points.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#neighbors">neighbors (row, rows)</a></td>
+	<td class="summary">This function returns the neighbors of a row.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#sort_by_goal">sort_by_goal ()</a></td>
 	<td class="summary">This function sorts a table by its goal using the zitler continous domination predicate.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#faraway">faraway (row, rows)</a></td>
+	<td class="summary">This function returns a list of ___.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#sample:divide">sample:divide ()</a></td>
+	<td class="summary">This function recursively divide rows down to size #rows^(enough = .5).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#sample:div">sample:div (rows)</a></td>
+	<td class="summary">This function splits rows via their distance to 2 faraway points.</td>
 	</tr>
 </table>
 
@@ -106,7 +126,7 @@
     <h3>Returns:</h3>
     <ol>
 
-        returns a new sample object
+        a new sample object
     </ol>
 
 
@@ -173,6 +193,54 @@
 
 </dd>
     <dt>
+    <a name = "createSubSample"></a>
+    <strong>createSubSample (list)</strong>
+    </dt>
+    <dd>
+    This function creates a sub-sample.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">list</span>
+         a list of data points
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a new sub-sample
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "dendogram"></a>
+    <strong>dendogram (inString, the_dendogram)</strong>
+    </dt>
+    <dd>
+    This function creates a dendogram.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">inString</span>
+         denotes the levels of the tree
+        </li>
+        <li><span class="parameter">the_dendogram</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
     <a name = "zitler"></a>
     <strong>zitler (row1, row2)</strong>
     </dt>
@@ -201,14 +269,142 @@
 
 </dd>
     <dt>
-    <a name = "sample:sort_by_goal"></a>
-    <strong>sample:sort_by_goal ()</strong>
+    <a name = "distance"></a>
+    <strong>distance (row1, row2)</strong>
+    </dt>
+    <dd>
+    This function returns the distance between two row points.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">row1</span>
+         one row to compare to another
+        </li>
+        <li><span class="parameter">row2</span>
+         one row to compare to another
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        the distance between two rows
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "neighbors"></a>
+    <strong>neighbors (row, rows)</strong>
+    </dt>
+    <dd>
+    This function returns the neighbors of a row.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">row</span>
+         a single row
+        </li>
+        <li><span class="parameter">rows</span>
+         all the other rows
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a list of neighbors
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "sort_by_goal"></a>
+    <strong>sort_by_goal ()</strong>
     </dt>
     <dd>
     This function sorts a table by its goal using the zitler continous domination predicate.
 
 
 
+
+
+
+
+</dd>
+    <dt>
+    <a name = "faraway"></a>
+    <strong>faraway (row, rows)</strong>
+    </dt>
+    <dd>
+    This function returns a list of ___.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">row</span>
+         a single row
+        </li>
+        <li><span class="parameter">rows</span>
+         all other rows
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "sample:divide"></a>
+    <strong>sample:divide ()</strong>
+    </dt>
+    <dd>
+    This function recursively divide rows down to size #rows^(enough = .5).
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        one table per leaf
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "sample:div"></a>
+    <strong>sample:div (rows)</strong>
+    </dt>
+    <dd>
+    This function splits rows via their distance to 2 faraway points.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">rows</span>
+         all rows
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        ___.
+    </ol>
 
 
 
@@ -221,7 +417,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2021-09-17 17:12:58 </i>
+<i style="float:right;">Last updated 2021-09-21 11:00:11 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

@@ -33,7 +33,7 @@ end
 
 
 -- https://github.com/timm/keys/blob/main/src/rand.lua
-local Seed = 10013 -- beware. do not lose control of your seeds
+local Seed = 62884 -- beware. do not lose control of your seeds
 
 -- **randi(?lo : int, ?hi : int) : int**  
 -- Return an int between `lo`  and `hi` (default 0..1).

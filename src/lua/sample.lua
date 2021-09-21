@@ -225,7 +225,7 @@ end
 -- return one table per leaf
 function sample:divide()
   local out = {}
-  local enough = 2 * (#self.rows)^self.settings.enough
+  local enough = (#self.rows)^self.settings.enough
   
   -- adds to set of samples when they are sufficiently small
   -- or continue splitting
@@ -257,7 +257,6 @@ function sample:div(rows)
   local two = self:faraway(one,  tools:randomSubList(rows, self.settings.samples))
   
   local c = self:distance(one, two)
-  print(c)
   
   local tmp = {}
   for key, value in pairs(rows) do
@@ -267,11 +266,6 @@ function sample:div(rows)
   end
   
   table.sort(tmp, function(x,y) return x[2] < y[2] end)
-  
-  for i = 1, #tmp do
-    --print(tmp[i][2])
-  end
-  --print()
   
   local l = {}
   local r = {}

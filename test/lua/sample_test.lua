@@ -93,13 +93,10 @@ local dendoTest = sample:new()
 dendoTest:load('../../data/auto93.csv')
 
 local leafs = dendoTest:divide()
-dendoTest:dendogram()
+--dendoTest:dendogram()
 
 for i = 1, #leafs do
-  for j = 1, #leafs[i].rows do
-    --print(table.unpack(leafs[i].rows[j]))
-  end
-  --print()
+  print(table.unpack(leafs[i].rows[#leafs[i].rows // 2]))
 end
 
 -- need to test zitler sort function

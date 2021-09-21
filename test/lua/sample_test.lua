@@ -17,6 +17,8 @@ sampleTest:load('../data/csv_good.csv')
 -- make another sample after load, just to make sure we can have multiple and dont overwrite
 local clonedSample = sample:new()
 
+
+
 -- need to test header gets filled with proper types
 assert(getmetatable(sampleTest.headers[1]) == sym)
 assert(getmetatable(sampleTest.headers[2]) == num)
@@ -96,7 +98,7 @@ local leafs = dendoTest:divide()
 --dendoTest:dendogram()
 
 for i = 1, #leafs do
-  print(table.unpack(leafs[i].rows[#leafs[i].rows // 2]))
+  --print(table.unpack(leafs[i].rows[#leafs[i].rows // 2]))
 end
 
 -- need to test zitler sort function
@@ -142,6 +144,8 @@ end
 -- test distance
 local distSample = sample:new()
 
+
+
 table.insert(distSample.headers, num:new('num1'))
 table.insert(distSample.headers, num:new('num2'))
 table.insert(distSample.headers, num:new('num3'))
@@ -169,12 +173,12 @@ assert(distSample:distance(distSample.rows[1], distSample.rows[2]) == 0.25)
 local neighbors = distSample:neighbors(distSample.rows[1])
 
 for key, value in pairs(neighbors) do
-  --io.write('{ ')
+  io.write('{ ')
   for k, v in pairs(value[1]) do
-    --io.write(v, ' ')
+    io.write(v, ' ')
   end
-  --io.write('} ')
-  --print(tostring(value[2]))
+  io.write('} ')
+  print(tostring(value[2]))
 end
 
 local tableExample = { 1, 2, 3, 4, 5, 6, 7, 8, 9 , 10 }
@@ -185,4 +189,17 @@ for i = 1, #tableCopy do
   --print(tableCopy[i])
 end
 
+
+
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
+
+
+--timer
+
+--local start_time = os.time()
+--local end_time = os.time()
+
+--local delta_time = end_time - start_time
+
+
+-- print(delta_time)

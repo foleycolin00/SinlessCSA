@@ -5,7 +5,10 @@ local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 local tools = {}
 
--- split function
+--- This function will split a given input string at the given delimiter. 
+-- @param inputString the given input string 
+-- @param delimiter the given delimiter 
+-- @return the parsed input string in the form of a table
 function tools:stringToTable(inputString, delimiter)
   local retTable = {}
   local i = 1
@@ -20,6 +23,10 @@ end
 
 -- if a list has key inserts, this cannot be used because #list would be 0
 -- if size is greater than list, it will just shuffle the whole list
+--- This function creates a random sample sub-list. 
+-- @param list a list of data points
+-- @param size size of random sub-list
+-- @return the random sample sub-list
 function tools:randomSubList(list, size)
   size = math.min(size, #list)
   for i = 1, size do

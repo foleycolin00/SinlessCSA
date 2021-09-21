@@ -25,7 +25,6 @@ local goal = require('goal')
 local klass = require('klass')
 local settings = require('settings')
 
-
 --- This function creates a new sample object.
 -- @function new
 -- @return a new sample object
@@ -99,6 +98,10 @@ function sample:clone()
   return ret_sample
 end
 
+--- This function creates a sub-sample. 
+-- @function createSubSample 
+-- @param list a list of data points
+-- @return a new sub-sample
 function sample:createSubSample(list)
   local newSample = sample:new()
   newSample.settings = self.settings
@@ -120,6 +123,10 @@ function sample:createSubSample(list)
   return newSample
 end
 
+---This function creates a dendogram.
+-- @function dendogram 
+-- @param inString denotes the levels of the tree
+-- @param the_dendogram 
 function sample:dendogram(inString, the_dendogram)
   local dendogram = {}
   
@@ -176,6 +183,11 @@ function sample:zitler(row1, row2)
   return s1 < s2 
 end
 
+--- This function returns the distance between two row points. 
+-- @function distance
+-- @param row1 one row to compare to another
+-- @param row2 one row to compare to another
+-- @return the distance between two rows
 function sample:distance(row1, row2)
   local sum = 0
   local n = 0
@@ -191,11 +203,15 @@ function sample:distance(row1, row2)
 end
 
 --[[
-function sample:distance_heuristic(row1, row2)
-  
+function sample:distance_heuristic(row1, row2)  
 end
 ]]
 
+---This function returns the neighbors of a row. 
+-- @function neighbors
+-- @param row a single row
+-- @param rows all the other rows 
+-- @return a list of neighbors 
 function sample:neighbors(row, rows)
   local neighbor_list = {}
   for key, value in pairs(rows or self.rows) do
@@ -210,10 +226,16 @@ function sample:neighbors(row, rows)
 end
 
 --- This function sorts a table by its goal using the zitler continous domination predicate. 
+-- @function sort_by_goal
 function sample:sort_by_goal()
   table.sort(self.rows, function (a, b) return self:zitler(a, b) end)
 end
 
+---This function returns a list of ___. 
+-- @function faraway 
+-- @param row a single row
+-- @param rows all other rows
+-- @return 
 function sample:faraway(row, rows)
   rows = rows or self.rows
   local distance_list = self:neighbors(row, rows)
@@ -221,8 +243,8 @@ function sample:faraway(row, rows)
 end
 
 
---- Recursive divide rows down to size #rows^(enough = .5)
--- return one table per leaf
+--- This function recursively divide rows down to size #rows^(enough = .5).
+-- @return one table per leaf
 function sample:divide()
   local out = {}
   local enough = (#self.rows)^self.settings.enough
@@ -249,7 +271,9 @@ function sample:divide()
   return out
 end
 
---- split rows via their distance to 2 faraway points
+---This function splits rows via their distance to 2 faraway points.
+-- @param rows all rows 
+-- @return ___.
 function sample:div(rows)
   rows = rows or self.rows
   local one = self:faraway(rows[ math.floor(tools:rand() * #rows) + 1 ],

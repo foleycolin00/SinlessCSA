@@ -1,3 +1,6 @@
+--- This settings class is used for the settings/configurations. 
+-- @module settings.lua
+-- @author Steven Jones & Azeeza Eagal
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 --package.path = '?.lua;' + package.path
@@ -8,10 +11,10 @@ local tools = require('tools')
 
 settings.__index = settings
 
---- This function creates a new sym object.
+--- This function creates a new settings object.
 -- @function new
--- @param col_name the column name
--- @return a new sym object
+-- @param fileName the file path 
+-- @return a new settings object
 function settings:new(fileName)
     local o = { name = 'default',
                 p = 2,

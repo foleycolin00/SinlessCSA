@@ -32,8 +32,8 @@ end
 -- @param x a value
 -- @return the input value
 function num:add(x)
+ 
   x = tonumber(x) or x
-  
   if type(x) ~= 'number' then
     return x
   end
@@ -41,16 +41,13 @@ function num:add(x)
   self.sample_list:add(x)
     
   self.count = self.count + 1
-  
   local delta = x - self.mean
 
   self.min = (self.min and (x > self.min)) and self.min or x
-
   self.max = (self.max and (x < self.max)) and self.max or x
 
   -- https://math.stackexchange.com/questions/106700/incremental-averageing
   self.mean = self.mean + (delta) / self.count
-
   self.m2 = self.m2 + delta * (x - self.mean) 
   
   --https://github.com/timm/keys/blob/main/src/num.lua & https://www.youtube.com/watch?v=p5xThuN3P0I

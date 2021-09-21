@@ -1,4 +1,4 @@
---- This some class is a non parameteric collector.
+--- This some class is a non-parameteric collector.
 -- @module some.lua
 -- @author Steven Jones & Azeeza Eagal
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end

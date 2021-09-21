@@ -89,7 +89,11 @@ assert(sampleTest.rows[2][1] == 'anotherDiffValue')
 assert(clonedSample ~= sampleTest)
 assert(getmetatable(clonedSample) == getmetatable(sampleTest))
 
-local leafs = sampleTest:divide()
+local dendoTest = sample:new()
+dendoTest:load('../../data/auto93.csv')
+
+local leafs = dendoTest:divide()
+dendoTest:dendogram()
 
 for i = 1, #leafs do
   for j = 1, #leafs[i].rows do

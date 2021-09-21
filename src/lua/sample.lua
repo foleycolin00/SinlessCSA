@@ -32,7 +32,9 @@ local settings = require('settings')
 function sample:new()
   local o = { headers = {},
               rows = {},
-              settings = settings:new() }
+              settings = settings:new(),
+              children = {},
+              c}
   setmetatable(o, self)
   
   return o
@@ -113,7 +115,38 @@ function sample:createSubSample(list)
     table.insert(newSample.rows, list[i])
   end
   
+  table.insert(self.children, newSample)
+  
   return newSample
+end
+
+function sample:dendogram(inString, the_dendogram)
+  local dendogram = {}
+  
+  local level = '../' .. (inString or '')
+  
+  for i = 1, #self.children do
+    self.children[i]:dendogram(level, the_dendogram or dendogram)
+  end
+  
+  level = level .. ' n = ' .. #self.rows
+  
+  if self.c then
+    level = level .. ', c = ' .. string.format('%.2f', self.c or '')
+  end
+  
+  if #self.children == 0 then
+    level = level .. '    randomRow = { ' .. table.concat(self.rows[#self.rows // 2], ', ') .. ' }'
+  end
+  
+  if the_dendogram then
+    table.insert(the_dendogram, level)
+  else
+    table.insert(dendogram, level)
+    for i = #dendogram, 1, -1 do
+      print(dendogram[i])
+    end
+  end
 end
 
 
@@ -153,7 +186,7 @@ function sample:distance(row1, row2)
       sum = sum + (self.headers[i]:distance(row1[i], row2[i]))^self.settings.p
     end
   end
-  
+
   return (sum / n)^(1 / self.settings.p)
 end
 
@@ -196,20 +229,20 @@ function sample:divide()
   
   -- adds to set of samples when they are sufficiently small
   -- or continue splitting
-  local function run(rows, level)    
-    if #rows < enough then
-      table.insert(out, self:createSubSample(rows))
+  local function run(sample) 
+    if #sample.rows < enough then
+      table.insert(out, sample)
     else
       -- splits in half
-      local l, r = self:div(rows)
-      
-      run(l, level + 1)
-      run(r, level + 1)
+      local l, r, c = self:div(sample.rows)
+      sample.c = c
+      run(sample:createSubSample(l))
+      run(sample:createSubSample(r))
     end
   end ----------------------------------------------
   
   -- starts the process of splitting
-  run(self.rows, 0)
+  run(self)
   
   -- out are samples
   -- better is zitler function
@@ -218,11 +251,13 @@ end
 
 --- split rows via their distance to 2 faraway points
 function sample:div(rows)
-  local one = self:faraway(self.rows[ math.floor(tools:rand() * #self.rows) + 1 ],
-                     tools:randomSubList(self.rows, self.settings.samples))
-  local two = self:faraway(one,  tools:randomSubList(self.rows, self.settings.samples))
+  rows = rows or self.rows
+  local one = self:faraway(rows[ math.floor(tools:rand() * #rows) + 1 ],
+                     tools:randomSubList(rows, self.settings.samples))
+  local two = self:faraway(one,  tools:randomSubList(rows, self.settings.samples))
   
   local c = self:distance(one, two)
+  print(c)
   
   local tmp = {}
   for key, value in pairs(rows) do
@@ -233,6 +268,11 @@ function sample:div(rows)
   
   table.sort(tmp, function(x,y) return x[2] < y[2] end)
   
+  for i = 1, #tmp do
+    --print(tmp[i][2])
+  end
+  --print()
+  
   local l = {}
   local r = {}
   
@@ -240,11 +280,11 @@ function sample:div(rows)
     table.insert(l, tmp[i][1])
   end
 
-  for i = math.ceil(#tmp / 2), #tmp do
+  for i = math.floor(#tmp / 2) + 1, #tmp do
     table.insert(r, tmp[i][1])
   end
   
-  return l, r
+  return l, r, c
 end
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

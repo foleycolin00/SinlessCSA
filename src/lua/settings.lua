@@ -15,7 +15,9 @@ settings.__index = settings
 function settings:new(fileName)
     local o = { name = 'default',
                 p = 2,
-                far = 0.9 }
+                far = 0.9,
+                samples = 128,
+                enough = 0.5 }
     
     setmetatable(o, self)
     

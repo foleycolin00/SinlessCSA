@@ -24,7 +24,6 @@ local sym = require('sym')
 local goal = require('goal')
 local klass = require('klass')
 local settings = require('settings')
-local some_sample = require('some_sample')
 
 
 --- This function creates a new sample object.
@@ -36,7 +35,6 @@ function sample:new()
               settings = settings:new() }
   setmetatable(o, self)
   
-  o.sample_list = some_sample:new(o)
   return o
 end
 
@@ -53,7 +51,6 @@ function sample:load(fileName)
         table.insert(tmp, self.headers[i]:add(row[i]))
       end
       table.insert(self.rows, tmp)
-      self.sample_list:add(tmp)
     end
   end
 end
@@ -99,6 +96,26 @@ function sample:clone()
   
   return ret_sample
 end
+
+function sample:createSubSample(list)
+  local newSample = sample:new()
+  newSample.settings = self.settings
+  
+  for i = 1, #self.headers do
+    newSample.headers[i] = getmetatable(self.headers[i]):new()
+  end
+  
+  for i = 1, #list do
+    for j = 1, #list[i] do
+      newSample.headers[j]:add(list[i][j])
+    end
+    
+    table.insert(newSample.rows, list[i])
+  end
+  
+  return newSample
+end
+
 
 --- This function performs the zitler continous domination predicate.
 -- @function zitler
@@ -165,65 +182,71 @@ function sample:sort_by_goal()
 end
 
 function sample:faraway(row, rows)
-  local distance_list = self:neighbors(row, rows or self.rows)
-  return distance_list[self.settings.far * #all // 1][1]
+  rows = rows or self.rows
+  local distance_list = self:neighbors(row, rows)
+  return distance_list[math.floor(self.settings.far * #rows)][1]
 end
 
---[[
+
 --- Recursive divide rows down to size #rows^(enough = .5)
 -- return one table per leaf
 function sample:divide()
+  local out = {}
+  local enough = 2 * (#self.rows)^self.settings.enough
+  
   -- adds to set of samples when they are sufficiently small
   -- or continue splitting
-  function run()
+  local function run(rows, level)    
     if #rows < enough then
-      table.insert(out, self:clone(rows))
+      table.insert(out, self:createSubSample(rows))
     else
       -- splits in half
-      l, r = self:div(rows)
-      run(l, lvl + 1)
-      run(r, lvl + 1)
+      local l, r = self:div(rows)
+      
+      run(l, level + 1)
+      run(r, level + 1)
     end
   end ----------------------------------------------
-
-  out = {}
-  enough = 2 * self.rows^0.5
   
   -- starts the process of splitting
   run(self.rows, 0)
   
-  better = function(t1, t2) return self:zitler(t1:mid(), t2:mid()) end
   -- out are samples
   -- better is zitler function
-  return table.sort(out, better)
+  return out
 end
 
 --- split rows via their distance to 2 faraway points
 function sample:div(rows)
-  one = self:faraway(randomRow)
-  two = self:faraway(one)
+  local one = self:faraway(self.rows[ math.floor(tools:rand() * #self.rows) + 1 ],
+                     tools:randomSubList(self.rows, self.settings.samples))
+  local two = self:faraway(one,  tools:randomSubList(self.rows, self.settings.samples))
   
-  c = self:distance(one, two)
+  local c = self:distance(one, two)
   
-  tmp = {}
+  local tmp = {}
   for key, value in pairs(rows) do
-    a = self:dist(value, one)
-    b = self:dist(value, two)
+    local a = self:distance(value, one)
+    local b = self:distance(value, two)
     table.insert(tmp, {value, (a^2 + c^2 - b^2) / (2 * c) })
   end
-  l, r = {}, {}
   
-  for key, value in pairs(tmp) do
-    -- put smallest in left and largest on right of tmp[2]
+  table.sort(tmp, function(x,y) return x[2] < y[2] end)
+  
+  local l = {}
+  local r = {}
+  
+  for i = 1, math.floor(#tmp / 2) do
+    table.insert(l, tmp[i][1])
+  end
+
+  for i = math.ceil(#tmp / 2), #tmp do
+    table.insert(r, tmp[i][1])
   end
   
   return l, r
 end
-]]
-
-
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return sample
-

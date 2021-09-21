@@ -9,6 +9,7 @@ local sym = require('sym')
 local goal = require('goal')
 local klass = require('klass')
 local settings = require('settings')
+local tools = require('tools')
 
 local sampleTest = sample:new()
 sampleTest:load('../data/csv_good.csv')
@@ -88,6 +89,15 @@ assert(sampleTest.rows[2][1] == 'anotherDiffValue')
 assert(clonedSample ~= sampleTest)
 assert(getmetatable(clonedSample) == getmetatable(sampleTest))
 
+local leafs = sampleTest:divide()
+
+for i = 1, #leafs do
+  for j = 1, #leafs[i].rows do
+    --print(table.unpack(leafs[i].rows[j]))
+  end
+  --print()
+end
+
 -- need to test zitler sort function
 local zitlerSample = sample:new()
 
@@ -129,15 +139,49 @@ for i = 1, #zitlerTable do
 end
 
 -- test distance
-assert(zitlerSample:distance(zitlerSample.rows[1], zitlerSample.rows[2]) == 0.25)
+local distSample = sample:new()
 
-local neighbors = zitlerSample:neighbors(zitlerSample.rows[1])
+table.insert(distSample.headers, num:new('num1'))
+table.insert(distSample.headers, num:new('num2'))
+table.insert(distSample.headers, num:new('num3'))
+table.insert(distSample.headers, num:new('num4'))
 
-for key, value in pairs(neighbors) do
-  print(tostring(value[1]) .. ' ' .. tostring(value[2]))
+local distTable = {
+  {1, 1, 3, 4},
+  {1, 2, 3, 4},
+  {1, 2, 5, 4},
+  {1, 3, 5, 4}
+}
+
+for i = 1, #distTable do
+  for j = 1, #distTable[i] do
+    distSample.headers[j]:add(distTable[i][j])
+  end
 end
 
-print(neighbors[1][2])
-print(neighbors[#neighbors][2])
+
+distSample.rows = distTable
+
+-- test distance
+assert(distSample:distance(distSample.rows[1], distSample.rows[2]) == 0.25)
+
+local neighbors = distSample:neighbors(distSample.rows[1])
+
+for key, value in pairs(neighbors) do
+  --io.write('{ ')
+  for k, v in pairs(value[1]) do
+    --io.write(v, ' ')
+  end
+  --io.write('} ')
+  --print(tostring(value[2]))
+end
+
+local tableExample = { 1, 2, 3, 4, 5, 6, 7, 8, 9 , 10 }
+
+local tableCopy = tools:randomSubList(tableExample, 10)
+
+for i = 1, #tableCopy do
+  --print(tableCopy[i])
+end
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

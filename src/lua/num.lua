@@ -71,6 +71,13 @@ function num:clone()
     return_val.mean = self.mean
     return_val.stdev = self.stdev
     return_val.m2 = self.m2
+    
+    return_val.sample_list.overall_items = self.sample_list.overall_items
+    return_val.sample_list.max_items = self.sample_list.max_items
+    for key, value in pairs(self.sample_list.sample_list) do
+      table.insert(return_val.sample_list, value)
+    end
+    
     return return_val
 end
 
@@ -92,12 +99,10 @@ end
 -- @param y second num
 -- @return normalized distance
 function num:distance(x, y)
-  
   x = self:norm(x)
   y = self:norm(y)
   
   if type(x) ~= 'number' and type(y) ~= 'number' then return 1 end
-    
   if type(x) ~= 'number' then x = (y > 0.5 and 0 or 1) end
   if type(y) ~= 'number' then y = (x > 0.5 and 0 or 1) end
   

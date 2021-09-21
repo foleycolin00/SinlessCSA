@@ -18,6 +18,20 @@ function tools:stringToTable(inputString, delimiter)
   return retTable
 end
 
+-- if a list has key inserts, this cannot be used because #list would be 0
+-- if size is greater than list, it will just shuffle the whole list
+function tools:randomSubList(list, size)
+  size = math.min(size, #list)
+  for i = 1, size do
+    local j = i + (tools:rand() * (#list - i) // 1)
+    
+    list[i], list[j] = list[j], list[i]
+  end
+  
+  return size and { table.unpack(list, 1, size) } or list
+end
+
+
 -- https://github.com/timm/keys/blob/main/src/rand.lua
 local Seed = 62884 -- beware. do not lose control of your seeds
 

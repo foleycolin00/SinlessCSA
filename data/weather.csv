@@ -10,7 +10,7 @@ rainy,65,70,TRUE,4,10
 overcast,64,65,TRUE,30,60
 sunny,72,95,FALSE,7,20 #adsas
 sunny,69,70,FALSE,70,70
-rainy,75,80,FALSE,80,40,
+rainy,75,80,FALSE,80,40
 sunny,75,70,TRUE,30,50
 overcast,72,90,TRUE,60,50
 overcast,81,75,FALSE,30,60

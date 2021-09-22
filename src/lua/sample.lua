@@ -143,7 +143,7 @@ function sample:dendogram(inString, the_dendogram)
   end
   
   if #self.children == 0 then
-    level = level .. '    randomRow = { ' .. table.concat(self.rows[#self.rows // 2], ', ') .. ' }'
+    level = level .. '    goals = ' .. self:goalString(self:mid())
   end
   
   if the_dendogram then
@@ -225,6 +225,33 @@ function sample:neighbors(row, rows)
   return neighbor_list
 end
 
+function sample:mid()
+  local midRow = {}
+  for key, value in pairs(self.headers) do
+    if getmetatable(value) == 'skip' then
+      table.insert(midRow, 'skip')
+    else
+      table.insert(midRow, value:mid())
+    end
+  end
+  
+  return midRow
+end
+
+function sample:goalString(row)
+  local ret = '[ '
+  
+  for key, value in pairs(self.headers) do
+    if getmetatable(value) == goal then
+      ret = ret .. string.format('%.1f ', row[key])
+    elseif getmetatable(value) == klass then
+      ret = ret .. row[key] .. ' '
+    end
+  end
+  
+  return ret .. ']'
+end
+
 --- This function sorts a table by its goal using the zitler continous domination predicate. 
 -- @function sort_by_goal
 function sample:sort_by_goal()
@@ -266,9 +293,15 @@ function sample:divide()
   -- starts the process of splitting
   run(self)
   
-  -- out are samples
-  -- better is zitler function
-  return out
+  local out_sortedMid = {}
+  
+  for key, value in pairs(out) do
+    table.insert(out_sortedMid, { value, value:mid()} )
+  end
+  
+  table.sort(out_sortedMid, function(x, y) return self:zitler(x[2], y[2]) end)
+  
+  return out_sortedMid
 end
 
 ---This function splits rows via their distance to 2 faraway points.

@@ -57,6 +57,10 @@ function num:add(x)
   return x
 end
 
+function num:mid()
+  return self.mean
+end
+
 --- This function clones a num object.
 -- @function clone
 -- @return a clone of a num object

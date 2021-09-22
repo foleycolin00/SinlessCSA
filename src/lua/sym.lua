@@ -41,6 +41,10 @@ function sym:add(x)
   return x
 end
 
+function sym:mid()
+  return self.mode
+end
+
 --- This function clones a sym object.
 -- @function clone
 -- @return a clone of a sym object
@@ -67,6 +71,12 @@ function sym:distance(x, y)
   if x == '?' or y == '?' then return 1 end
   
   return x == y and 0 or 1
+end
+
+function sym:discretize()
+  for key, value in pairs(self.symbol_list) do
+    
+  end
 end
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

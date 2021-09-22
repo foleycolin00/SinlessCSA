@@ -97,8 +97,15 @@ dendoTest:load('../../data/auto93.csv')
 local leafs = dendoTest:divide()
 --dendoTest:dendogram()
 
+for key, value in pairs(dendoTest.headers) do
+  if getmetatable(value) == goal or getmetatable(value) == klass then
+    io.write(value.name, ' ')
+  end
+end
+print()
+
 for i = 1, #leafs do
-  --print(table.unpack(leafs[i].rows[#leafs[i].rows // 2]))
+  print(dendoTest:goalString(leafs[i][2]))
 end
 
 -- need to test zitler sort function
@@ -173,12 +180,12 @@ assert(distSample:distance(distSample.rows[1], distSample.rows[2]) == 0.25)
 local neighbors = distSample:neighbors(distSample.rows[1])
 
 for key, value in pairs(neighbors) do
-  io.write('{ ')
+  --io.write('{ ')
   for k, v in pairs(value[1]) do
-    io.write(v, ' ')
+    --io.write(v, ' ')
   end
-  io.write('} ')
-  print(tostring(value[2]))
+  --io.write('} ')
+  --print(tostring(value[2]))
 end
 
 local tableExample = { 1, 2, 3, 4, 5, 6, 7, 8, 9 , 10 }

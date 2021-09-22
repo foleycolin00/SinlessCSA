@@ -26,43 +26,47 @@ local start_time = os.time()
 
 for i = 1, #weatherSample.rows do
   local neighbors = weatherSample:neighbors(weatherSample.rows[i])
+  -- row in question
   print(string.format('Row %d: {%s}', i, table.concat(weatherSample.rows[i], ", ")))
-  for key, value in pairs(neighbors) do 
-    io.write('{')
-    io.write(table.concat(value[1], ', '), '  Distance: ')
-    io.write(value[2])
-    print('}')  
-   end
+    -- closest
+      io.write('Closest: {')
+      print(table.concat(neighbors[1][1], " ") .. "}" .. " Distance: " .. neighbors[1][2])
+    -- furthest
+      io.write('Furthest: {')
+      print(table.concat(neighbors[#neighbors][1], " ") .. "}" .. " Distance: " .. neighbors[#neighbors][2])
    print()
 end
+-- i want key[1] and key[nth]
 
---[[
+
 for i = 1, #pom3aSample.rows do
     local neighbors = pom3aSample:neighbors(pom3aSample.rows[i])
+    -- row in question
     print(string.format('Row %d: {%s}', i, table.concat(pom3aSample.rows[i], ", ")))
-    for key, value in pairs(neighbors) do 
-      io.write('{')
-      io.write(table.concat(value[1], ', '), '  Distance: ')
-      io.write(value[2])
-      print('}')  
-     end
-     print()
+    -- closest
+    io.write('Closest: {')
+    print(table.concat(neighbors[1][1], " ") .. "}" .. " Distance: " .. neighbors[1][2])
+  -- furthest
+    io.write('Furthest: {')
+    print(table.concat(neighbors[#neighbors][1], " ") .. "}" .. " Distance: " .. neighbors[#neighbors][2])
+    print()
   end
+
 
   for i = 1, #auto93Sample.rows do
     local neighbors = auto93Sample:neighbors(auto93Sample.rows[i])
     print(string.format('Row %d: {%s}', i, table.concat(auto93Sample.rows[i], ", ")))
-    for key, value in pairs(neighbors) do 
-      io.write('{')
-      io.write(table.concat(value[1], ', '), '  Distance: ')
-      io.write(value[2])
-      print('}')  
-    end
-     print()
-  en
-  d
+    -- closest
+    io.write('Closest: {')
+    print(table.concat(neighbors[1][1], " ") .. "}" .. " Distance: " .. neighbors[1][2])
+  -- furthest
+    io.write('Furthest: {')
+    print(table.concat(neighbors[#neighbors][1], " ") .. "}" .. " Distance: " .. neighbors[#neighbors][2])
+    print()
+  end
 
-  ]]
+
+-- task 3: 
   local end_time = os.time()
 
   local delta_time = end_time - start_time

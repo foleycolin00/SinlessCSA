@@ -14,7 +14,7 @@ Furthest: {sunny, 85, 85, FALSE, 10, 20  Distance: 0.90267093384844}
 The next task given was to show the derivation of the cosine rule. That can be seen below:
 
  <br>
-![Screenshot (90)](https://user-images.githubusercontent.com/89092830/134360525-14f2d5b8-d40b-4bfa-934b-6c94c0fb090b.png)
+![image](https://user-images.githubusercontent.com/89092830/134360525-14f2d5b8-d40b-4bfa-934b-6c94c0fb090b.png)
 <br>
 
 ## Task 3

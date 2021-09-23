@@ -110,6 +110,51 @@ function num:distance(x, y)
   return math.abs(x - y)
 end
 
+function num:discretize(other_num)
+  -- i = good sample (for us it is self)
+  -- j = bad sample (for us it it other_num)
+  
+  -- go through some (which is a sample of num)
+  -- so for the good one it would be every item in some's sample list
+  -- and attach 1 to it, { { self.some[1], 1 }, { self.some[2], 1 }, ... }
+  -- do the same for the bad sample (other_num), but attach 0 to it
+  -- { { other_num.some[1], 0 }, { other_num.some[2], 0 }, ... }
+  
+  
+  --[[
+  local symbol_list_collection = {}
+  
+  for key, value in pairs(self.symbol_list) do
+    symbol_list_collection[key] = 1
+  end
+  
+  for key, value in pairs(other_sym.symbol_list) do
+    symbol_list_collection[key] = 1
+  end
+  
+  local sym_col = {}
+  
+  for key, value in pairs(symbol_list_collection) do
+    table.insert(sym_col, key)
+  end
+  
+  local curr_index = 1
+  ]]
+  return function()
+    --[[
+    if curr_index <= #sym_col then
+      local item = sym_col[curr_index]
+      local ret = self.name .. ' ' .. item .. ' ' .. item .. ' '
+                  .. tostring(self.symbol_list[item]) .. ' ' .. tostring(other_sym.symbol_list[item])
+      curr_index = curr_index + 1
+    
+      return ret
+    end
+    ]]
+  end
+  
+end
+
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return num

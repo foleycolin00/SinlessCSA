@@ -73,9 +73,35 @@ function sym:distance(x, y)
   return x == y and 0 or 1
 end
 
-function sym:discretize()
+function sym:discretize(other_sym)
+  ---
+  local symbol_list_collection = {}
+  
   for key, value in pairs(self.symbol_list) do
+    symbol_list_collection[key] = 1
+  end
+  
+  for key, value in pairs(other_sym.symbol_list) do
+    symbol_list_collection[key] = 1
+  end
+  
+  local sym_col = {}
+  
+  for key, value in pairs(symbol_list_collection) do
+    table.insert(sym_col, key)
+  end
+  
+  local curr_index = 1
+  
+  return function()
+    if curr_index <= #sym_col then
+      local item = sym_col[curr_index]
+      local ret = self.name .. ' ' .. item .. ' ' .. item .. ' '
+                  .. tostring(self.symbol_list[item]) .. ' ' .. tostring(other_sym.symbol_list[item])
+      curr_index = curr_index + 1
     
+      return ret
+    end
   end
 end
 

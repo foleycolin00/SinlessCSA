@@ -17,8 +17,6 @@ sampleTest:load('../data/csv_good.csv')
 -- make another sample after load, just to make sure we can have multiple and dont overwrite
 local clonedSample = sample:new()
 
-
-
 -- need to test header gets filled with proper types
 assert(getmetatable(sampleTest.headers[1]) == sym)
 assert(getmetatable(sampleTest.headers[2]) == num)
@@ -91,21 +89,26 @@ assert(sampleTest.rows[2][1] == 'anotherDiffValue')
 assert(clonedSample ~= sampleTest)
 assert(getmetatable(clonedSample) == getmetatable(sampleTest))
 
+print('start discretize')
+print()
 local dendoTest = sample:new()
-dendoTest:load('../../data/auto93.csv')
+dendoTest:load('../../data/weather.csv')
+
+local check = dendoTest:discretize()
+print('end discretize')
 
 local leafs = dendoTest:divide()
 --dendoTest:dendogram()
 
 for key, value in pairs(dendoTest.headers) do
   if getmetatable(value) == goal or getmetatable(value) == klass then
-    io.write(value.name, ' ')
+    --io.write(value.name, ' ')
   end
 end
 print()
 
 for i = 1, #leafs do
-  print(dendoTest:goalString(leafs[i][2]))
+  --print(dendoTest:goalString(leafs[i][2]))
   --print(table.unpack(leafs[i][1]:mid()))
 end
 
@@ -196,8 +199,6 @@ local tableCopy = tools:randomSubList(tableExample, 10)
 for i = 1, #tableCopy do
   --print(tableCopy[i])
 end
-
-
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 

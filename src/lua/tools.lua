@@ -75,7 +75,6 @@ function tools:csv(fileName)
   local line_number = 1
   
   return function()
-
     while true do
 
       if tmp then
@@ -113,7 +112,7 @@ function tools:csv(fileName)
         break
       end
     end
-  end  
+  end
 end
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

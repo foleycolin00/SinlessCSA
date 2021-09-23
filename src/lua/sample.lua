@@ -72,7 +72,7 @@ function sample:header(list)
     elseif string.sub(item,1,1):match('[A-Z]') then -- uppercase isNum
       table.insert(self.headers, num:new(item))
     else
-      table.insert(self.headers, sym:new(item))
+      table.insert(self.headers, sym:new(tostring(item)))
     end
   end
 end
@@ -107,7 +107,7 @@ function sample:createSubSample(list)
   newSample.settings = self.settings
   
   for i = 1, #self.headers do
-    newSample.headers[i] = getmetatable(self.headers[i]):new()
+    newSample.headers[i] = getmetatable(self.headers[i]):new(self.headers[i].name)
   end
   
   for i = 1, #list do
@@ -228,7 +228,7 @@ end
 function sample:mid()
   local midRow = {}
   for key, value in pairs(self.headers) do
-    if getmetatable(value) == 'skip' then
+    if getmetatable(value) == skip then
       table.insert(midRow, 'skip')
     else
       table.insert(midRow, value:mid())
@@ -336,6 +336,36 @@ function sample:div(rows)
   end
   
   return l, r, c
+end
+
+function sample:discretize()
+  local ret = {}
+  
+  local leafs = self:divide()
+  
+  local best, worst = leafs[1][1], leafs[#leafs][1]
+  
+  print('best')
+  for key, value in pairs(best.rows) do
+    print(table.concat(value, ' '))
+  end
+  print('worst')
+  for key, value in pairs(worst.rows) do
+    print(table.concat(value, ' '))
+  end
+  print()
+  
+  for i = 1, #best.headers do
+    if getmetatable(best.headers[i]) == num or getmetatable(best.headers[i]) == sym then
+      for discretized_item in best.headers[i]:discretize(worst.headers[i]) do
+        print(i .. ' ' .. discretized_item)
+      end
+    end
+  end
+  print()
+
+  
+  return ret
 end
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

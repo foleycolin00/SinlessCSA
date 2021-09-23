@@ -2,7 +2,7 @@
 
 In this homework assignment, we attempt to implement the cluster and contrast peeking method. 
 ## Task 1
-The first task of this homework was to implement an AHA distance function for Nums and Syms and for each row, print the row item, it's nearest item and the distance between them, and its furthest item and the distance between them. The runtime of this is ____ and can be found at [test/lua/hw4.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw4-lua/test/lua/hw4.lua). 
+The first task of this homework was to implement an AHA distance function for Nums and Syms and for each row, print the row item, it's nearest item and the distance between them, and its furthest item and the distance between them. The runtime of this is 0.75 seconds on both the weather dataset and the AUTO93 set; the POM3a set took a LONG time. The code can be found at [test/lua/hw4.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw4-lua/test/lua/hw4.lua) and [src/lua/sample.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw4-lua/src/lua/sample.lua). 
 
 An example of the output: 
 ```
@@ -15,9 +15,4 @@ The next task given was to show the derivation of the cosine rule. That can be s
 <br>
 
 ## Task 3
-The last task given was to complement the faraway function by implementing a div1 function that does one random based on two distant points, and a divs function that does many random projections, dividing the data down to sqrt(n) of the data. The runtime for this is ____ and can be found at [test/lua/hw4.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw4-lua/test/lua/hw4.lua).
-
-An example of the output: 
-```
-WIP
-```
+The last task given was to complement the faraway function by implementing a div1 function that does one random based on two distant points, and a divs function that does many random projections, dividing the data down to sqrt(n) of the data. The implementation can be found at [src/lua/sample.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw4-lua/src/lua/sample.lua).

@@ -22,7 +22,7 @@ auto93Sample:load('../../data/auto93.csv')
 
 --task 1: print the nearest and furthest item for each row for every sample
 
-local start_time = os.time()
+local start_time = os.clock()
 
 for i = 1, #weatherSample.rows do
   local neighbors = weatherSample:neighbors(weatherSample.rows[i])
@@ -36,22 +36,6 @@ for i = 1, #weatherSample.rows do
       print(table.concat(neighbors[#neighbors][1], " ") .. "}" .. " Distance: " .. neighbors[#neighbors][2])
    print()
 end
--- i want key[1] and key[nth]
-
-
-for i = 1, #pom3aSample.rows do
-    local neighbors = pom3aSample:neighbors(pom3aSample.rows[i])
-    -- row in question
-    print(string.format('Row %d: {%s}', i, table.concat(pom3aSample.rows[i], ", ")))
-    -- closest
-    io.write('Closest: {')
-    print(table.concat(neighbors[1][1], " ") .. "}" .. " Distance: " .. neighbors[1][2])
-  -- furthest
-    io.write('Furthest: {')
-    print(table.concat(neighbors[#neighbors][1], " ") .. "}" .. " Distance: " .. neighbors[#neighbors][2])
-    print()
-  end
-
 
   for i = 1, #auto93Sample.rows do
     local neighbors = auto93Sample:neighbors(auto93Sample.rows[i])
@@ -66,8 +50,21 @@ for i = 1, #pom3aSample.rows do
   end
 
 
--- task 3: 
-  local end_time = os.time()
+  --[[
+for i = 1, #pom3aSample.rows do
+  local neighbors = pom3aSample:neighbors(pom3aSample.rows[i])
+  -- row in question
+  print(string.format('Row %d: {%s}', i, table.concat(pom3aSample.rows[i], ", ")))
+  -- closest
+  io.write('Closest: {')
+  print(table.concat(neighbors[1][1], " ") .. "}" .. " Distance: " .. neighbors[1][2])
+-- furthest
+  io.write('Furthest: {')
+  print(table.concat(neighbors[#neighbors][1], " ") .. "}" .. " Distance: " .. neighbors[#neighbors][2])
+  print()
+end
+]]
+  local end_time = os.clock()
 
   local delta_time = end_time - start_time
 

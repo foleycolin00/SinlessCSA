@@ -8,6 +8,7 @@ local num = {}
 num.__index = num
 
 local some = require('some')
+local settings = require('settings')
 
 --- This function creates a new num object.
 -- @function new
@@ -21,7 +22,8 @@ function num:new(col_name)
               mean = 0,
               stdev = 0,
               m2 = 0,
-              sample_list = some:new() }
+              sample_list = some:new(),
+              settings = settings:new() }
   setmetatable(o, self)
   
   return o
@@ -119,41 +121,74 @@ function num:discretize(other_num)
   -- and attach 1 to it, { { self.some[1], 1 }, { self.some[2], 1 }, ... }
   -- do the same for the bad sample (other_num), but attach 0 to it
   -- { { other_num.some[1], 0 }, { other_num.some[2], 0 }, ... }
-  
-  
-  --[[
-  local symbol_list_collection = {}
-  
-  for key, value in pairs(self.symbol_list) do
-    symbol_list_collection[key] = 1
+  local sample_list_collection = {}
+
+  for key, value in pairs(self.sample_list) do
+    sample_list_collection[key] = 1
   end
   
-  for key, value in pairs(other_sym.symbol_list) do
-    symbol_list_collection[key] = 1
+  for key, value in pairs(other_num.sample_list) do
+    sample_list_collection[key] = 0
   end
   
-  local sym_col = {}
+  local xys = {}
   
-  for key, value in pairs(symbol_list_collection) do
-    table.insert(sym_col, key)
+  for key, value in pairs(sample_list_collection) do
+    table.insert(xys, key)
   end
   
+  --print(table.unpack(xys.sample_list))
   local curr_index = 1
-  ]]
+
+  -- find minimum break space (.3 * expected value of standard deviation)
+  local n1 = #self.sample_list.sample_list
+  local n2 = #other_num.sample_list.sample_list
+
+  local iota = self.settings.cohen * (self.stdev * n1 + other_num.stdev * n2) / (n1 + n2)
+  
+  -- i do not like the comment he left at this line
+  --local ranges = merge(unsuper(xys, #xys**self.settings.bins, iota))
+
   return function()
-    --[[
-    if curr_index <= #sym_col then
-      local item = sym_col[curr_index]
+--[[
+    if curr_index <= #xys then
+      local item = xys[curr_index]
       local ret = self.name .. ' ' .. item .. ' ' .. item .. ' '
-                  .. tostring(self.symbol_list[item]) .. ' ' .. tostring(other_sym.symbol_list[item])
+                  .. tostring(self.sample_list[item]) .. ' ' .. tostring(other_num.sample_list[item])
       curr_index = curr_index + 1
-    
       return ret
     end
     ]]
+  
   end
   
 end
+
+function num:variance(other_num)
+
+  
+end
+
+function num:unsuper(xys, binsize, iota)
+  --[[
+  --xys.sort(key=lambda s:s[0])
+  local split = {}
+
+  local i = 0
+  local j = 0 
+
+  while i < (#xys - 1) and (#xys - 1) > binsize do 
+    if (( j >= #xys - 1) or (xys[j][0] != xys[j + 1][0])) and (math.abs(i-j) > iota) and ((#xys - 1 - j) , binsize ) then 
+]]
+
+
+end
+
+function num:merge()
+
+end
+
+
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 

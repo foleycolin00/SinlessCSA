@@ -346,6 +346,7 @@ function sample:discretize()
   local best, worst = leafs[1][1], leafs[#leafs][1]
   
   print('best')
+ 
   for key, value in pairs(best.rows) do
     print(table.concat(value, ' '))
   end

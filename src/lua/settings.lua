@@ -20,7 +20,9 @@ function settings:new(fileName)
                 p = 2,
                 far = 0.9,
                 samples = 128,
-                enough = 0.5 }
+                enough = 0.5,
+                cohen = 0.3,
+                bins = 0.5 }
     
     setmetatable(o, self)
     

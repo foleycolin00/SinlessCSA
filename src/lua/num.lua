@@ -121,23 +121,33 @@ function num:discretize(other_num)
   -- and attach 1 to it, { { self.some[1], 1 }, { self.some[2], 1 }, ... }
   -- do the same for the bad sample (other_num), but attach 0 to it
   -- { { other_num.some[1], 0 }, { other_num.some[2], 0 }, ... }
-  local sample_list_collection = {}
+  local best_sample_list_collection = {}
+  local rest_sample_list_collection = {}
 
   for key, value in pairs(self.sample_list) do
-    sample_list_collection[key] = 1
+    best_sample_list_collection[key] = 1
+    print(self.sample_list.sample_list[value])
+    --best_sample_list_collection[value] = self.sample_list.sample_list
   end
-  
+ 
+
   for key, value in pairs(other_num.sample_list) do
-    sample_list_collection[key] = 0
+    rest_sample_list_collection[key] = 0
+    --rest_sample_list_collection[value] = other_num.sample_list.sample_list
   end
   
-  local xys = {}
-  
-  for key, value in pairs(sample_list_collection) do
-    table.insert(xys, key)
+ --[[
+  for key, value in pairs(best_sample_list_collection) do
+    print("Key: " .. best_sample_list_collection[key])
+    io.write("Value: " .. best_sample_list_collection[value])
   end
-  
-  --print(table.unpack(xys.sample_list))
+
+  for key, value in pairs(rest_sample_list_collection) do
+    --print("Key: " .. rest_sample_list_collection[key])
+    --io.write("Value: " .. rest_sample_list_collection[value])
+  end
+  ]]
+  -- put the key value pairs in 
   local curr_index = 1
 
   -- find minimum break space (.3 * expected value of standard deviation)
@@ -158,8 +168,9 @@ function num:discretize(other_num)
       curr_index = curr_index + 1
       return ret
     end
-    ]]
+
   
+  ]]
   end
   
 end
@@ -170,21 +181,62 @@ function num:variance(other_num)
 end
 
 function num:unsuper(xys, binsize, iota)
-  --[[
+
   --xys.sort(key=lambda s:s[0])
+  -- this line sorts xys by keys, so the lowest keys are at the front of the array: https://www.youtube.com/watch?v=Ob9rY6PQMfI (4:13)
   local split = {}
 
   local i = 0
   local j = 0 
 
   while i < (#xys - 1) and (#xys - 1) > binsize do 
-    if (( j >= #xys - 1) or (xys[j][0] != xys[j + 1][0])) and (math.abs(i-j) > iota) and ((#xys - 1 - j) , binsize ) then 
-]]
 
+    if ( (j >= #xys - 1) or (xys[j][0] ~= xys[j + 1][0])) and (math.abs(i-j) > iota) and ((#xys - 1 - j) > binsize ) then 
+      local temp = {}
+
+      for key, value in pairs(i, j + 1) do 
+        table.insert(temp, xys[key])
+      end
+
+      table.insert(split, temp)
+
+      i = j + 1
+      j = 1 
+    elseif j < #xys then 
+      j = j + 1 
+    else 
+      i = i + 1 
+    end 
+
+    temp = {} 
+
+    for key, value in pairs(i, #xys) do
+      table.insert(temp, xys[key])
+    end
+
+    table.insert(split, temp)
+  end
+
+return split
 
 end
 
-function num:merge()
+function num:merge(ranges)
+  local i = 0
+  
+  while i < #ranges do 
+    local a = ranges[i]
+    local b = ranges[i + 1]
+    local c = a + b 
+
+    if (variance(c) * 0.95) <= (variance(a)*#a) + (variance(b)*#b / #a + #b) then 
+      ranges[i+1] = ranges[i] + ranges[i+1]
+      --ranges.pop(i)
+    else 
+      i = i + 1 
+    end 
+  end 
+  return ranges
 
 end
 

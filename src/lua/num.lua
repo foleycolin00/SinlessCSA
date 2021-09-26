@@ -122,20 +122,32 @@ function num:discretize(other_num)
   -- do the same for the bad sample (other_num), but attach 0 to it
   -- { { other_num.some[1], 0 }, { other_num.some[2], 0 }, ... }
   local sample_list_collection = {}
+  local rest_counter = 0
+  local best_counter = 0
 
+  -- every key should be given a one
   for key, value in pairs(self.sample_list.sample_list) do
     sample_list_collection[key] = 1
+    best_counter = best_counter + 1
   end
  
-
+-- every key should be given a zero
   for key, value in pairs(other_num.sample_list.sample_list) do
     sample_list_collection[key] = 0
+    rest_counter = rest_counter + 1 
   end
 
+  print("disZeros: " .. rest_counter)
+  print("ones: " .. best_counter )
 
+  print()
+  print()
+
+  print("Actual keys:")
   for key, value in pairs(sample_list_collection) do
     print("Key: " .. sample_list_collection[key])
   end
+
 
   local curr_index = 1
 
@@ -153,8 +165,8 @@ function num:discretize(other_num)
 --[[
     if curr_index <= #xys then
       local item = xys[curr_index]
-      local ret = self.name .. ' ' .. item .. ' ' .. item .. ' '
-                  .. tostring(self.sample_list[item]) .. ' ' .. tostring(other_num.sample_list[item])
+      local ret = ":name ".. self.name .. ' :lo' .. item .. ' :high' .. item .. ' :best'
+                  .. tostring(self.sample_list[item]) .. ' :rest' .. tostring(other_num.sample_list[item])
       curr_index = curr_index + 1
       return ret
     end
@@ -170,19 +182,27 @@ function num:variance(other_num)
   
 end
 
-function num:unsuper(xys, binsize, iota)
-
+function num:unsuper(sample_list_collection, binsize, iota)
   --xys.sort(key=lambda s:s[0])
   -- this line sorts xys by keys, so the lowest keys are at the front of the array: https://www.youtube.com/watch?v=Ob9rY6PQMfI (4:13)
   -- order by keys
-  xkeys = {}
+  --[[
+  local sortedkeys = {}
+  local zero_counter = 0
 
-  for k in pairs(xys) do table.insert(xkeys, k) end
-  table.sort(xkeys)
-
-  for _,k in pairs(xkeys) do print(k, xys[k]) end
-
+  for i = 1, #sample_list_collection do 
+    if sample_list_collection[key] == 0 then
+      table.insert(sortedkeys, sample_list_collection[i])
+      local zero_counter = zero_counter + 1 
+    end
+  end
   
+  for key, value in pairs(sortedkeys) do
+    print("what")
+    print("Key: " .. sortedkeys[key])
+  end
+  ]]
+  --print("unsuper-Zeros: " .. zero_counter)
 --[[
   local split = {}
 
@@ -191,7 +211,7 @@ function num:unsuper(xys, binsize, iota)
 
   while (i < (#xys - 1)) and ((#xys - 1) > binsize) do 
 
-    if ( (j >= #xys - 1) or (xys[j][0] ~= xys[j + 1][0])) and (math.abs(i-j) > iota) and ((#xys - 1 - j) > binsize ) then 
+    if ( (j >= (#xys - 1)) or (xys[j][0] ~= xys[j + 1][0])) and (math.abs(i-j) > iota) and ((#xys - 1 - j) > binsize ) then 
       local temp = {}
 
       for key, value in pairs(i, j + 1) do 
@@ -216,9 +236,9 @@ function num:unsuper(xys, binsize, iota)
 
     table.insert(split, temp)
   end
-]]
---return split
 
+--return split
+]]
 return 1
 end
 

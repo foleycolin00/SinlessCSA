@@ -73,6 +73,9 @@ function sym:distance(x, y)
   return x == y and 0 or 1
 end
 
+--- This function discretizes the symbols of a dataset 
+-- @param other_sym the "rest" sample
+-- @return the descritized information
 function sym:discretize(other_sym)
   ---
   local symbol_list_collection = {}
@@ -96,8 +99,8 @@ function sym:discretize(other_sym)
   return function()
     if curr_index <= #sym_col then
       local item = sym_col[curr_index]
-      local ret = self.name .. ' ' .. item .. ' ' .. item .. ' '
-                  .. tostring(self.symbol_list[item]) .. ' ' .. tostring(other_sym.symbol_list[item])
+      local ret =':name ' .. self.name .. ' :lo ' .. item .. ' :hi ' .. item .. ' :best '
+                  .. tostring(self.symbol_list[item]) .. ' :rest ' .. tostring(other_sym.symbol_list[item])
       curr_index = curr_index + 1
     
       return ret

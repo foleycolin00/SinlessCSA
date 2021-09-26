@@ -122,32 +122,21 @@ function num:discretize(other_num)
   -- do the same for the bad sample (other_num), but attach 0 to it
   -- { { other_num.some[1], 0 }, { other_num.some[2], 0 }, ... }
   local sample_list_collection = {}
-  local rest_counter = 0
-  local best_counter = 0
 
   -- every key should be given a one
   for key, value in pairs(self.sample_list.sample_list) do
-    sample_list_collection[key] = 1
-    best_counter = best_counter + 1
+    table.insert(sample_list_collection, { value, 1 })
   end
- 
+  
 -- every key should be given a zero
   for key, value in pairs(other_num.sample_list.sample_list) do
-    sample_list_collection[key] = 0
-    rest_counter = rest_counter + 1 
+    table.insert(sample_list_collection, { value, 0 })
   end
-
-  print("disZeros: " .. rest_counter)
-  print("ones: " .. best_counter )
-
-  print()
-  print()
 
   print("Actual keys:")
   for key, value in pairs(sample_list_collection) do
-    print("Key: " .. sample_list_collection[key])
+    print(value[1] .. ' ' .. value[2])
   end
-
 
   local curr_index = 1
 

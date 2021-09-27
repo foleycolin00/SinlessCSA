@@ -123,14 +123,14 @@ function num:discretize(other_num)
   -- { { other_num.some[1], 0 }, { other_num.some[2], 0 }, ... }
   local sample_list_collection = {}
 
+  -- every key should be given a zero
+  for key, value in pairs(other_num.sample_list.sample_list) do
+    table.insert(sample_list_collection, { value, 0 })
+  end
+
   -- every key should be given a one
   for key, value in pairs(self.sample_list.sample_list) do
     table.insert(sample_list_collection, { value, 1 })
-  end
-  
--- every key should be given a zero
-  for key, value in pairs(other_num.sample_list.sample_list) do
-    table.insert(sample_list_collection, { value, 0 })
   end
 
   print("Actual keys:")
@@ -172,46 +172,31 @@ function num:variance(other_num)
 end
 
 function num:unsuper(sample_list_collection, binsize, iota)
-  --xys.sort(key=lambda s:s[0])
-  -- this line sorts xys by keys, so the lowest keys are at the front of the array: https://www.youtube.com/watch?v=Ob9rY6PQMfI (4:13)
-  -- order by keys
-  --[[
-  local sortedkeys = {}
-  local zero_counter = 0
 
-  for i = 1, #sample_list_collection do 
-    if sample_list_collection[key] == 0 then
-      table.insert(sortedkeys, sample_list_collection[i])
-      local zero_counter = zero_counter + 1 
-    end
-  end
-  
-  for key, value in pairs(sortedkeys) do
-    print("what")
-    print("Key: " .. sortedkeys[key])
-  end
-  ]]
-  --print("unsuper-Zeros: " .. zero_counter)
---[[
   local split = {}
 
   local i = 0
   local j = 0 
 
-  while (i < (#xys - 1)) and ((#xys - 1) > binsize) do 
-
-    if ( (j >= (#xys - 1)) or (xys[j][0] ~= xys[j + 1][0])) and (math.abs(i-j) > iota) and ((#xys - 1 - j) > binsize ) then 
+  -- while i is less than sample list collection and sample list collection is greater than the bin size 
+  while (i < (#sample_list_collection - 1)) and ((#sample_list_collection - 1) > binsize) do 
+    -- It cannot break ranges uness the i-th+1 value is different to the i-th value
+    -- It cannot break unless the break contains more than iota items
+    -- It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, latter)
+    if ( (j >= (#sample_list_collection - 1)) or (sample_list_collection[j] ~= sample_list_collection[j + 1])) and (math.abs(i-j) > iota) and ((#sample_list_collection - 1 - j) > binsize ) then 
+      
       local temp = {}
-
-      for key, value in pairs(i, j + 1) do 
-        table.insert(temp, xys[key])
+-- this is probably the problem
+      for k = i, j+1 do 
+        table.insert(temp, sample_list_collection[k])
+        print("WEird For Loop: " )
       end
-
+      print("fhkfadfhl")
       table.insert(split, temp)
 
       i = j + 1
       j = 1 
-    elseif j < #xys then 
+    elseif j < #sample_list_collection then 
       j = j + 1 
     else 
       i = i + 1 
@@ -219,22 +204,21 @@ function num:unsuper(sample_list_collection, binsize, iota)
 
     temp = {} 
 
-    for key, value in pairs(i, #xys) do
-      table.insert(temp, xys[key])
+    for k = i , #sample_list_collection do 
+      table.insert(temp, sample_list_collection[k])
     end
 
     table.insert(split, temp)
   end
 
---return split
-]]
-return 1
+return split
+
 end
 
 function num:merge(ranges)
   local i = 0
   
-  while i < #ranges do 
+  while i < (#ranges - 1) do 
     local a = ranges[i]
     local b = ranges[i + 1]
     local c = a + b 

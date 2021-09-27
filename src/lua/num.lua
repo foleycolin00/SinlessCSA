@@ -175,34 +175,33 @@ function num:unsuper(sample_list_collection, binsize, iota)
 
   local split = {}
 
-  local i = 0
-  local j = 0 
+  local i = 1
+  local j = 1 
 
   -- while i is less than sample list collection and sample list collection is greater than the bin size 
-  while (i < (#sample_list_collection - 1)) and ((#sample_list_collection - 1) > binsize) do 
-    -- It cannot break ranges uness the i-th+1 value is different to the i-th value
+  while (i < (#sample_list_collection - 1)) and ((#sample_list_collection - i) > binsize) do 
+    -- It cannot break ranges unless the i-th+1 value is different to the i-th value
     -- It cannot break unless the break contains more than iota items
     -- It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, latter)
-    if ( (j >= (#sample_list_collection - 1)) or (sample_list_collection[j] ~= sample_list_collection[j + 1])) and (math.abs(i-j) > iota) and ((#sample_list_collection - 1 - j) > binsize ) then 
+    if ( (j >= #sample_list_collection) or (sample_list_collection[j][1] ~= sample_list_collection[j + 1][1])) and (j - i > iota) and ((j - i) > binsize ) then 
       
       local temp = {}
--- this is probably the problem
-      for k = i, j+1 do 
+
+      for k = i, j do 
         table.insert(temp, sample_list_collection[k])
-        print("WEird For Loop: " )
       end
-      print("fhkfadfhl")
+      
       table.insert(split, temp)
 
       i = j + 1
-      j = 1 
-    elseif j < #sample_list_collection then 
+      j = i + 1
+    elseif j < #sample_list_collection + 1 then 
       j = j + 1 
     else 
       i = i + 1 
     end 
 
-    temp = {} 
+    local temp = {} 
 
     for k = i , #sample_list_collection do 
       table.insert(temp, sample_list_collection[k])
@@ -211,6 +210,15 @@ function num:unsuper(sample_list_collection, binsize, iota)
     table.insert(split, temp)
   end
 
+  print('split')
+  for i = 1, #split do
+    for j = 1, #split[i] do
+      io.write(table.concat(split[i][j], ' '), ', ')
+    end
+    print()
+  end
+  print('endsplit')
+    
 return split
 
 end

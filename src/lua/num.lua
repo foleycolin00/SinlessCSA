@@ -132,27 +132,25 @@ function num:discretize(other_num)
   for key, value in pairs(self.sample_list.sample_list) do
     table.insert(sample_list_collection, { value, 1 })
   end
---[[
-  print("Actual keys:")
-  for key, value in pairs(sample_list_collection) do
-    print(value[1] .. ' ' .. value[2])
-  end
-]]
-  local curr_index = 1
 
   -- find minimum break space (.3 * expected value of standard deviation)
   local n1 = #self.sample_list.sample_list
   local n2 = #other_num.sample_list.sample_list
 
   local iota = self.settings.cohen * (self.stdev * n1 + other_num.stdev * n2) / (n1 + n2)
-  
-  --local ranges = merge(unsuper(xys, #xys**self.settings.bins, iota))
-  self:unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota)
 
-  self:merge(unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota))
+  local ranges = self:merge(self:unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota))
 
-  return function()
+  if #ranges > 1 then 
+    for i = 1, #ranges do
+    end
+  end
+
+ local curr_index = 1
+
 --[[
+  return function()
+
     if curr_index <= #xys then
       local item = xys[curr_index]
       local ret = ":name ".. self.name .. ' :lo' .. item .. ' :high' .. item .. ' :best'
@@ -160,10 +158,8 @@ function num:discretize(other_num)
       curr_index = curr_index + 1
       return ret
     end
-
-  
   ]]
-  end
+
   
 end
 
@@ -173,15 +169,20 @@ function num:variance(range)
   local best_prob = 0
   local rest_prob = 0
   local prob_table = {}
+  local e = 0
   
+  for i = 1, #range do
+    for j = 1, #range[i] do
+      io.write(range[i][j], '  ')
+    end
+  end
+
   -- count how many zeros and ones there are 
   for i = 1, #range do
     for j = 1, #range[i] do
-      io.write(table.concat(range[j], ' '), ', ')
-      if range[j] == 0 then zero_counter = zero_counter + 1 end
-      if range[j] == 1 then one_counter = one_counter + 1 end
+      if range[i][j] == 0 then zero_counter = zero_counter + 1 end
+      if range[i][j] == 1 then one_counter = zero_counter + 1 end
     end
-    print()
   end
 
   -- insert into table
@@ -190,12 +191,11 @@ function num:variance(range)
 
   -- probability 
   for i = 1, #prob_table do
-    local prob = prob_table(i) / #prob_table
+    local prob = prob_table[i] / (zero_counter + one_counter)
     -- https://stackoverflow.com/questions/24101708/custom-logarithm-lua-answer-has-trick-that-can-be-used-on-almost-any-language/24101745
     local w = (math.log(prob) / math.log(2))
-    local e = e - prob*w
+    e = e - prob*w
   end
-  
 return e
   
 end
@@ -239,7 +239,7 @@ function num:unsuper(sample_list_collection, binsize, iota)
     table.insert(split, temp)
 
   end
---[[
+
   print('split')
   for i = 1, #split do
     for j = 1, #split[i] do
@@ -248,32 +248,69 @@ function num:unsuper(sample_list_collection, binsize, iota)
     print()
   end
   print('endsplit')
-    ]]
+
 return split
 
 end
 
 function num:merge(ranges)
-  --[[
-  local i = 0
+
+    print("A: ")
+    for i = 1, #ranges[1] do 
+      io.write(table.unpack(ranges[1]), ', ')
+    end   
+    print()
+--[[
+    print("B: ")
+    for i = 1, #b do 
+      io.write(table.unpack(b[i]), ', ')
+    end   
+    print()
+    print("C: ")
+    for i = 1, #c do 
+      io.write(table.unpack(c[i]), ', ')
+    end  
+
   
+  local i = 1
+  print("Ranges " .. #ranges)
+]]
+  while i < #ranges do 
     local a = ranges[i]
     local b = ranges[i + 1]
-    local c = {table.unpack(a),table.unpack(b)}
+    local c = {table.unpack(a), table.unpack(b)}
 
-    
-    if (variance(c) * 0.95) <= (variance(a)*#a) + (variance(b)*#b / #a + #b) then 
-      ranges[i+1] = ranges[i] + ranges[i+1]
-      table.remove(i)
+    print("A: ")
+    for i = 1, #a do 
+      io.write(table.unpack(a[i]), ', ')
+    end   
+    print()
+
+    print("B: ")
+    for i = 1, #b do 
+      io.write(table.unpack(b[i]), ', ')
+    end   
+    print()
+    print("C: ")
+    for i = 1, #c do 
+      io.write(table.unpack(c[i]), ', ')
+    end   
+    print()
+      end
+
+
+
+--[[
+    if (tonumber(self:variance(a)) * 0.95) <= (tonumber(self:variance(a))*#a) + (tonumber(self:variance(b))*#b / #a + #b) then 
+     table.insert(ranges[i], ranges[i+1])
+     table.remove(ranges[i])
     else 
       i = i + 1 
     end 
   end 
  
-
-  return 1
-  --return ranges
- ]]
+return ranges
+]]
 end
 
 

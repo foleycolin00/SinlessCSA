@@ -64,4 +64,4 @@ class Sym:
     ittr = i.has
     ittr.update(j.has)
     for x in ittr:
-      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))
+      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0), False, False)

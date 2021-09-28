@@ -34,6 +34,3 @@ for i in range(10):
 print("\n\n\n\n\n\n\n------\nTask 3:")
  
 leafs = s.divs()
-
-for leaf in leafs:
-  print(len(leaf.rows))

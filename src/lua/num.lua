@@ -132,12 +132,12 @@ function num:discretize(other_num)
   for key, value in pairs(self.sample_list.sample_list) do
     table.insert(sample_list_collection, { value, 1 })
   end
-
+--[[
   print("Actual keys:")
   for key, value in pairs(sample_list_collection) do
     print(value[1] .. ' ' .. value[2])
   end
-
+]]
   local curr_index = 1
 
   -- find minimum break space (.3 * expected value of standard deviation)
@@ -146,9 +146,10 @@ function num:discretize(other_num)
 
   local iota = self.settings.cohen * (self.stdev * n1 + other_num.stdev * n2) / (n1 + n2)
   
-  -- i do not like the comment he left at this line
   --local ranges = merge(unsuper(xys, #xys**self.settings.bins, iota))
-  local ranges = self:unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota)
+  self:unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota)
+
+  self:merge(unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota))
 
   return function()
 --[[
@@ -166,8 +167,36 @@ function num:discretize(other_num)
   
 end
 
-function num:variance(other_num)
+function num:variance(range)
+  local zero_counter = 0
+  local one_counter = 0
+  local best_prob = 0
+  local rest_prob = 0
+  local prob_table = {}
+  
+  -- count how many zeros and ones there are 
+  for i = 1, #range do
+    for j = 1, #range[i] do
+      io.write(table.concat(range[j], ' '), ', ')
+      if range[j] == 0 then zero_counter = zero_counter + 1 end
+      if range[j] == 1 then one_counter = one_counter + 1 end
+    end
+    print()
+  end
 
+  -- insert into table
+  table.insert(prob_table, zero_counter)
+  table.insert(prob_table, one_counter)
+
+  -- probability 
+  for i = 1, #prob_table do
+    local prob = prob_table(i) / #prob_table
+    -- https://stackoverflow.com/questions/24101708/custom-logarithm-lua-answer-has-trick-that-can-be-used-on-almost-any-language/24101745
+    local w = (math.log(prob) / math.log(2))
+    local e = e - prob*w
+  end
+  
+return e
   
 end
 
@@ -208,8 +237,9 @@ function num:unsuper(sample_list_collection, binsize, iota)
     end
 
     table.insert(split, temp)
-  end
 
+  end
+--[[
   print('split')
   for i = 1, #split do
     for j = 1, #split[i] do
@@ -218,28 +248,32 @@ function num:unsuper(sample_list_collection, binsize, iota)
     print()
   end
   print('endsplit')
-    
+    ]]
 return split
 
 end
 
 function num:merge(ranges)
+  --[[
   local i = 0
   
-  while i < (#ranges - 1) do 
     local a = ranges[i]
     local b = ranges[i + 1]
-    local c = a + b 
+    local c = {table.unpack(a),table.unpack(b)}
 
+    
     if (variance(c) * 0.95) <= (variance(a)*#a) + (variance(b)*#b / #a + #b) then 
       ranges[i+1] = ranges[i] + ranges[i+1]
-      --ranges.pop(i)
+      table.remove(i)
     else 
       i = i + 1 
     end 
   end 
-  return ranges
+ 
 
+  return 1
+  --return ranges
+ ]]
 end
 
 

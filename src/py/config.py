@@ -16,13 +16,14 @@ class Config:
   k = 2                 #Bayes low class frequency hack
   knn = 2               #Number of neighbors for knn
   kadd = "mode"         #combination rule of knn
-  loud = True          #Set verbose
+  loud = True           #Set verbose
   m = 1                 #Bayes low range frequency hack
   p = 2                 #Distance calculation exponent
   sames = 256           #max size of nonparametric samples
   samples = 128         #number of neighbors to explore
   some = 20             #Number of samples to find far things
   seed = 10013          #Seed for random numbers
+  support = 2           #support for discretization
   top = 10              #Focus on this many
   wild = False          #Run egs, no protection (wild mode)
   wait = 10             #Pause before thinking'

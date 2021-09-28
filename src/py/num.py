@@ -147,11 +147,11 @@ class Num:
     ranges = self.merge(self.unsuper(xys, len(xys)**Config.bins, iota))
     # 
     if len(ranges) > 1:  
-      for r in ranges:
+      for n,r in enumerate(ranges):
         rx = [t[0] for t in r]
         ry = [t[1] for t in r]
         yield Discretization(at=i.at, name=i.name, lo=sorted(rx)[0], hi=sorted(rx)[-1], 
-                best= ry.count(1), rest=ry.count(0))
+                best= ry.count(1), rest=ry.count(0), first = n==0, last = n==len(ranges)-1)
   
   '''
   Unsuper function

@@ -92,7 +92,7 @@ class Sym:
     ittr = i.has
     ittr.update(j.has)
     for x in ittr:
-      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))</code></pre>
+      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0), False, False)</code></pre>
 </details>
 </section>
 <section>
@@ -181,7 +181,7 @@ _most = frequency of most seen symbol
     ittr = i.has
     ittr.update(j.has)
     for x in ittr:
-      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))</code></pre>
+      yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0), False, False)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -218,7 +218,7 @@ _most = frequency of most seen symbol
   ittr = i.has
   ittr.update(j.has)
   for x in ittr:
-    yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0))</code></pre>
+    yield Discretization(i.at, i.name, x, x, i.has.get(x,0), j.has.get(x,0), False, False)</code></pre>
 </details>
 </dd>
 <dt id="src.py.sym.Sym.dist"><code class="name flex">

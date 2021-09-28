@@ -4,6 +4,7 @@ from sym import *
 from some import *
 from num import *
 from config import *
+from copy import deepcopy
 import random
 import math
 import functools
@@ -73,6 +74,16 @@ class Sample:
     for col in self.y:
       goals.append(col.mid())
     return str(goals)
+  
+  '''
+  Clones a new sample
+  '''
+  def clone(self):
+    s = Sample()
+    s.keep = self.keep
+    s.klass = self.klass
+    s.add(self.names)
+    return s
   
   '''
   Adds a new row
@@ -216,7 +227,7 @@ class Sample:
       rows = self.rows
     a = []
     for r2 in rows:
-      if self.dist(r1, r2) != 0:
+      if self.dist(r1, r2) != 0.0:
         a.append((self.dist(r1, r2), r2))
     a = sorted(a, key=lambda row: row[0])
     return a
@@ -227,7 +238,7 @@ class Sample:
   :return: that far point
   '''
   def faraway(self, row):
-    a = self.neighbors(row, random.sample(self.rows, Config.samples))
+    a = self.neighbors(row, self.rows if len(self.rows) < Config.samples else random.sample(self.rows, Config.samples))
     return a[math.floor(Config.far*len(a))][1]
     
   '''
@@ -296,4 +307,10 @@ class Sample:
       for d in good.discretize(good, bad):
         arr.append(d)
     return arr
-    
+  
+  '''
+  ys(fmt)
+  Report the central tendcany of goals
+  '''
+  def ys(self, fmt):
+    return 

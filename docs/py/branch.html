@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>src.py.discretization API documentation</title>
-<meta name="description" content="" />
+<title>src.py.branch API documentation</title>
+<meta name="description" content="Class for holding branches created for decision trees" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,53 +19,35 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>src.py.discretization</code></h1>
+<h1 class="title">Module <code>src.py.branch</code></h1>
 </header>
 <section id="section-intro">
+<p>Class for holding branches created for decision trees</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from enum import *
-from config import *
+<pre><code class="python">&#39;&#39;&#39;
+Class for holding branches created for decision trees
 &#39;&#39;&#39;
-Class for holding discretizations created for decision trees
-&#39;&#39;&#39;
-class Discretization:
-  
-  class DiscMethod(Enum):
-    MAXIMIZE = 1
-    MINIMIZE = 2
-    NOVEL = 3
+class Branch:
   
   &#39;&#39;&#39;
   Initilization for the Discretization class
   &#39;&#39;&#39;
-  def __init__(self, at, name, lo, hi, best, rest, first, last):
-    self.at = at
-    self.name = name
-    self.lo = lo
-    self.hi = hi
-    self.best = best
-    self.rest = rest
-    self.first = first
-    self.last = last
+  def __init__(self, typ, level, mid, n, disc = None):
+    self.typ = typ
+    self.level = level
+    self.mid = mid
+    self.n = n
+    
+    self.disc = disc
   
   def __str__(self):
-    return str(f&#34;{{:at {self.at}, :name {self.name}, :lo {self.lo}, :hi {self.hi}, :best {self.best}, :rest {self.rest}, :first {self.first}, :last {self.last}}}&#34;)
-  
-  def show(self):
-    if self.lo == self.hi: return f&#34;{self.name} == {self.lo}&#34;
-    elif self.first: return f&#34;{self.name} &lt;= {self.hi}&#34;
-    elif self.last : return f&#34;{self.name} &gt;= {self.lo}&#34;
-    else: return f&#34;{self.lo} &lt;= {self.name} &lt;= {self.hi}&#34;
-  
-  def matches(self, row):
-    v=row[self.at]
-    if   v==&#34;?&#34;   : return True
-    elif self.first: return v &lt;= self.hi
-    elif self.last : return v &gt;= self.lo
-    else          : return self.lo &lt;= v &lt;= self.hi</code></pre>
+    if self.disc:
+      return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.disc.show()} then {self.mid} ({self.n})&#34;)
+    else:
+      return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.mid} ({self.n})&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -77,95 +59,35 @@ class Discretization:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="src.py.discretization.Discretization"><code class="flex name class">
-<span>class <span class="ident">Discretization</span></span>
-<span>(</span><span>at, name, lo, hi, best, rest, first, last)</span>
+<dt id="src.py.branch.Branch"><code class="flex name class">
+<span>class <span class="ident">Branch</span></span>
+<span>(</span><span>typ, level, mid, n, disc=None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Initilization for the Discretization class</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Discretization:
-  
-  class DiscMethod(Enum):
-    MAXIMIZE = 1
-    MINIMIZE = 2
-    NOVEL = 3
+<pre><code class="python">class Branch:
   
   &#39;&#39;&#39;
   Initilization for the Discretization class
   &#39;&#39;&#39;
-  def __init__(self, at, name, lo, hi, best, rest, first, last):
-    self.at = at
-    self.name = name
-    self.lo = lo
-    self.hi = hi
-    self.best = best
-    self.rest = rest
-    self.first = first
-    self.last = last
+  def __init__(self, typ, level, mid, n, disc = None):
+    self.typ = typ
+    self.level = level
+    self.mid = mid
+    self.n = n
+    
+    self.disc = disc
   
   def __str__(self):
-    return str(f&#34;{{:at {self.at}, :name {self.name}, :lo {self.lo}, :hi {self.hi}, :best {self.best}, :rest {self.rest}, :first {self.first}, :last {self.last}}}&#34;)
-  
-  def show(self):
-    if self.lo == self.hi: return f&#34;{self.name} == {self.lo}&#34;
-    elif self.first: return f&#34;{self.name} &lt;= {self.hi}&#34;
-    elif self.last : return f&#34;{self.name} &gt;= {self.lo}&#34;
-    else: return f&#34;{self.lo} &lt;= {self.name} &lt;= {self.hi}&#34;
-  
-  def matches(self, row):
-    v=row[self.at]
-    if   v==&#34;?&#34;   : return True
-    elif self.first: return v &lt;= self.hi
-    elif self.last : return v &gt;= self.lo
-    else          : return self.lo &lt;= v &lt;= self.hi</code></pre>
+    if self.disc:
+      return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.disc.show()} then {self.mid} ({self.n})&#34;)
+    else:
+      return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.mid} ({self.n})&#34;)</code></pre>
 </details>
-<h3>Class variables</h3>
-<dl>
-<dt id="src.py.discretization.Discretization.DiscMethod"><code class="name">var <span class="ident">DiscMethod</span></code></dt>
-<dd>
-<div class="desc"><p>An enumeration.</p></div>
-</dd>
-</dl>
-<h3>Methods</h3>
-<dl>
-<dt id="src.py.discretization.Discretization.matches"><code class="name flex">
-<span>def <span class="ident">matches</span></span>(<span>self, row)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def matches(self, row):
-  v=row[self.at]
-  if   v==&#34;?&#34;   : return True
-  elif self.first: return v &lt;= self.hi
-  elif self.last : return v &gt;= self.lo
-  else          : return self.lo &lt;= v &lt;= self.hi</code></pre>
-</details>
-</dd>
-<dt id="src.py.discretization.Discretization.show"><code class="name flex">
-<span>def <span class="ident">show</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def show(self):
-  if self.lo == self.hi: return f&#34;{self.name} == {self.lo}&#34;
-  elif self.first: return f&#34;{self.name} &lt;= {self.hi}&#34;
-  elif self.last : return f&#34;{self.name} &gt;= {self.lo}&#34;
-  else: return f&#34;{self.lo} &lt;= {self.name} &lt;= {self.hi}&#34;</code></pre>
-</details>
-</dd>
-</dl>
 </dd>
 </dl>
 </section>
@@ -184,12 +106,7 @@ class Discretization:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="src.py.discretization.Discretization" href="#src.py.discretization.Discretization">Discretization</a></code></h4>
-<ul class="">
-<li><code><a title="src.py.discretization.Discretization.DiscMethod" href="#src.py.discretization.Discretization.DiscMethod">DiscMethod</a></code></li>
-<li><code><a title="src.py.discretization.Discretization.matches" href="#src.py.discretization.Discretization.matches">matches</a></code></li>
-<li><code><a title="src.py.discretization.Discretization.show" href="#src.py.discretization.Discretization.show">show</a></code></li>
-</ul>
+<h4><code><a title="src.py.branch.Branch" href="#src.py.branch.Branch">Branch</a></code></h4>
 </li>
 </ul>
 </li>

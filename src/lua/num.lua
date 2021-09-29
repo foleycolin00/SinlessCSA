@@ -141,179 +141,139 @@ function num:discretize(other_num)
 
   local ranges = self:merge(self:unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota))
 
-  if #ranges > 1 then 
-    for i = 1, #ranges do
+  --[[
+  print('here')
+  for i = 1, #ranges do
+    for j = 1, #ranges[i] do
+      io.write(table.concat(ranges[i][j], ' '), ', ')
+    end
+    print('\n')
+  end
+  print()
+  ]]
+ local curr_index = 0
+
+  return function()
+    curr_index = curr_index + 1
+    
+    if curr_index <= #ranges then
+      local lo = ranges[curr_index][1][1]
+      local hi = ranges[curr_index][1][1]
+      local counts = {0, 0}
+      
+      for key, value in pairs(ranges[curr_index]) do
+        if (value[1] < lo) then
+          lo = value[1]
+        end
+        if (value[1] > hi) then
+          hi = value[1]
+        end
+        
+        local best_or_worst = value[2] + 1
+        
+        counts[best_or_worst] = counts[best_or_worst] + 1
+      end
+      return self.name .. ' low = ' .. lo .. ' hi = ' .. hi .. ' best = ' .. counts[2] .. ' rest = ' .. counts[1]
     end
   end
-
- local curr_index = 1
-
---[[
-  return function()
-
-    if curr_index <= #xys then
-      local item = xys[curr_index]
-      local ret = ":name ".. self.name .. ' :lo' .. item .. ' :high' .. item .. ' :best'
-                  .. tostring(self.sample_list[item]) .. ' :rest' .. tostring(other_num.sample_list[item])
-      curr_index = curr_index + 1
-      return ret
-    end
-  ]]
-
-  
 end
 
 function num:variance(range)
-  local zero_counter = 0
-  local one_counter = 0
-  local best_prob = 0
-  local rest_prob = 0
-  local prob_table = {}
-  local e = 0
+  local counts = {0, 0}
+  for key, value in pairs(range) do
+    local best_or_worst = value[2] + 1
+    counts[best_or_worst] = counts[best_or_worst] + 1
+  end
   
-  for i = 1, #range do
-    for j = 1, #range[i] do
-      io.write(range[i][j], '  ')
-    end
+  if counts[1] == 0 or counts[2] == 0 then
+    return 0
   end
-
-  -- count how many zeros and ones there are 
-  for i = 1, #range do
-    for j = 1, #range[i] do
-      if range[i][j] == 0 then zero_counter = zero_counter + 1 end
-      if range[i][j] == 1 then one_counter = zero_counter + 1 end
-    end
-  end
-
-  -- insert into table
-  table.insert(prob_table, zero_counter)
-  table.insert(prob_table, one_counter)
-
-  -- probability 
-  for i = 1, #prob_table do
-    local prob = prob_table[i] / (zero_counter + one_counter)
-    -- https://stackoverflow.com/questions/24101708/custom-logarithm-lua-answer-has-trick-that-can-be-used-on-almost-any-language/24101745
-    local w = (math.log(prob) / math.log(2))
-    e = e - prob*w
-  end
-return e
   
+  local p1 = counts[1] / #range
+  local p2 = 1 - p1
+  
+  local w1 = math.log(p1, 2)
+  local w2 = math.log(p2, 2)
+  return -(p1 * w1 + p2 * w2)
 end
 
 function num:unsuper(sample_list_collection, binsize, iota)
-
+  --[[
+  for i = 1, #sample_list_collection do
+    io.write(sample_list_collection[i][1] .. ' ' .. sample_list_collection[i][2] .. ', ')
+  end
+  print()
+  ]]
+  
+  --table.sort(sample_list_collection, function(x, y) return x[1] < y[1] end)
+  
   local split = {}
 
   local i = 1
-  local j = 1 
-
+  local j = 2
+  
   -- while i is less than sample list collection and sample list collection is greater than the bin size 
-  while (i < (#sample_list_collection - 1)) and ((#sample_list_collection - i) > binsize) do 
+  while (i < #sample_list_collection) and (#sample_list_collection - j >= binsize) do
+    local max = sample_list_collection[i][1]
+    local min = sample_list_collection[i][2]
+    
+    for k = i + 1, j do
+      max = math.max(max, sample_list_collection[k][1])
+      min = math.min(max, sample_list_collection[k][1])
+    end
     -- It cannot break ranges unless the i-th+1 value is different to the i-th value
     -- It cannot break unless the break contains more than iota items
     -- It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, latter)
-    if ( (j >= #sample_list_collection) or (sample_list_collection[j][1] ~= sample_list_collection[j + 1][1])) and (j - i > iota) and ((j - i) > binsize ) then 
-      
-      local temp = {}
-
-      for k = i, j do 
-        table.insert(temp, sample_list_collection[k])
-      end
-      
-      table.insert(split, temp)
+    if (j == #sample_list_collection) or
+       ((sample_list_collection[i][1] ~= sample_list_collection[j][1]) and
+       max - min < iota and
+       j - i >= binsize) then 
+      table.insert(split, {table.unpack(sample_list_collection, i, j)})
 
       i = j + 1
       j = i + 1
-    elseif j < #sample_list_collection + 1 then 
+    elseif j < #sample_list_collection then 
       j = j + 1 
     else 
       i = i + 1 
-    end 
-
-    local temp = {} 
-
-    for k = i , #sample_list_collection do 
-      table.insert(temp, sample_list_collection[k])
-    end
-
-    table.insert(split, temp)
-
+    end    
   end
+  
+  table.insert(split, {table.unpack(sample_list_collection, i, #sample_list_collection)})
+  
 
-  print('split')
+  print()
   for i = 1, #split do
     for j = 1, #split[i] do
       io.write(table.concat(split[i][j], ' '), ', ')
     end
     print()
   end
-  print('endsplit')
+  print()
 
-return split
-
+  return split
 end
 
 function num:merge(ranges)
-
-    print("A: ")
-    for i = 1, #ranges[1] do 
-      io.write(table.unpack(ranges[1]), ', ')
-    end   
-    print()
---[[
-    print("B: ")
-    for i = 1, #b do 
-      io.write(table.unpack(b[i]), ', ')
-    end   
-    print()
-    print("C: ")
-    for i = 1, #c do 
-      io.write(table.unpack(c[i]), ', ')
-    end  
-
-  
   local i = 1
-  print("Ranges " .. #ranges)
-]]
+  
   while i < #ranges do 
     local a = ranges[i]
     local b = ranges[i + 1]
-    local c = {table.unpack(a), table.unpack(b)}
+    local c = {}
+    table.move(a, 1, #a, 1, c)
+    table.move(b, 1, #b, #c + 1, c)
 
-    print("A: ")
-    for i = 1, #a do 
-      io.write(table.unpack(a[i]), ', ')
-    end   
-    print()
-
-    print("B: ")
-    for i = 1, #b do 
-      io.write(table.unpack(b[i]), ', ')
-    end   
-    print()
-    print("C: ")
-    for i = 1, #c do 
-      io.write(table.unpack(c[i]), ', ')
-    end   
-    print()
-      end
-
-
-
---[[
-    if (tonumber(self:variance(a)) * 0.95) <= (tonumber(self:variance(a))*#a) + (tonumber(self:variance(b))*#b / #a + #b) then 
-     table.insert(ranges[i], ranges[i+1])
-     table.remove(ranges[i])
-    else 
+    if (self:variance(c) * 0.95) <= (self:variance(a) * #a + self:variance(b) * #b) / (#a + #b) then
+      ranges[i + 1] = c
+      table.remove(ranges, i)
+    else
       i = i + 1 
     end 
-  end 
+  end
  
-return ranges
-]]
+  return ranges
 end
-
-
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 

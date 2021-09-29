@@ -45,13 +45,14 @@ class Config:
   k = 2                 #Bayes low class frequency hack
   knn = 2               #Number of neighbors for knn
   kadd = &#34;mode&#34;         #combination rule of knn
-  loud = True          #Set verbose
+  loud = True           #Set verbose
   m = 1                 #Bayes low range frequency hack
   p = 2                 #Distance calculation exponent
   sames = 256           #max size of nonparametric samples
   samples = 128         #number of neighbors to explore
   some = 20             #Number of samples to find far things
   seed = 10013          #Seed for random numbers
+  support = 2           #support for discretization
   top = 10              #Focus on this many
   wild = False          #Run egs, no protection (wild mode)
   wait = 10             #Pause before thinking&#39;</code></pre>
@@ -90,13 +91,14 @@ class Config:
   k = 2                 #Bayes low class frequency hack
   knn = 2               #Number of neighbors for knn
   kadd = &#34;mode&#34;         #combination rule of knn
-  loud = True          #Set verbose
+  loud = True           #Set verbose
   m = 1                 #Bayes low range frequency hack
   p = 2                 #Distance calculation exponent
   sames = 256           #max size of nonparametric samples
   samples = 128         #number of neighbors to explore
   some = 20             #Number of samples to find far things
   seed = 10013          #Seed for random numbers
+  support = 2           #support for discretization
   top = 10              #Focus on this many
   wild = False          #Run egs, no protection (wild mode)
   wait = 10             #Pause before thinking&#39;</code></pre>
@@ -187,6 +189,10 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="src.py.config.Config.support"><code class="name">var <span class="ident">support</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.py.config.Config.top"><code class="name">var <span class="ident">top</span></code></dt>
 <dd>
 <div class="desc"></div>
@@ -241,6 +247,7 @@ class Config:
 <li><code><a title="src.py.config.Config.samples" href="#src.py.config.Config.samples">samples</a></code></li>
 <li><code><a title="src.py.config.Config.seed" href="#src.py.config.Config.seed">seed</a></code></li>
 <li><code><a title="src.py.config.Config.some" href="#src.py.config.Config.some">some</a></code></li>
+<li><code><a title="src.py.config.Config.support" href="#src.py.config.Config.support">support</a></code></li>
 <li><code><a title="src.py.config.Config.top" href="#src.py.config.Config.top">top</a></code></li>
 <li><code><a title="src.py.config.Config.wait" href="#src.py.config.Config.wait">wait</a></code></li>
 <li><code><a title="src.py.config.Config.wild" href="#src.py.config.Config.wild">wild</a></code></li>

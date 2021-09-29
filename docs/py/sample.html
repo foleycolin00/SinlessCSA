@@ -32,6 +32,7 @@ from sym import *
 from some import *
 from num import *
 from config import *
+from copy import deepcopy
 import random
 import math
 import functools
@@ -101,6 +102,16 @@ class Sample:
     for col in self.y:
       goals.append(col.mid())
     return str(goals)
+  
+  &#39;&#39;&#39;
+  Clones a new sample
+  &#39;&#39;&#39;
+  def clone(self):
+    s = Sample()
+    s.keep = self.keep
+    s.klass = self.klass
+    s.add(self.names)
+    return s
   
   &#39;&#39;&#39;
   Adds a new row
@@ -244,7 +255,7 @@ class Sample:
       rows = self.rows
     a = []
     for r2 in rows:
-      if self.dist(r1, r2) != 0:
+      if self.dist(r1, r2) != 0.0:
         a.append((self.dist(r1, r2), r2))
     a = sorted(a, key=lambda row: row[0])
     return a
@@ -255,7 +266,7 @@ class Sample:
   :return: that far point
   &#39;&#39;&#39;
   def faraway(self, row):
-    a = self.neighbors(row, random.sample(self.rows, Config.samples))
+    a = self.neighbors(row, self.rows if len(self.rows) &lt; Config.samples else random.sample(self.rows, Config.samples))
     return a[math.floor(Config.far*len(a))][1]
     
   &#39;&#39;&#39;
@@ -324,7 +335,13 @@ class Sample:
       for d in good.discretize(good, bad):
         arr.append(d)
     return arr
-    </code></pre>
+  
+  &#39;&#39;&#39;
+  ys(fmt)
+  Report the central tendcany of goals
+  &#39;&#39;&#39;
+  def ys(self, fmt):
+    return </code></pre>
 </details>
 </section>
 <section>
@@ -440,6 +457,16 @@ klass = klass value</p></div>
     return str(goals)
   
   &#39;&#39;&#39;
+  Clones a new sample
+  &#39;&#39;&#39;
+  def clone(self):
+    s = Sample()
+    s.keep = self.keep
+    s.klass = self.klass
+    s.add(self.names)
+    return s
+  
+  &#39;&#39;&#39;
   Adds a new row
   :param lst: the row to add
   &#39;&#39;&#39;
@@ -581,7 +608,7 @@ klass = klass value</p></div>
       rows = self.rows
     a = []
     for r2 in rows:
-      if self.dist(r1, r2) != 0:
+      if self.dist(r1, r2) != 0.0:
         a.append((self.dist(r1, r2), r2))
     a = sorted(a, key=lambda row: row[0])
     return a
@@ -592,7 +619,7 @@ klass = klass value</p></div>
   :return: that far point
   &#39;&#39;&#39;
   def faraway(self, row):
-    a = self.neighbors(row, random.sample(self.rows, Config.samples))
+    a = self.neighbors(row, self.rows if len(self.rows) &lt; Config.samples else random.sample(self.rows, Config.samples))
     return a[math.floor(Config.far*len(a))][1]
     
   &#39;&#39;&#39;
@@ -660,7 +687,14 @@ klass = klass value</p></div>
     for good, bad in zip(best.x, worst.x):
       for d in good.discretize(good, bad):
         arr.append(d)
-    return arr</code></pre>
+    return arr
+  
+  &#39;&#39;&#39;
+  ys(fmt)
+  Report the central tendcany of goals
+  &#39;&#39;&#39;
+  def ys(self, fmt):
+    return </code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -700,6 +734,23 @@ klass = klass value</p></div>
     s2 = s2 - math.pow(e, w * (y-x)/n)
   #&#34;row1 is better than row2&#34;
   return s1/n &lt; s2/n</code></pre>
+</details>
+</dd>
+<dt id="src.py.sample.Sample.clone"><code class="name flex">
+<span>def <span class="ident">clone</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clone(self):
+  s = Sample()
+  s.keep = self.keep
+  s.klass = self.klass
+  s.add(self.names)
+  return s</code></pre>
 </details>
 </dd>
 <dt id="src.py.sample.Sample.data"><code class="name flex">
@@ -843,7 +894,7 @@ klass = klass value</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def faraway(self, row):
-  a = self.neighbors(row, random.sample(self.rows, Config.samples))
+  a = self.neighbors(row, self.rows if len(self.rows) &lt; Config.samples else random.sample(self.rows, Config.samples))
   return a[math.floor(Config.far*len(a))][1]</code></pre>
 </details>
 </dd>
@@ -910,7 +961,7 @@ klass = klass value</p></div>
     rows = self.rows
   a = []
   for r2 in rows:
-    if self.dist(r1, r2) != 0:
+    if self.dist(r1, r2) != 0.0:
       a.append((self.dist(r1, r2), r2))
   a = sorted(a, key=lambda row: row[0])
   return a</code></pre>
@@ -956,6 +1007,19 @@ klass = klass value</p></div>
     return 1</code></pre>
 </details>
 </dd>
+<dt id="src.py.sample.Sample.ys"><code class="name flex">
+<span>def <span class="ident">ys</span></span>(<span>self, fmt)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ys(self, fmt):
+  return </code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -987,6 +1051,7 @@ klass = klass value</p></div>
 <ul class="two-column">
 <li><code><a title="src.py.sample.Sample.add" href="#src.py.sample.Sample.add">add</a></code></li>
 <li><code><a title="src.py.sample.Sample.better" href="#src.py.sample.Sample.better">better</a></code></li>
+<li><code><a title="src.py.sample.Sample.clone" href="#src.py.sample.Sample.clone">clone</a></code></li>
 <li><code><a title="src.py.sample.Sample.data" href="#src.py.sample.Sample.data">data</a></code></li>
 <li><code><a title="src.py.sample.Sample.discretize" href="#src.py.sample.Sample.discretize">discretize</a></code></li>
 <li><code><a title="src.py.sample.Sample.dist" href="#src.py.sample.Sample.dist">dist</a></code></li>
@@ -999,6 +1064,7 @@ klass = klass value</p></div>
 <li><code><a title="src.py.sample.Sample.neighbors" href="#src.py.sample.Sample.neighbors">neighbors</a></code></li>
 <li><code><a title="src.py.sample.Sample.rowCompare" href="#src.py.sample.Sample.rowCompare">rowCompare</a></code></li>
 <li><code><a title="src.py.sample.Sample.sampleCompare" href="#src.py.sample.Sample.sampleCompare">sampleCompare</a></code></li>
+<li><code><a title="src.py.sample.Sample.ys" href="#src.py.sample.Sample.ys">ys</a></code></li>
 </ul>
 </li>
 </ul>

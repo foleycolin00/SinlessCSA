@@ -17,6 +17,12 @@ auto93Sample:load('../../data/auto93.csv')
 
 -- task 1: clustering 
 local check = auto93Sample:discretize()
---auto93Sample:dendogram()
+auto93Sample:dendogram()
+
+local leafs = auto93Sample:divide()
+for i = 1, #leafs do
+    print(auto93Sample:goalString(leafs[i][2]))
+    print(table.unpack(leafs[i][1]:mid()))
+  end
 
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end

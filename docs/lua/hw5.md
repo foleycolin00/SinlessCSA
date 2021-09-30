@@ -69,6 +69,40 @@ In this homework assignment, we attempt to discretize data.
 ../../../../../../ n = 12    goals = [ 2368.3 15.3 27.5 ]
 ```
 ## Task 2: Sorting the Leaves
+```
+[ 1974.4 17.3 39.2 ]
+[ 2626.2 19.4 33.3 ]
+[ 2350.0 16.8 32.5 ]
+[ 2162.7 16.8 30.0 ]
+[ 2166.9 17.8 27.5 ]
+[ 2291.7 16.2 32.3 ]
+[ 2250.8 16.6 30.0 ]
+[ 2100.2 16.1 29.2 ]
+[ 2211.7 16.9 26.9 ]
+[ 2297.7 17.3 24.6 ]
+[ 2438.3 15.1 30.8 ]
+[ 2158.7 15.8 25.8 ]
+[ 2391.4 15.2 29.2 ]
+[ 2644.1 16.2 29.2 ]
+[ 2531.2 15.5 29.2 ]
+[ 2469.2 15.8 26.9 ]
+[ 3005.8 17.1 20.8 ]
+[ 2784.8 15.3 21.7 ]
+[ 3237.6 17.4 21.7 ]
+[ 2811.2 15.3 20.8 ]
+[ 3146.2 15.6 22.3 ]
+[ 3382.3 17.6 20.0 ]
+[ 3165.5 16.0 20.0 ]
+[ 3437.0 17.2 20.0 ]
+[ 3716.2 14.4 20.8 ]
+[ 4025.7 13.9 16.2 ]
+[ 3834.5 12.4 15.4 ]
+[ 4210.5 12.8 18.5 ]
+[ 4135.8 13.3 12.5 ]
+[ 4314.1 12.5 10.0 ]
+[ 4468.8 12.3 12.3 ]
+[ 4330.2 10.5 12.5 ]
+```
 
 
 ## Task 3: Discretization
@@ -114,3 +148,5 @@ and
 7 :name origin :lo 3 :hi 3 :best 13 :rest nil
 7 :name origin :lo 1 :hi 1 :best nil :rest 12
 ```
+
+The code for this assignment can be found at [test/lua/hw5.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/test/lua/hw5.lua), [src/lua/sample.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/sample.lua), [src/lua/num.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/num.lua), and [src/lua/sym.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/sym.lua).

@@ -359,7 +359,7 @@ function sample:discretize()
   for i = 1, #best.headers do
     if getmetatable(best.headers[i]) == num or getmetatable(best.headers[i]) == sym then
       for discretized_item in best.headers[i]:discretize(worst.headers[i]) do
-        print(i .. ' ' .. discretized_item)
+        print('at: ' .. i .. ' ' .. discretized_item)
       end
     end
   end

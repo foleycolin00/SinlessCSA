@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>src.py.config API documentation</title>
-<meta name="description" content="Class for all of the configurations/hyperparameters" />
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,40 +22,86 @@
 <h1 class="title">Module <code>src.py.config</code></h1>
 </header>
 <section id="section-intro">
-<p>Class for all of the configurations/hyperparameters</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#39;&#39;&#39;
+<pre><code class="python">import random
+import numpy as np
+import math
+&#39;&#39;&#39;
 Class for all of the configurations/hyperparameters
 &#39;&#39;&#39;
 class Config:
-  bins =  .5            #Bins are of size n**BINS
-  bootstrap = 512       #number of bootstrap samples
-  cols = &#39;x&#39;            #Columns to use for inference
-  cohen = .3
-  conf =   .05          #confidence for bootstraps
-  cliffs = .147         #small effect 
-  eg = &#34;&#34;               #&#39;-x ls&#39; lists all, &#39;-x all&#39; runs all
-  enough = .5           #preferred size of leaf bins
+  bins =  .5            #Min bin size n**bins for discretize
+  enough = .5           #Min size for divs creating creating leafs using gausian projections
   far = .9              #Where to look for far things
-  goaL = &#39;best&#39;         #Learning goals: best|rest|other
-  iota = .3             #Small = sd**iota
-  k = 2                 #Bayes low class frequency hack
-  knn = 2               #Number of neighbors for knn
-  kadd = &#34;mode&#34;         #combination rule of knn
-  loud = True           #Set verbose
-  m = 1                 #Bayes low range frequency hack
-  p = 2                 #Distance calculation exponent
-  sames = 256           #max size of nonparametric samples
+  FFTstop = .5          #Minimum size of the last leaf in FFT, calculated by n**FFTstop
+  FFTLength = 5         #FFT Length
+  FFTType = &#39;11110&#39;     #Type of tree used for FFT
+  iota = .3             #Minimum break span for discretization = sd * iota
+  mergeVariance = .95   #Max variance needed to merge for discretization
+  p = 2                 #Distance calculation exponent for rows
   samples = 128         #number of neighbors to explore
-  some = 20             #Number of samples to find far things
-  seed = 10013          #Seed for random numbers
-  support = 2           #support for discretization
-  top = 10              #Focus on this many
-  wild = False          #Run egs, no protection (wild mode)
-  wait = 10             #Pause before thinking&#39;</code></pre>
+  support = 2           #support for discretization scoring a range for sort
+  
+  verbose = True        #Set verbose
+  
+  #Min, Max(inclusive), Step
+  bins_range = [0.1, .9, .1]
+  enough_range = [0.1, .9, .1]
+  far_range = [.5, .99, .05]
+  FFTstop_range = [0, .9, .1]
+  FFTLength_range = [2, 10, 1]
+  iota_range = [.1, .9, .1]
+  mergeVariance_range = [.5, .99, .05]
+  p_range = [2, 10, 1]
+  samples_range = [5, 10, 1] #2**x
+  support_range = [2, 10, 1]
+  
+  def generate(v):
+    if v == &#39;FFTType&#39;:
+      #Create the FFTType from the length
+      fft = &#34;&#34;
+      for i in range(int(Config.FFTLength) - 1):
+        fft+= random.choice([&#39;0&#39;, &#39;1&#39;])
+      fft += str(abs(int(fft[-1])-1))
+      setattr(Config, v, fft)
+    else:
+      #Get the range of the attr
+      ranges = getattr(Config, v + &#39;_range&#39;)
+      
+      #Create the range of choices
+      choices = np.arange(ranges[0], ranges[1], ranges[2])
+      choices = np.append(choices, ranges[1])
+      
+      #Round to near values
+      if isinstance(ranges[2], int):
+        choices = choices.astype(int)
+      else:
+        choices = np.around(choices, 2)
+      
+      if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
+        choices = np.append(choices, ranges[1])
+      
+      #Set the attribute
+      setattr(Config, v, random.choice(choices))
+      
+    if Config.verbose:
+      print(f&#34;{v}: {getattr(Config, v)}&#34;)
+  
+  def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+    for v in variables:
+      Config.generate(v)
+  
+  def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+    arr = []
+    line = []
+    for v in variables:
+      line.append(getattr(Config, v))
+    arr.append(variables)
+    arr.append(line)
+    return arr</code></pre>
 </details>
 </section>
 <section>
@@ -77,59 +123,103 @@ class Config:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Config:
-  bins =  .5            #Bins are of size n**BINS
-  bootstrap = 512       #number of bootstrap samples
-  cols = &#39;x&#39;            #Columns to use for inference
-  cohen = .3
-  conf =   .05          #confidence for bootstraps
-  cliffs = .147         #small effect 
-  eg = &#34;&#34;               #&#39;-x ls&#39; lists all, &#39;-x all&#39; runs all
-  enough = .5           #preferred size of leaf bins
+  bins =  .5            #Min bin size n**bins for discretize
+  enough = .5           #Min size for divs creating creating leafs using gausian projections
   far = .9              #Where to look for far things
-  goaL = &#39;best&#39;         #Learning goals: best|rest|other
-  iota = .3             #Small = sd**iota
-  k = 2                 #Bayes low class frequency hack
-  knn = 2               #Number of neighbors for knn
-  kadd = &#34;mode&#34;         #combination rule of knn
-  loud = True           #Set verbose
-  m = 1                 #Bayes low range frequency hack
-  p = 2                 #Distance calculation exponent
-  sames = 256           #max size of nonparametric samples
+  FFTstop = .5          #Minimum size of the last leaf in FFT, calculated by n**FFTstop
+  FFTLength = 5         #FFT Length
+  FFTType = &#39;11110&#39;     #Type of tree used for FFT
+  iota = .3             #Minimum break span for discretization = sd * iota
+  mergeVariance = .95   #Max variance needed to merge for discretization
+  p = 2                 #Distance calculation exponent for rows
   samples = 128         #number of neighbors to explore
-  some = 20             #Number of samples to find far things
-  seed = 10013          #Seed for random numbers
-  support = 2           #support for discretization
-  top = 10              #Focus on this many
-  wild = False          #Run egs, no protection (wild mode)
-  wait = 10             #Pause before thinking&#39;</code></pre>
+  support = 2           #support for discretization scoring a range for sort
+  
+  verbose = True        #Set verbose
+  
+  #Min, Max(inclusive), Step
+  bins_range = [0.1, .9, .1]
+  enough_range = [0.1, .9, .1]
+  far_range = [.5, .99, .05]
+  FFTstop_range = [0, .9, .1]
+  FFTLength_range = [2, 10, 1]
+  iota_range = [.1, .9, .1]
+  mergeVariance_range = [.5, .99, .05]
+  p_range = [2, 10, 1]
+  samples_range = [5, 10, 1] #2**x
+  support_range = [2, 10, 1]
+  
+  def generate(v):
+    if v == &#39;FFTType&#39;:
+      #Create the FFTType from the length
+      fft = &#34;&#34;
+      for i in range(int(Config.FFTLength) - 1):
+        fft+= random.choice([&#39;0&#39;, &#39;1&#39;])
+      fft += str(abs(int(fft[-1])-1))
+      setattr(Config, v, fft)
+    else:
+      #Get the range of the attr
+      ranges = getattr(Config, v + &#39;_range&#39;)
+      
+      #Create the range of choices
+      choices = np.arange(ranges[0], ranges[1], ranges[2])
+      choices = np.append(choices, ranges[1])
+      
+      #Round to near values
+      if isinstance(ranges[2], int):
+        choices = choices.astype(int)
+      else:
+        choices = np.around(choices, 2)
+      
+      if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
+        choices = np.append(choices, ranges[1])
+      
+      #Set the attribute
+      setattr(Config, v, random.choice(choices))
+      
+    if Config.verbose:
+      print(f&#34;{v}: {getattr(Config, v)}&#34;)
+  
+  def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+    for v in variables:
+      Config.generate(v)
+  
+  def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+    arr = []
+    line = []
+    for v in variables:
+      line.append(getattr(Config, v))
+    arr.append(variables)
+    arr.append(line)
+    return arr</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
+<dt id="src.py.config.Config.FFTLength"><code class="name">var <span class="ident">FFTLength</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.FFTLength_range"><code class="name">var <span class="ident">FFTLength_range</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.FFTType"><code class="name">var <span class="ident">FFTType</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.FFTstop"><code class="name">var <span class="ident">FFTstop</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.FFTstop_range"><code class="name">var <span class="ident">FFTstop_range</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.py.config.Config.bins"><code class="name">var <span class="ident">bins</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.bootstrap"><code class="name">var <span class="ident">bootstrap</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.cliffs"><code class="name">var <span class="ident">cliffs</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.cohen"><code class="name">var <span class="ident">cohen</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.cols"><code class="name">var <span class="ident">cols</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.conf"><code class="name">var <span class="ident">conf</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.eg"><code class="name">var <span class="ident">eg</span></code></dt>
+<dt id="src.py.config.Config.bins_range"><code class="name">var <span class="ident">bins_range</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -137,11 +227,15 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="src.py.config.Config.enough_range"><code class="name">var <span class="ident">enough_range</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.py.config.Config.far"><code class="name">var <span class="ident">far</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.goaL"><code class="name">var <span class="ident">goaL</span></code></dt>
+<dt id="src.py.config.Config.far_range"><code class="name">var <span class="ident">far_range</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -149,23 +243,15 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.k"><code class="name">var <span class="ident">k</span></code></dt>
+<dt id="src.py.config.Config.iota_range"><code class="name">var <span class="ident">iota_range</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.kadd"><code class="name">var <span class="ident">kadd</span></code></dt>
+<dt id="src.py.config.Config.mergeVariance"><code class="name">var <span class="ident">mergeVariance</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.knn"><code class="name">var <span class="ident">knn</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.loud"><code class="name">var <span class="ident">loud</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.m"><code class="name">var <span class="ident">m</span></code></dt>
+<dt id="src.py.config.Config.mergeVariance_range"><code class="name">var <span class="ident">mergeVariance_range</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -173,7 +259,7 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.sames"><code class="name">var <span class="ident">sames</span></code></dt>
+<dt id="src.py.config.Config.p_range"><code class="name">var <span class="ident">p_range</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -181,11 +267,7 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.seed"><code class="name">var <span class="ident">seed</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.some"><code class="name">var <span class="ident">some</span></code></dt>
+<dt id="src.py.config.Config.samples_range"><code class="name">var <span class="ident">samples_range</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -193,17 +275,90 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.top"><code class="name">var <span class="ident">top</span></code></dt>
+<dt id="src.py.config.Config.support_range"><code class="name">var <span class="ident">support_range</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.wait"><code class="name">var <span class="ident">wait</span></code></dt>
+<dt id="src.py.config.Config.verbose"><code class="name">var <span class="ident">verbose</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.wild"><code class="name">var <span class="ident">wild</span></code></dt>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="src.py.config.Config.generate"><code class="name flex">
+<span>def <span class="ident">generate</span></span>(<span>v)</span>
+</code></dt>
 <dd>
 <div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate(v):
+  if v == &#39;FFTType&#39;:
+    #Create the FFTType from the length
+    fft = &#34;&#34;
+    for i in range(int(Config.FFTLength) - 1):
+      fft+= random.choice([&#39;0&#39;, &#39;1&#39;])
+    fft += str(abs(int(fft[-1])-1))
+    setattr(Config, v, fft)
+  else:
+    #Get the range of the attr
+    ranges = getattr(Config, v + &#39;_range&#39;)
+    
+    #Create the range of choices
+    choices = np.arange(ranges[0], ranges[1], ranges[2])
+    choices = np.append(choices, ranges[1])
+    
+    #Round to near values
+    if isinstance(ranges[2], int):
+      choices = choices.astype(int)
+    else:
+      choices = np.around(choices, 2)
+    
+    if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
+      choices = np.append(choices, ranges[1])
+    
+    #Set the attribute
+    setattr(Config, v, random.choice(choices))
+    
+  if Config.verbose:
+    print(f&#34;{v}: {getattr(Config, v)}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="src.py.config.Config.generateAll"><code class="name flex">
+<span>def <span class="ident">generateAll</span></span>(<span>variables=['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support'])</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+  for v in variables:
+    Config.generate(v)</code></pre>
+</details>
+</dd>
+<dt id="src.py.config.Config.getAsArray"><code class="name flex">
+<span>def <span class="ident">getAsArray</span></span>(<span>variables=['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support'])</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+  arr = []
+  line = []
+  for v in variables:
+    line.append(getattr(Config, v))
+  arr.append(variables)
+  arr.append(line)
+  return arr</code></pre>
+</details>
 </dd>
 </dl>
 </dd>
@@ -226,31 +381,31 @@ class Config:
 <li>
 <h4><code><a title="src.py.config.Config" href="#src.py.config.Config">Config</a></code></h4>
 <ul class="two-column">
+<li><code><a title="src.py.config.Config.FFTLength" href="#src.py.config.Config.FFTLength">FFTLength</a></code></li>
+<li><code><a title="src.py.config.Config.FFTLength_range" href="#src.py.config.Config.FFTLength_range">FFTLength_range</a></code></li>
+<li><code><a title="src.py.config.Config.FFTType" href="#src.py.config.Config.FFTType">FFTType</a></code></li>
+<li><code><a title="src.py.config.Config.FFTstop" href="#src.py.config.Config.FFTstop">FFTstop</a></code></li>
+<li><code><a title="src.py.config.Config.FFTstop_range" href="#src.py.config.Config.FFTstop_range">FFTstop_range</a></code></li>
 <li><code><a title="src.py.config.Config.bins" href="#src.py.config.Config.bins">bins</a></code></li>
-<li><code><a title="src.py.config.Config.bootstrap" href="#src.py.config.Config.bootstrap">bootstrap</a></code></li>
-<li><code><a title="src.py.config.Config.cliffs" href="#src.py.config.Config.cliffs">cliffs</a></code></li>
-<li><code><a title="src.py.config.Config.cohen" href="#src.py.config.Config.cohen">cohen</a></code></li>
-<li><code><a title="src.py.config.Config.cols" href="#src.py.config.Config.cols">cols</a></code></li>
-<li><code><a title="src.py.config.Config.conf" href="#src.py.config.Config.conf">conf</a></code></li>
-<li><code><a title="src.py.config.Config.eg" href="#src.py.config.Config.eg">eg</a></code></li>
+<li><code><a title="src.py.config.Config.bins_range" href="#src.py.config.Config.bins_range">bins_range</a></code></li>
 <li><code><a title="src.py.config.Config.enough" href="#src.py.config.Config.enough">enough</a></code></li>
+<li><code><a title="src.py.config.Config.enough_range" href="#src.py.config.Config.enough_range">enough_range</a></code></li>
 <li><code><a title="src.py.config.Config.far" href="#src.py.config.Config.far">far</a></code></li>
-<li><code><a title="src.py.config.Config.goaL" href="#src.py.config.Config.goaL">goaL</a></code></li>
+<li><code><a title="src.py.config.Config.far_range" href="#src.py.config.Config.far_range">far_range</a></code></li>
+<li><code><a title="src.py.config.Config.generate" href="#src.py.config.Config.generate">generate</a></code></li>
+<li><code><a title="src.py.config.Config.generateAll" href="#src.py.config.Config.generateAll">generateAll</a></code></li>
+<li><code><a title="src.py.config.Config.getAsArray" href="#src.py.config.Config.getAsArray">getAsArray</a></code></li>
 <li><code><a title="src.py.config.Config.iota" href="#src.py.config.Config.iota">iota</a></code></li>
-<li><code><a title="src.py.config.Config.k" href="#src.py.config.Config.k">k</a></code></li>
-<li><code><a title="src.py.config.Config.kadd" href="#src.py.config.Config.kadd">kadd</a></code></li>
-<li><code><a title="src.py.config.Config.knn" href="#src.py.config.Config.knn">knn</a></code></li>
-<li><code><a title="src.py.config.Config.loud" href="#src.py.config.Config.loud">loud</a></code></li>
-<li><code><a title="src.py.config.Config.m" href="#src.py.config.Config.m">m</a></code></li>
+<li><code><a title="src.py.config.Config.iota_range" href="#src.py.config.Config.iota_range">iota_range</a></code></li>
+<li><code><a title="src.py.config.Config.mergeVariance" href="#src.py.config.Config.mergeVariance">mergeVariance</a></code></li>
+<li><code><a title="src.py.config.Config.mergeVariance_range" href="#src.py.config.Config.mergeVariance_range">mergeVariance_range</a></code></li>
 <li><code><a title="src.py.config.Config.p" href="#src.py.config.Config.p">p</a></code></li>
-<li><code><a title="src.py.config.Config.sames" href="#src.py.config.Config.sames">sames</a></code></li>
+<li><code><a title="src.py.config.Config.p_range" href="#src.py.config.Config.p_range">p_range</a></code></li>
 <li><code><a title="src.py.config.Config.samples" href="#src.py.config.Config.samples">samples</a></code></li>
-<li><code><a title="src.py.config.Config.seed" href="#src.py.config.Config.seed">seed</a></code></li>
-<li><code><a title="src.py.config.Config.some" href="#src.py.config.Config.some">some</a></code></li>
+<li><code><a title="src.py.config.Config.samples_range" href="#src.py.config.Config.samples_range">samples_range</a></code></li>
 <li><code><a title="src.py.config.Config.support" href="#src.py.config.Config.support">support</a></code></li>
-<li><code><a title="src.py.config.Config.top" href="#src.py.config.Config.top">top</a></code></li>
-<li><code><a title="src.py.config.Config.wait" href="#src.py.config.Config.wait">wait</a></code></li>
-<li><code><a title="src.py.config.Config.wild" href="#src.py.config.Config.wild">wild</a></code></li>
+<li><code><a title="src.py.config.Config.support_range" href="#src.py.config.Config.support_range">support_range</a></code></li>
+<li><code><a title="src.py.config.Config.verbose" href="#src.py.config.Config.verbose">verbose</a></code></li>
 </ul>
 </li>
 </ul>

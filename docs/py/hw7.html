@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>src.py API documentation</title>
+<title>src.py.hw7 API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,79 +19,80 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Namespace <code>src.py</code></h1>
+<h1 class="title">Module <code>src.py.hw7</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from sample import *
+import os
+import functools
+from pprint import pprint
+from fft import Fft
+import csv
+
+s = Sample()
+myPath = os.path.dirname(os.path.abspath(__file__))
+myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+s.fromFile(myPath + &#34;/data/auto93.csv&#34;)
+
+NEWHYPER = True
+HyperNum = 30
+
+if (NEWHYPER):
+  with open(myPath + &#34;/data/hyperOutput.csv&#34;,&#39;w&#39;) as f:
+      writer = csv.writer(f)
+      row = Config.getAsArray()[0]
+      names = [x.name for x in s.y]
+      writer.writerow(row+names)
+
+  for i in range(HyperNum):
+    print(f&#34;{i+1}:  &#34;, end = &#34;&#34;)
+    Config.verbose = False
+    
+    #generate all new values
+    Config.generateAll()
+
+    #get the FFT trees
+    #Config.verbose = False
+    branch=[]
+    try:
+      fft = Fft(s, s, branch)
+    except:
+      print(&#34;ERROR&#34;)
+    Config.verbose = True
+
+    #The final value
+    print(fft.best)
+    
+    with open(myPath + &#34;/data/hyperOutput.csv&#34;,&#39;a&#39;) as f:
+      writer = csv.writer(f)
+      row = Config.getAsArray()[1]
+      values = fft.best
+      writer.writerow(row+values)
+
+s2 = Sample()
+myPath = os.path.dirname(os.path.abspath(__file__))
+myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+myPath = myPath[:myPath.rindex(&#34;/&#34;)]
+s2.fromFile(myPath + &#34;/data/hyperOutput.csv&#34;)
+
+print(s2.names)
+
+Config.verbose = False
+branch=[]
+fft = Fft(s2, s2, branch)
+Config.verbose = True
+
+#The final, final value
+print(fft.best)
+print(fft.bestPath)</code></pre>
+</details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
-<dl>
-<dt><code class="name"><a title="src.py.branch" href="branch.html">src.py.branch</a></code></dt>
-<dd>
-<div class="desc"><p>Class for holding branches created for decision trees</p></div>
-</dd>
-<dt><code class="name"><a title="src.py.config" href="config.html">src.py.config</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.conftest" href="conftest.html">src.py.conftest</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.discretization" href="discretization.html">src.py.discretization</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.fft" href="fft.html">src.py.fft</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.hw3" href="hw3.html">src.py.hw3</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.hw4" href="hw4.html">src.py.hw4</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.hw5" href="hw5.html">src.py.hw5</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.hw6" href="hw6.html">src.py.hw6</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.hw7" href="hw7.html">src.py.hw7</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.num" href="num.html">src.py.num</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.readCSV" href="readCSV.html">src.py.readCSV</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.sample" href="sample.html">src.py.sample</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.skip" href="skip.html">src.py.skip</a></code></dt>
-<dd>
-<div class="desc"><p>Skip class
-Always does nothing on add</p></div>
-</dd>
-<dt><code class="name"><a title="src.py.some" href="some.html">src.py.some</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="src.py.sym" href="sym.html">src.py.sym</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -108,27 +109,7 @@ Always does nothing on add</p></div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="src" href="../index.html">src</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="src.py.branch" href="branch.html">src.py.branch</a></code></li>
-<li><code><a title="src.py.config" href="config.html">src.py.config</a></code></li>
-<li><code><a title="src.py.conftest" href="conftest.html">src.py.conftest</a></code></li>
-<li><code><a title="src.py.discretization" href="discretization.html">src.py.discretization</a></code></li>
-<li><code><a title="src.py.fft" href="fft.html">src.py.fft</a></code></li>
-<li><code><a title="src.py.hw3" href="hw3.html">src.py.hw3</a></code></li>
-<li><code><a title="src.py.hw4" href="hw4.html">src.py.hw4</a></code></li>
-<li><code><a title="src.py.hw5" href="hw5.html">src.py.hw5</a></code></li>
-<li><code><a title="src.py.hw6" href="hw6.html">src.py.hw6</a></code></li>
-<li><code><a title="src.py.hw7" href="hw7.html">src.py.hw7</a></code></li>
-<li><code><a title="src.py.num" href="num.html">src.py.num</a></code></li>
-<li><code><a title="src.py.readCSV" href="readCSV.html">src.py.readCSV</a></code></li>
-<li><code><a title="src.py.sample" href="sample.html">src.py.sample</a></code></li>
-<li><code><a title="src.py.skip" href="skip.html">src.py.skip</a></code></li>
-<li><code><a title="src.py.some" href="some.html">src.py.some</a></code></li>
-<li><code><a title="src.py.sym" href="sym.html">src.py.sym</a></code></li>
+<li><code><a title="src.py" href="index.html">src.py</a></code></li>
 </ul>
 </li>
 </ul>

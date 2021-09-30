@@ -10,15 +10,12 @@ myPath = myPath[:myPath.rindex("/")]
 myPath = myPath[:myPath.rindex("/")]
 s.fromFile(myPath + "/data/auto93.csv")
 
-Config.loud = False
+Config.verbose = False
 branch=[]
 fft = Fft(s, s, branch)
-Config.loud = True
+Config.verbose = True
 
-n = 0
-for f in fft.trees:
-  for b in f:
-    print(str(n)+ " " + str(b))
-    n+=1
-  print(n)
-  n+=1
+for b in fft.tree:
+  print(str(b))
+  
+print(fft.best)

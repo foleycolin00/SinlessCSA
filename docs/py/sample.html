@@ -97,11 +97,20 @@ class Sample:
     for value in inits:
       self.add(value)
   
+  &#39;&#39;&#39;
+  Prints the mid point of the sample
+  &#39;&#39;&#39;
   def __str__(self):
+    return str(self.mid())
+  
+  &#39;&#39;&#39;
+  Get the mid point of the sample in array form
+  &#39;&#39;&#39;
+  def mid(self):
     goals = []
     for col in self.y:
       goals.append(col.mid())
-    return str(goals)
+    return goals
   
   &#39;&#39;&#39;
   Clones a new sample
@@ -279,7 +288,7 @@ class Sample:
     c = self.dist(one, two)
     tmp = []
     
-    if Config.loud:
+    if Config.verbose:
       print(&#34;c={:.2} &#34;.format(c))
     
     for row in rows:
@@ -299,16 +308,20 @@ class Sample:
   :param enough: how we know when to stop
   &#39;&#39;&#39;
   def divR(self, rows, level, leafs, enough):
-    if Config.loud:
+    #printing
+    if Config.verbose:
         for i in range(level + 1):
           print(&#34;|.. &#34;, end=&#39;&#39;)
         print(f&#34;n={len(rows)} &#34;, end=&#39;&#39;)
+        
+    #if we have to stop when we are smaller than enough
     if len(rows) &lt; enough:
       s = Sample([self.names] + rows)
-      if Config.loud:
+      if Config.verbose:
         print(s)
       leafs.append(s)
     else:
+      #divide and recurse
       left, right = self.div1(rows)
       self.divR(left, level+1, leafs, enough)
       self.divR(right, level+1, leafs, enough)
@@ -319,8 +332,9 @@ class Sample:
   def divs(self):
     leafs = []
     enough = pow(len(self.rows), Config.enough)
+    #perform the recurssive function
     self.divR(self.rows, 0, leafs, enough)
-    
+    #sort the leaves
     leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
     return leafs
   
@@ -331,6 +345,7 @@ class Sample:
     arr = []
     clusters = self.divs()
     best, worst = clusters[0], clusters[-1]
+    #zip them together and discretize the good from bad for each
     for good, bad in zip(best.x, worst.x):
       for d in good.discretize(good, bad):
         arr.append(d)
@@ -450,11 +465,20 @@ klass = klass value</p></div>
     for value in inits:
       self.add(value)
   
+  &#39;&#39;&#39;
+  Prints the mid point of the sample
+  &#39;&#39;&#39;
   def __str__(self):
+    return str(self.mid())
+  
+  &#39;&#39;&#39;
+  Get the mid point of the sample in array form
+  &#39;&#39;&#39;
+  def mid(self):
     goals = []
     for col in self.y:
       goals.append(col.mid())
-    return str(goals)
+    return goals
   
   &#39;&#39;&#39;
   Clones a new sample
@@ -632,7 +656,7 @@ klass = klass value</p></div>
     c = self.dist(one, two)
     tmp = []
     
-    if Config.loud:
+    if Config.verbose:
       print(&#34;c={:.2} &#34;.format(c))
     
     for row in rows:
@@ -652,16 +676,20 @@ klass = klass value</p></div>
   :param enough: how we know when to stop
   &#39;&#39;&#39;
   def divR(self, rows, level, leafs, enough):
-    if Config.loud:
+    #printing
+    if Config.verbose:
         for i in range(level + 1):
           print(&#34;|.. &#34;, end=&#39;&#39;)
         print(f&#34;n={len(rows)} &#34;, end=&#39;&#39;)
+        
+    #if we have to stop when we are smaller than enough
     if len(rows) &lt; enough:
       s = Sample([self.names] + rows)
-      if Config.loud:
+      if Config.verbose:
         print(s)
       leafs.append(s)
     else:
+      #divide and recurse
       left, right = self.div1(rows)
       self.divR(left, level+1, leafs, enough)
       self.divR(right, level+1, leafs, enough)
@@ -672,8 +700,9 @@ klass = klass value</p></div>
   def divs(self):
     leafs = []
     enough = pow(len(self.rows), Config.enough)
+    #perform the recurssive function
     self.divR(self.rows, 0, leafs, enough)
-    
+    #sort the leaves
     leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
     return leafs
   
@@ -684,6 +713,7 @@ klass = klass value</p></div>
     arr = []
     clusters = self.divs()
     best, worst = clusters[0], clusters[-1]
+    #zip them together and discretize the good from bad for each
     for good, bad in zip(best.x, worst.x):
       for d in good.discretize(good, bad):
         arr.append(d)
@@ -784,6 +814,7 @@ klass = klass value</p></div>
   arr = []
   clusters = self.divs()
   best, worst = clusters[0], clusters[-1]
+  #zip them together and discretize the good from bad for each
   for good, bad in zip(best.x, worst.x):
     for d in good.discretize(good, bad):
       arr.append(d)
@@ -828,7 +859,7 @@ klass = klass value</p></div>
   c = self.dist(one, two)
   tmp = []
   
-  if Config.loud:
+  if Config.verbose:
     print(&#34;c={:.2} &#34;.format(c))
   
   for row in rows:
@@ -851,16 +882,20 @@ klass = klass value</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def divR(self, rows, level, leafs, enough):
-  if Config.loud:
+  #printing
+  if Config.verbose:
       for i in range(level + 1):
         print(&#34;|.. &#34;, end=&#39;&#39;)
       print(f&#34;n={len(rows)} &#34;, end=&#39;&#39;)
+      
+  #if we have to stop when we are smaller than enough
   if len(rows) &lt; enough:
     s = Sample([self.names] + rows)
-    if Config.loud:
+    if Config.verbose:
       print(s)
     leafs.append(s)
   else:
+    #divide and recurse
     left, right = self.div1(rows)
     self.divR(left, level+1, leafs, enough)
     self.divR(right, level+1, leafs, enough)</code></pre>
@@ -878,8 +913,9 @@ klass = klass value</p></div>
 <pre><code class="python">def divs(self):
   leafs = []
   enough = pow(len(self.rows), Config.enough)
+  #perform the recurssive function
   self.divR(self.rows, 0, leafs, enough)
-  
+  #sort the leaves
   leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
   return leafs</code></pre>
 </details>
@@ -945,6 +981,22 @@ klass = klass value</p></div>
       else:
         self.x.append(new)
     at+=1</code></pre>
+</details>
+</dd>
+<dt id="src.py.sample.Sample.mid"><code class="name flex">
+<span>def <span class="ident">mid</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mid(self):
+  goals = []
+  for col in self.y:
+    goals.append(col.mid())
+  return goals</code></pre>
 </details>
 </dd>
 <dt id="src.py.sample.Sample.neighbors"><code class="name flex">
@@ -1061,6 +1113,7 @@ klass = klass value</p></div>
 <li><code><a title="src.py.sample.Sample.faraway" href="#src.py.sample.Sample.faraway">faraway</a></code></li>
 <li><code><a title="src.py.sample.Sample.fromFile" href="#src.py.sample.Sample.fromFile">fromFile</a></code></li>
 <li><code><a title="src.py.sample.Sample.header" href="#src.py.sample.Sample.header">header</a></code></li>
+<li><code><a title="src.py.sample.Sample.mid" href="#src.py.sample.Sample.mid">mid</a></code></li>
 <li><code><a title="src.py.sample.Sample.neighbors" href="#src.py.sample.Sample.neighbors">neighbors</a></code></li>
 <li><code><a title="src.py.sample.Sample.rowCompare" href="#src.py.sample.Sample.rowCompare">rowCompare</a></code></li>
 <li><code><a title="src.py.sample.Sample.sampleCompare" href="#src.py.sample.Sample.sampleCompare">sampleCompare</a></code></li>

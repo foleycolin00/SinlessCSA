@@ -23,11 +23,11 @@ for leaf in leafs:
   print()
 
 print("------\nTask 3:")
-Config.loud = False
+Config.verbose = False
 disc = s.discretize()
 for d in disc:
   print(d)
-Config.loud = True
+Config.verbose = True
 
 best, worst = leafs[0], leafs[-1]
 

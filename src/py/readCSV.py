@@ -84,15 +84,3 @@ def convertNumber(num):
       return float(num)
     except ValueError:
       return str(num)
-
-
-def main():
-  myPath = os.path.dirname(os.path.abspath(__file__))
-  myPath = myPath[:myPath.rindex("/")]
-  myPath = myPath[:myPath.rindex("/")]
-  for line in readCSV(myPath + "/data/weather.csv"):
-    print(line)
-
-if __name__ == "__main__":
-   # stuff only to run when not called via 'import' here
-   main()

@@ -111,19 +111,7 @@ def convertNumber(num):
     try: 
       return float(num)
     except ValueError:
-      return str(num)
-
-
-def main():
-  myPath = os.path.dirname(os.path.abspath(__file__))
-  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
-  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
-  for line in readCSV(myPath + &#34;/data/weather.csv&#34;):
-    print(line)
-
-if __name__ == &#34;__main__&#34;:
-   # stuff only to run when not called via &#39;import&#39; here
-   main()</code></pre>
+      return str(num)</code></pre>
 </details>
 </section>
 <section>
@@ -150,23 +138,6 @@ if __name__ == &#34;__main__&#34;:
       return float(num)
     except ValueError:
       return str(num)</code></pre>
-</details>
-</dd>
-<dt id="src.py.readCSV.main"><code class="name flex">
-<span>def <span class="ident">main</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def main():
-  myPath = os.path.dirname(os.path.abspath(__file__))
-  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
-  myPath = myPath[:myPath.rindex(&#34;/&#34;)]
-  for line in readCSV(myPath + &#34;/data/weather.csv&#34;):
-    print(line)</code></pre>
 </details>
 </dd>
 <dt id="src.py.readCSV.readCSV"><code class="name flex">
@@ -265,7 +236,6 @@ if __name__ == &#34;__main__&#34;:
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="src.py.readCSV.convertNumber" href="#src.py.readCSV.convertNumber">convertNumber</a></code></li>
-<li><code><a title="src.py.readCSV.main" href="#src.py.readCSV.main">main</a></code></li>
 <li><code><a title="src.py.readCSV.readCSV" href="#src.py.readCSV.readCSV">readCSV</a></code></li>
 </ul>
 </li>

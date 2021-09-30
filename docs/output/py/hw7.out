@@ -1,0 +1,24 @@
+What were the run times of your optimizer as you increased r?
+
+30 - 0m10.921s [3278.0, 15.0, 20.0]
+60 - 0m13.854s [2090.0, 16.0, 30.0]
+125 - 0m35.169s [2155.0, 16.0, 30.0]
+250 - 1m12.037s [2155.0, 16.0, 30.0]
+500 - 2m9.725s  [2155.0, 16.0, 30.0]
+1000 - 2m51.724s [2155.0, 16.0, 30.0]
+
+
+Does Hyperparameter optimization change a learner's behavior?
+
+Of course it changes the learner's behavior. There are many magic numbers that are under the control of the learner for every learning session. However, just changing a magic hyper parameter does not change nearly as dirastically as changing up the method you are using to get the data. As shown by the Villabos hypothesis, we can get near deep neural network performance without needing the deep neural network overhead, proving that the method is just as important as the hyper parameters.
+
+
+Does Hyperparameter optimization improve a learner's behavior?
+
+[2155.0, 16.0, 30.0] was the original value that was discovered using the learners behavior. I think with a larger and more complex dataset, it is certain that optimization would improve a lerarners behavior, for someone with my limited experience in machine learning. It is impossible for me to know the exact right combonation of hyper paramters in order to get the best results. Thus, I think that this is very helpful in getting an improved value.
+
+
+Does the Villabos hypothesis hold for car design?
+If not, how many random staggers do you suggest?
+
+As shown above. We get the same results somewhere between 60 and 125 different values. I am not certain of the math, but this seems to be a good range for the 

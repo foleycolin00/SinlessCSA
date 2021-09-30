@@ -69,11 +69,20 @@ class Sample:
     for value in inits:
       self.add(value)
   
+  '''
+  Prints the mid point of the sample
+  '''
   def __str__(self):
+    return str(self.mid())
+  
+  '''
+  Get the mid point of the sample in array form
+  '''
+  def mid(self):
     goals = []
     for col in self.y:
       goals.append(col.mid())
-    return str(goals)
+    return goals
   
   '''
   Clones a new sample
@@ -251,7 +260,7 @@ class Sample:
     c = self.dist(one, two)
     tmp = []
     
-    if Config.loud:
+    if Config.verbose:
       print("c={:.2} ".format(c))
     
     for row in rows:
@@ -271,16 +280,20 @@ class Sample:
   :param enough: how we know when to stop
   '''
   def divR(self, rows, level, leafs, enough):
-    if Config.loud:
+    #printing
+    if Config.verbose:
         for i in range(level + 1):
           print("|.. ", end='')
         print(f"n={len(rows)} ", end='')
+        
+    #if we have to stop when we are smaller than enough
     if len(rows) < enough:
       s = Sample([self.names] + rows)
-      if Config.loud:
+      if Config.verbose:
         print(s)
       leafs.append(s)
     else:
+      #divide and recurse
       left, right = self.div1(rows)
       self.divR(left, level+1, leafs, enough)
       self.divR(right, level+1, leafs, enough)
@@ -291,8 +304,9 @@ class Sample:
   def divs(self):
     leafs = []
     enough = pow(len(self.rows), Config.enough)
+    #perform the recurssive function
     self.divR(self.rows, 0, leafs, enough)
-    
+    #sort the leaves
     leafs.sort(key=functools.cmp_to_key(self.sampleCompare))
     return leafs
   
@@ -303,6 +317,7 @@ class Sample:
     arr = []
     clusters = self.divs()
     best, worst = clusters[0], clusters[-1]
+    #zip them together and discretize the good from bad for each
     for good, bad in zip(best.x, worst.x):
       for d in good.discretize(good, bad):
         arr.append(d)

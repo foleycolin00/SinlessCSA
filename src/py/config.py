@@ -1,29 +1,76 @@
+import random
+import numpy as np
+import math
 '''
 Class for all of the configurations/hyperparameters
 '''
 class Config:
-  bins =  .5            #Bins are of size n**BINS
-  bootstrap = 512       #number of bootstrap samples
-  cols = 'x'            #Columns to use for inference
-  cohen = .3
-  conf =   .05          #confidence for bootstraps
-  cliffs = .147         #small effect 
-  eg = ""               #'-x ls' lists all, '-x all' runs all
-  enough = .5           #preferred size of leaf bins
+  bins =  .5            #Min bin size n**bins for discretize
+  enough = .5           #Min size for divs creating creating leafs using gausian projections
   far = .9              #Where to look for far things
-  goaL = 'best'         #Learning goals: best|rest|other
-  iota = .3             #Small = sd**iota
-  k = 2                 #Bayes low class frequency hack
-  knn = 2               #Number of neighbors for knn
-  kadd = "mode"         #combination rule of knn
-  loud = True           #Set verbose
-  m = 1                 #Bayes low range frequency hack
-  p = 2                 #Distance calculation exponent
-  sames = 256           #max size of nonparametric samples
+  FFTstop = .5          #Minimum size of the last leaf in FFT, calculated by n**FFTstop
+  FFTLength = 5         #FFT Length
+  FFTType = '11110'     #Type of tree used for FFT
+  iota = .3             #Minimum break span for discretization = sd * iota
+  mergeVariance = .95   #Max variance needed to merge for discretization
+  p = 2                 #Distance calculation exponent for rows
   samples = 128         #number of neighbors to explore
-  some = 20             #Number of samples to find far things
-  seed = 10013          #Seed for random numbers
-  support = 2           #support for discretization
-  top = 10              #Focus on this many
-  wild = False          #Run egs, no protection (wild mode)
-  wait = 10             #Pause before thinking'
+  support = 2           #support for discretization scoring a range for sort
+  
+  verbose = True        #Set verbose
+  
+  #Min, Max(inclusive), Step
+  bins_range = [0.1, .9, .1]
+  enough_range = [0.1, .9, .1]
+  far_range = [.5, .99, .05]
+  FFTstop_range = [0, .9, .1]
+  FFTLength_range = [2, 10, 1]
+  iota_range = [.1, .9, .1]
+  mergeVariance_range = [.5, .99, .05]
+  p_range = [2, 10, 1]
+  samples_range = [5, 10, 1] #2**x
+  support_range = [2, 10, 1]
+  
+  def generate(v):
+    if v == 'FFTType':
+      #Create the FFTType from the length
+      fft = ""
+      for i in range(int(Config.FFTLength) - 1):
+        fft+= random.choice(['0', '1'])
+      fft += str(abs(int(fft[-1])-1))
+      setattr(Config, v, fft)
+    else:
+      #Get the range of the attr
+      ranges = getattr(Config, v + '_range')
+      
+      #Create the range of choices
+      choices = np.arange(ranges[0], ranges[1], ranges[2])
+      choices = np.append(choices, ranges[1])
+      
+      #Round to near values
+      if isinstance(ranges[2], int):
+        choices = choices.astype(int)
+      else:
+        choices = np.around(choices, 2)
+      
+      if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
+        choices = np.append(choices, ranges[1])
+      
+      #Set the attribute
+      setattr(Config, v, random.choice(choices))
+      
+    if Config.verbose:
+      print(f"{v}: {getattr(Config, v)}")
+  
+  def generateAll(variables = ['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support']):
+    for v in variables:
+      Config.generate(v)
+  
+  def getAsArray(variables = ['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support']):
+    arr = []
+    line = []
+    for v in variables:
+      line.append(getattr(Config, v))
+    arr.append(variables)
+    arr.append(line)
+    return arr

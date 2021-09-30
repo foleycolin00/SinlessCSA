@@ -153,3 +153,9 @@ def testSampleDivs():
   
   for leaf in leafs:
     assert len(leaf.rows) == 12 or len(leaf.rows) == 13
+
+'''Test function print'''
+def testSamplePrint():
+  s = Sample([["abc", "A+", "B-", "def"]])
+  s.add(["a", 0, 1, "a"])
+  assert f"{s}" == "[0.0, 1.0]"

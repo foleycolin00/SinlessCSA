@@ -122,6 +122,8 @@ class Num:
   :return: the mid value
   '''
   def mid(self):
+    if self.n == 0:
+      return '?'
     temp = self.some.getAll()
     middle = math.floor(len(temp)/2)
     if len(temp) % 2 == 1:
@@ -141,7 +143,7 @@ class Num:
     #
     # find a minimum break span (.3 * expected value of standard deivation)
     n1,n2 = len(i._all()), len(j._all())
-    iota = Config.cohen * (i.var()*n1 + j.var()*n2) / (n1 + n2)
+    iota = Config.iota * (i.var()*n1 + j.var()*n2) / (n1 + n2)
     #
     # all the real work is in unsuper and merge... which is your problem
     ranges = self.merge(self.unsuper(xys, len(xys)**Config.bins, iota))
@@ -199,7 +201,7 @@ class Num:
       b = ranges[i+1]
       c = a+b
       
-      if variance(c)*.95 <= (variance(a)*len(a) + variance(b)*len(b))/(len(a) + len(b)):
+      if variance(c)*Config.mergeVariance <= (variance(a)*len(a) + variance(b)*len(b))/(len(a) + len(b)):
         ranges[i+1] = ranges[i] + ranges[i+1]
         ranges.pop(i)
       else:

@@ -99,8 +99,10 @@ function sym:discretize(other_sym)
   return function()
     if curr_index <= #sym_col then
       local item = sym_col[curr_index]
-      local ret =':name ' .. self.name .. ' :lo ' .. item .. ' :hi ' .. item .. ' :best '
-                  .. tostring(self.symbol_list[item] or 0) .. ' :rest ' .. tostring(other_sym.symbol_list[item] or 0)
+      local ret = self.name .. 
+        ' low = ' .. item .. ' hi = ' .. item .. 
+        ' best = ' .. tostring(self.symbol_list[item] or 0) .. ' rest = ' .. tostring(other_sym.symbol_list[item] or 0) ..
+        ' first = ' .. 'FALSE' .. ' last = ' .. 'FALSE'
       curr_index = curr_index + 1
     
       return ret

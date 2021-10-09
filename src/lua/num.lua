@@ -178,7 +178,10 @@ function num:discretize(other_num)
         counts[best_or_worst] = counts[best_or_worst] + 1
       end
       
-      return self.name .. ' low = ' .. lo .. ' hi = ' .. hi .. ' best = ' .. counts[2] .. ' rest = ' .. counts[1]
+      return self.name ..
+        ' low = ' .. lo .. ' hi = ' .. hi ..
+        ' best = ' .. counts[2] .. ' rest = ' .. counts[1] ..
+        ' first = ' .. tostring(curr_index == 1) .. ' last = ' .. tostring(curr_index == #ranges)
     end
   end
 end

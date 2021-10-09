@@ -370,6 +370,110 @@ function sample:discretize()
   return ret
 end
 
+function sample:matches(bin, list)
+  local matching_rows = {}
+  local index = bin.at
+  
+  for key, value in pairs(list) do
+    local item = value[index]
+    if item == "?" or
+        bin.first and item <= bin.hi or
+        bin.last and item >= bin.lo or
+        bin.lo <= item <= bin.hi then
+      table.insert(matching_rows, value)
+    end
+  end
+  
+  return matching_rows
+end
+
+function sample:fft()
+  local stop = stop or 2 * #self.rows^self.settings.bins --0.5 should be bins hyperparameter
+  
+  -- call discretize to get the bins (the low, high, etc)
+  local bins = self:discretize()
+  
+  -- call values on plan and monitor, return the highest
+  -- scoring item, one will be best because plan calculates
+  -- differently than monitor, and monitor is rest
+  local bestIdeas = self:score_best_plan(bins)
+  local worstIdeas = self:score_best_monitor(bins)
+  
+  -- bestIdea and worstIdea still a bin
+  local tree = {}
+  
+  -- 2 trees
+  -- a yes, no, bin (1, 0, best)
+  -- a yes, no, bin (0, 1, worst)
+  
+  self:fft_recurse(bestIdeas, worstIdeas, self.rows, stop, 1, 1)
+  
+  -- try to match rows with bin
+  -- if not enough items per stop criteria
+  -- then final leaf
+  
+  -- else call fft again
+end
+
+function sample:fft_recurse(bestIdeas, worstIdeas, matches_list, stop, best_index, worst_index)
+  
+  -- do 1
+  local new_matches_list = self:matches(bestIdeas[best_index], matches_list)
+  best_index = best_index + 1
+  
+  -- do 0
+  local new_matches_list_2 = self:matches(worstIdeas[worst_index], matches_list)
+  worst_index = worst_index + 1
+  
+  if #new_matches_list < stop then
+    return --something
+  else
+    self:fft_recurse(bestIdeas, worstIdeas, new_matches_list, stop, best_index, worst_index)
+  end
+  
+  if #new_matches_list_2 < stop then
+    return --something
+  else
+    self:fft_recurse(bestIdeas, worstIdeas, new_matches_list_2, stop, best_index, worst_index)
+  end
+end
+
+
+function score_best_plan(bins)
+  local bins_w_score = {}
+  
+  local s = self.settings.support
+  
+  for key, value in pairs(bins) do
+    local b = value.best / value.bests
+    local r = value.rest / value.rests
+    
+    table.insert(bins_w_score, {b > r and b^s/(b + r) or 0, value})
+  end
+  
+  table.sort(bins_w_score, function(x, y) return x[1] > y[1] end)
+  
+  return bins_w_score
+end
+
+function score_best_monitor(bins)
+  local bins_w_score = {}
+  
+  local s = self.settings.support
+  
+  for key, value in pairs(bins) do
+    local b = value.best / value.bests
+    local r = value.rest / value.rests
+    
+    table.insert(bins_w_score, {b > r and r^s/(b + r) or 0, value})
+  end
+  
+  table.sort(bins_w_score, function(x, y) return x[1] > y[1] end)
+  
+  return bins_w_score
+end
+
+
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return sample

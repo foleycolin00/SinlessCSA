@@ -139,14 +139,22 @@ worst
 and 
 
 ```
-1 Cylinders low = 4 hi = 8 best = 13 rest = 12
-2 Displacement low = 360 hi = 455 best = 0 rest = 12
-2 Displacement low = 79 hi = 91 best = 13 rest = 0
-3 Horsepower low = 190 hi = 230 best = 0 rest = 12
-3 Horsepower low = 58 hi = 68 best = 13 rest = 0
-6 Model low = 70 hi = 82 best = 13 rest = 12
-7 :name origin :lo 3 :hi 3 :best 13 :rest nil
-7 :name origin :lo 1 :hi 1 :best nil :rest 12
+at: 1 Cylinders low = 4 hi = 4 best = 13 rest = 0
+at: 1 Cylinders low = 4 hi = 8 best = 0 rest = 12
+
+at: 2 Displacement low = 79 hi = 91 best = 13 rest = 0
+at: 2 Displacement low = 91 hi = 455 best = 0 rest = 12
+
+at: 3 Horsepower low = 58 hi = 67 best = 12 rest = 0
+at: 3 Horsepower low = 67 hi = 215 best = 1 rest = 5
+at: 3 Horsepower low = 215 hi = 230 best = 0 rest = 7
+
+at: 6 Model low = 70 hi = 70 best = 0 rest = 7
+at: 6 Model low = 70 hi = 80 best = 1 rest = 5
+at: 6 Model low = 80 hi = 82 best = 12 rest = 0
+
+at: 7 :name origin :lo 1 :hi 1 :best 0 :rest 12
+at: 7 :name origin :lo 3 :hi 3 :best 13 :rest 0
 ```
 
 The code for this assignment can be found at [test/lua/hw5.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/test/lua/hw5.lua), [src/lua/sample.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/sample.lua), [src/lua/num.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/num.lua), and [src/lua/sym.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/sym.lua).

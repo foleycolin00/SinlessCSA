@@ -54,7 +54,7 @@ function num:add(x)
   
   --https://github.com/timm/keys/blob/main/src/num.lua & https://www.youtube.com/watch?v=p5xThuN3P0I
   if self.count > 1 then  
-      self.stdev = ((self.m2 / self.count - 1))^0.5 end
+      self.stdev = (self.m2 / (self.count - 1))^0.5 end
   
   return x
 end
@@ -137,12 +137,14 @@ function num:discretize(other_num)
   local n1 = #self.sample_list.sample_list
   local n2 = #other_num.sample_list.sample_list
 
-  local iota = self.settings.cohen * (self.stdev * n1 + other_num.stdev * n2) / (n1 + n2)
+  local iota = self.settings.cohen * ( (self.stdev * n1 + other_num.stdev * n2) / (n1 + n2) )
+  --print("Iota")
+  --print(iota)
+  --print()
 
   local ranges = self:merge(self:unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota))
 
   --[[
-  print('here')
   for i = 1, #ranges do
     for j = 1, #ranges[i] do
       io.write(table.concat(ranges[i][j], ' '), ', ')
@@ -151,28 +153,31 @@ function num:discretize(other_num)
   end
   print()
   ]]
+  
  local curr_index = 0
 
   return function()
     curr_index = curr_index + 1
     
     if curr_index <= #ranges then
-      local lo = ranges[curr_index][1][1]
-      local hi = ranges[curr_index][1][1]
-      local counts = {0, 0}
+      local lo
+      if curr_index > 1 then
+        lo = ranges[curr_index - 1][#ranges[curr_index - 1]][1]
+      else
+        lo = ranges[curr_index][1][1]
+      end
       
-      for key, value in pairs(ranges[curr_index]) do
-        if (value[1] < lo) then
-          lo = value[1]
-        end
-        if (value[1] > hi) then
-          hi = value[1]
-        end
+      local hi = ranges[curr_index][#ranges[curr_index]][1]
+      
+      local counts = {0, 0}
+        
+      for key, value in pairs(ranges[curr_index]) do       
         
         local best_or_worst = value[2] + 1
         
         counts[best_or_worst] = counts[best_or_worst] + 1
       end
+      
       return self.name .. ' low = ' .. lo .. ' hi = ' .. hi .. ' best = ' .. counts[2] .. ' rest = ' .. counts[1]
     end
   end
@@ -199,49 +204,58 @@ end
 
 function num:unsuper(sample_list_collection, binsize, iota)
   --[[
+  print("here first")
   for i = 1, #sample_list_collection do
     io.write(sample_list_collection[i][1] .. ' ' .. sample_list_collection[i][2] .. ', ')
   end
   print()
   ]]
   
-  --table.sort(sample_list_collection, function(x, y) return x[1] < y[1] end)
+  -- sort it by value so max min collecting works
+  table.sort(sample_list_collection, function(x, y) return x[1] < y[1] end)
+  
+  --[[
+  print("here second")
+  for i = 1, #sample_list_collection do
+    io.write(sample_list_collection[i][1] .. ' ' .. sample_list_collection[i][2] .. ', ')
+  end
+  print()
+  ]]
   
   local split = {}
 
   local i = 1
   local j = 2
   
-  -- while i is less than sample list collection and sample list collection is greater than the bin size 
-  while (i < #sample_list_collection) and (#sample_list_collection - j >= binsize) do
-    local max = sample_list_collection[i][1]
-    local min = sample_list_collection[i][2]
+  -- while j is not off the end of the list
+  while (j <= #sample_list_collection + 1) do
     
-    for k = i + 1, j do
-      max = math.max(max, sample_list_collection[k][1])
-      min = math.min(max, sample_list_collection[k][1])
-    end
-    -- It cannot break ranges unless the i-th+1 value is different to the i-th value
-    -- It cannot break unless the break contains more than iota items
-    -- It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, latter)
-    if (j == #sample_list_collection) or
-       ((sample_list_collection[i][1] ~= sample_list_collection[j][1]) and
-       max - min < iota and
-       j - i >= binsize) then 
-      table.insert(split, {table.unpack(sample_list_collection, i, j)})
+    -- If j is at the end, do the break (bin the remaining items)
+    if j > #sample_list_collection or
+    
+       -- It cannot break ranges unless the current lowest i value is different then
+       -- the last value being checked at j
+       -- unneeded, will fail the next chekck if they are the same
+       --((sample_list_collection[i][1] ~= sample_list_collection[j][1]) and
+       
+       -- It cannot break unless the value range of the items are more different ( max - min > 0.3 * sd)
+       -- max = where j is (the next item to not include in this break)
+       -- min = where i is (the lowest item in the sorted list
+       (sample_list_collection[j][1] - sample_list_collection[i][1] > iota and
+       -- It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, later)
+       j - i > binsize and
+       -- there are bin size or more items left in the list
+       (#sample_list_collection - j  > binsize)) then
+       
+      table.insert(split, {table.unpack(sample_list_collection, i, j - 1)})
 
-      i = j + 1
-      j = i + 1
-    elseif j < #sample_list_collection then 
-      j = j + 1 
-    else 
-      i = i + 1 
-    end    
+      i = j
+    end
+    
+    j = j + 1
   end
   
-  table.insert(split, {table.unpack(sample_list_collection, i, #sample_list_collection)})
-  
-
+  --[[
   print()
   for i = 1, #split do
     for j = 1, #split[i] do
@@ -250,6 +264,7 @@ function num:unsuper(sample_list_collection, binsize, iota)
     print()
   end
   print()
+  ]]
 
   return split
 end

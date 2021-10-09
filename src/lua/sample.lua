@@ -361,6 +361,7 @@ function sample:discretize()
       for discretized_item in best.headers[i]:discretize(worst.headers[i]) do
         print('at: ' .. i .. ' ' .. discretized_item)
       end
+      print()
     end
   end
   print()

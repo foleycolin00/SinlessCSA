@@ -47,7 +47,7 @@ if (NEWHYPER):
       writer = csv.writer(f)
       row = Config.getAsArray()[0]
       names = [x.name for x in s.y]
-      writer.writerow(row+names)
+      writer.writerow(row+names+[&#34;N+&#34;])
 
   for i in range(HyperNum):
     print(f&#34;{i+1}:  &#34;, end = &#34;&#34;)

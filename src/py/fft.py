@@ -49,12 +49,12 @@ class Fft():
       (leaf if idea.matches(row) else other).add(row) # match the rows to leaf, tree
     #branch1  = deepcopy(branch)
     tree += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
-    self.leaves.append(leaf.mid())
+    self.leaves.append(leaf.mid()+[len(leaf.rows)])
     
     #Stop if we reach too far or past the tree level
     if len(other.rows) <= stop or level >= Config.FFTLength - 2: #end two before the end, not a magic number
       tree  += [Branch(typ = no, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
-      self.leaves.append(leaf.mid())
+      self.leaves.append(leaf.mid()+[len(leaf.rows)])
       self.tree = tree
     else:
       self.FFThelper(other, sample, tree,stop=stop,level=level+1)
@@ -78,7 +78,7 @@ class Fft():
     names = []
     for y in self.sample.y:
       names.append(y.name)
-    s = Sample([names])
+    s = Sample([names+["N+"]])
     
     for l in self.leaves:
       s.add(l)
@@ -94,6 +94,8 @@ class Fft():
   '''
   def getBestPath(self):
     bestString = f"{self.best}"
+    #Get the best string with out the N+ row
+    bestString = bestString[:bestString.rfind(',')]+"]"
     bestPath = ""
       
     i = 0

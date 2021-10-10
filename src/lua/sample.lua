@@ -495,6 +495,10 @@ function sample:fft_recurse(tree, level_info, stop)
   while (#matching_list < stop and i < #bestIdeas) do
     i = i + 1
     matching_list, non_matching_list = self:matches(bestIdeas[i][2])
+    
+    if i == #bestIdeas then
+      matching_list, non_matching_list = self:matches(worstIdeas[1][2])
+    end
   end
   
   table.insert(level_info, { 1, bestIdeas[1][2], {table.unpack(matching_list)} })
@@ -518,6 +522,11 @@ function sample:fft_recurse(tree, level_info, stop)
   while (#matching_list < stop and i < #bestIdeas) do
     i = i + 1
     matching_list, non_matching_list = self:matches(bestIdeas[i][2])
+    
+    if i == #bestIdeas then
+      matching_list, non_matching_list = self:matches(worstIdeas[1][2])
+    end
+    
   end
   
   table.insert(level_info, { 0, worstIdeas[1][2], {table.unpack(matching_list)} })

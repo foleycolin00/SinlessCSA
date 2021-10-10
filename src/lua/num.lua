@@ -256,7 +256,7 @@ function num:unsuper(sample_list_collection, binsize, iota)
     j = j + 1
   end
   
-  --[[
+  
   print()
   for i = 1, #split do
     for j = 1, #split[i] do
@@ -265,7 +265,7 @@ function num:unsuper(sample_list_collection, binsize, iota)
     print()
   end
   print()
-  ]]
+  
 
   return split
 end

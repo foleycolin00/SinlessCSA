@@ -17,6 +17,7 @@ auto93Sample:load('../../data/auto93.csv')
 
 -- task 1: clustering 
 auto93Sample:fft(10)
+--auto93Sample:discretize()
 --auto93Sample:dendogram()
 
 --[[

@@ -396,22 +396,19 @@ function sample:matches_rest(bin, list)
   
   for key, value in pairs(list) do
     local item = value[index]
-    if item == "?" then
-      table.insert(matching_rows, value)
-    elseif (bin.low == bin.high and item == bin.low) or
-       (bin.first and item <= bin.high) or
-       (bin.last and item > bin.low) or
-       (bin.low < item and item <= bin.high) then
-         
-    else
-      table.insert(matching_rows, value)
+    if item == "?" or
+       (bin.low == bin.high and item ~= bin.low) or
+       (bin.first and item > bin.high) or
+       (bin.last and item <= bin.low) or
+       (bin.low >= item and item > bin.high) then
+         table.insert(matching_rows, value)
     end
   end
   
   return matching_rows
 end
 
-function sample:show(bin)
+function sample:show_best(bin)
   if bin.low == bin.high then
     return bin.col_name .. ' == ' .. bin.low
   elseif bin.first then
@@ -423,7 +420,19 @@ function sample:show(bin)
   return bin.low .. ' < ' .. bin.col_name .. ' <= ' .. bin.high
 end
 
-function sample:fft()
+function sample:show_rest(bin)
+  if bin.low == bin.high then
+    return bin.col_name .. ' != ' .. bin.low
+  elseif bin.first then
+    return bin.col_name .. ' > ' .. bin.high
+  elseif bin.last then
+    return bin.col_name .. ' <= ' .. bin.low
+  end
+  
+  return bin.low .. ' >= ' .. bin.col_name .. ' > ' .. bin.high
+end
+
+function sample:fft(max_choices)
   local stop = stop or 2 * (#self.rows)^self.settings.bins --0.5 should be bins hyperparameter
   
   -- call discretize to get the bins (the low, high, etc)
@@ -460,65 +469,107 @@ function sample:fft()
   self:fft_recurse(tree, {}, bestIdeas, worstIdeas, self.rows, stop, 1, 1)
   
   for key, value in pairs(tree) do
-    print(value)
-    print()
+    if #value <= max_choices then
+      print(key)
+      for k, v in pairs(value) do
+        -- print the 0/1
+        io.write(' ' .. v[1], '   ')
+        
+        -- print if/elseif/else depending on key position
+        if k == 1 then
+          io.write("   if ")
+        elseif k == #value then
+          io.write("else ")
+        else
+          io.write("elseif ")
+        end
+        
+        -- if it is a 1, then use bestIdea to index
+        -- else use the worstIdea to index
+        if v[1] == 1 then
+          io.write(self:show_best(bestIdeas[v[2]][2]), '\t\t')
+        else
+          io.write(self:show_rest(worstIdeas[v[2]][2]), '\t\t')
+        end
+        
+        table.sort(v[3], function (a, b) return self:zitler(a, b) end)
+        
+        if #v[3] > 0 then
+          io.write(self:goalString(v[3][1]), ' ')
+        end
+        
+        io.write('(' .. #v[3] .. ')', '\n')
+        
+      end
+      print()
+      end
   end
+  
+  --for key, value in pairs(tree) do
+    --print(value)
+    --print()
+  --end
+    --table.insert(level_string, '1 ' .. self:show(bestIdeas[best_index][2]) .. ' (' .. #new_matches_list .. ')')
+    --table.insert(tree, table.concat(level_string, '\n'))
+    --table.sort(new_matches_list, function (a, b) return self:zitler(a, b) end)
+    --for key, value in pairs(new_matches_list) do
+    --print(self:goalString(value))
+    --end
+    --print(self:goalString(new_matches_list[1]))
+    --print()
+    
+    --table.insert(level_string, '0 ' .. self:show(worstIdeas[worst_index][2]) .. ' (' .. #new_matches_list_2 .. ')')
+    --table.insert(tree, table.concat(level_string, '\n'))
+    --table.remove(level_string, #level_string)
+    
+    --table.sort(new_matches_list_2, function (a, b) return self:zitler(a, b) end)
+    --for key, value in pairs(new_matches_list_2) do
+    --print(self:goalString(value))
+    --end
+    --print(self:goalString(new_matches_list_2[1]))
+    --print()
 end
 
-function sample:fft_recurse(tree, level_string, bestIdeas, worstIdeas, matches_list, stop, best_index, worst_index)
+function sample:fft_recurse(tree, level_info, bestIdeas, worstIdeas, matches_list, stop, best_index, worst_index)
   local old_matches_size = #matches_list
+  
   -- do 1
   local new_matches_list = self:matches_best(bestIdeas[best_index][2], matches_list)
   
-  while (#new_matches_list == 0 or #new_matches_list == old_matches_size) do
+  while (best_index + 1 <= #bestIdeas and (#new_matches_list == 0 or #new_matches_list == old_matches_size) ) do
     best_index = best_index + 1
     new_matches_list = self:matches_best(bestIdeas[best_index][2], matches_list)
   end
   
+  table.insert(level_info, { 1, best_index, {table.unpack(new_matches_list)} })
+  
+  if #new_matches_list < stop or best_index + 1 > #bestIdeas then
+    table.insert(tree, { table.unpack(level_info) })
+  else
+    self:fft_recurse(tree, level_info, bestIdeas, worstIdeas, new_matches_list, stop, best_index + 1, worst_index)
+  end
+  
+  -- clean up the 1
+  table.remove(level_info, #level_info)
   
   -- do 0
-  local new_matches_list_2 = self:matches_rest(worstIdeas[worst_index][2], matches_list)
+  new_matches_list = self:matches_rest(worstIdeas[worst_index][2], matches_list)
   
-  while (#new_matches_list_2 == 0 or #new_matches_list_2 == old_matches_size) do
+  while (worst_index + 1 <= #worstIdeas and (#new_matches_list == 0 or #new_matches_list == old_matches_size) ) do
     worst_index = worst_index + 1
-    new_matches_list_2 = self:matches_rest(worstIdeas[worst_index][2], matches_list)
+    new_matches_list = self:matches_rest(worstIdeas[worst_index][2], matches_list)
   end
   
-  if #new_matches_list < stop then
-    table.insert(level_string, '1 ' .. self:show(bestIdeas[best_index][2]) .. ' (' .. #new_matches_list .. ')')
-    table.insert(tree, table.concat(level_string, '\n'))
-    table.remove(level_string, #level_string)
-    
-    table.sort(new_matches_list, function (a, b) return self:zitler(a, b) end)
-    --for key, value in pairs(new_matches_list) do
-      --print(self:goalString(value))
-    --end
-    print(self:goalString(new_matches_list[1]))
-    print()
-    
+  table.insert(level_info, { 0, worst_index, {table.unpack(new_matches_list)} })
+  
+  if #new_matches_list < stop or worst_index + 1 > #worstIdeas then
+    table.insert(tree, { table.unpack(level_info) })
   else
-    table.insert(level_string, '1 ' .. self:show(bestIdeas[best_index][2]) .. ' (' .. #new_matches_list .. ')')
-    self:fft_recurse(tree, level_string, bestIdeas, worstIdeas, new_matches_list, stop, best_index + 1, worst_index)
-    table.remove(level_string, #level_string)
+    self:fft_recurse(tree, level_info, bestIdeas, worstIdeas, new_matches_list, stop, best_index, worst_index + 1)
   end
   
-  if #new_matches_list_2 < stop then
-    table.insert(level_string, '0 ' .. self:show(worstIdeas[worst_index][2]) .. ' (' .. #new_matches_list_2 .. ')')
-    table.insert(tree, table.concat(level_string, '\n'))
-    table.remove(level_string, #level_string)
-    
-    table.sort(new_matches_list_2, function (a, b) return self:zitler(a, b) end)
-    --for key, value in pairs(new_matches_list_2) do
-      --print(self:goalString(value))
-    --end
-    print(self:goalString(new_matches_list_2[1]))
-    print()
-    
-  else
-    table.insert(level_string, '0 ' .. self:show(worstIdeas[worst_index][2]) .. ' (' .. #new_matches_list_2 .. ')')
-    self:fft_recurse(tree, level_string, bestIdeas, worstIdeas, new_matches_list_2, stop, best_index, worst_index + 1)
-    table.remove(level_string, #level_string)
-  end
+  -- clean up the 0
+  table.remove(level_info, #level_info)
 end
 
 
@@ -530,7 +581,12 @@ function sample:score_best_plan(bins)
   for key, value in pairs(bins) do
     local b = value.best / value.bests
     local r = value.rest / value.rests
-    table.insert(bins_w_score, {b > r and (b^s)/(b + r) or 0, value})
+    
+    if b > r then
+      table.insert(bins_w_score, {(b^s)/(b + r), value})
+    end
+    
+    --table.insert(bins_w_score, {b > r and (b^s)/(b + r) or 0, value})
   end
   
   table.sort(bins_w_score, function(x, y) return x[1] > y[1] end)
@@ -546,7 +602,12 @@ function sample:score_best_monitor(bins)
   for key, value in pairs(bins) do
     local b = value.best / value.bests
     local r = value.rest / value.rests
-    table.insert(bins_w_score, {r > b and (r^s)/(b + r) or 0, value})
+    
+    if r > b then
+      table.insert(bins_w_score, {(r^s)/(b + r), value})
+    end
+    
+    --table.insert(bins_w_score, {r > b and (r^s)/(b + r) or 0, value})
   end
   
   table.sort(bins_w_score, function(x, y) return x[1] > y[1] end)

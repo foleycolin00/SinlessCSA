@@ -412,37 +412,12 @@ end
 function sample:fft(max_choices)
   local stop = stop or 2 * (#self.rows)^self.settings.bins --0.5 should be bins hyperparameter
   
-  -- call discretize to get the bins (the low, high, etc)
-  --self:discretize()
-  
-  -- call values on plan and monitor, return the highest
-  -- scoring item, one will be best because plan calculates
-  -- differently than monitor, and monitor is rest
-  --local bestIdeas = self:score_best_plan(self.bins)
-  --local worstIdeas = self:score_best_monitor(self.bins)
-  
-  --[[
-  for key, value in pairs(bestIdeas) do
-    io.write(value[1] .. ' ')
-    value[2]:print_out()
-  end
-  print()
-  for key, value in pairs(worstIdeas) do
-    io.write(value[1] .. ' ')
-    value[2]:print_out()
-  end
-  print()
-  ]]
-  
-  -- bestIdea and worstIdea still a bin
   local tree = {}
-  
-  -- 2 trees
-  -- a yes, no, bin (1, 0, best)
-  -- a yes, no, bin (0, 1, worst)
   
   self:fft_recurse(tree, {}, stop)
   
+  -- pretty print the tree
+  --[[
   for key, value in pairs(tree) do
     if #value <= max_choices then
       print(key)
@@ -482,13 +457,44 @@ function sample:fft(max_choices)
       print()
       end
   end
+  ]]
+  
+  local leaves = {}
+  -- build the leaves from the tree
+  for key, value in pairs(tree) do
+    for k, v in pairs(value) do
+      table.sort(v[3], function (a, b) return self:zitler(a, b) end)
+      table.insert(leaves, v[3][(#v[3] // 2) + 1])
+    end
+  end
+  
+  table.sort(leaves, function (a, b) return self:zitler(a, b) end)
+  
+  return leaves
 end
 
 function sample:fft_recurse(tree, level_info, stop)
+  -- call discretize to get the bins (the low, high, etc)
   self:discretize()
   
+  -- call values on plan and monitor, return the highest
+  -- scoring item, one will be best because plan calculates
+  -- differently than monitor, and monitor is rest
   local bestIdeas = self:score_best_plan()
   local worstIdeas = self:score_best_monitor()
+  
+  --[[
+  for key, value in pairs(bestIdeas) do
+    io.write(value[1] .. ' ')
+    value[2]:print_out()
+  end
+  print()
+  for key, value in pairs(worstIdeas) do
+    io.write(value[1] .. ' ')
+    value[2]:print_out()
+  end
+  print()
+  ]]
   
   local i = 1
   -- do 1

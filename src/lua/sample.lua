@@ -464,11 +464,11 @@ function sample:fft(max_choices)
   for key, value in pairs(tree) do
     for k, v in pairs(value) do
       table.sort(v[3], function (a, b) return self:zitler(a, b) end)
-      table.insert(leaves, v[3][(#v[3] // 2) + 1])
+      table.insert(leaves, { v[3][(#v[3] // 2) + 1], #v[3] })
     end
   end
   
-  table.sort(leaves, function (a, b) return self:zitler(a, b) end)
+  table.sort(leaves, function (a, b) return self:zitler(a[1], b[1]) end)
   
   return leaves
 end

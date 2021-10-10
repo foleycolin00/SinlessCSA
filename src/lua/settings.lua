@@ -41,10 +41,10 @@ function settings:random()
   -- random is range + base, use // 1 to truncate to integer, add 1 to range when doing so
   local setting = self:new()
   setting.p = tools:randi(1, 10)--tools:randi(2, 2)--tools:randi(1, 10) -- 1-6 inclusive
-  setting.far = tools:rand(0.2, 1)--tools:rand(0.9, 0.9)--tools:rand(0.2, 1) -- 0.1-0.9 inclusive
+  setting.far = tools:rand(0.1, 1)--tools:rand(0.9, 0.9)--tools:rand(0.2, 1) -- 0.1-0.9 inclusive
   setting.samples = tools:randi(64, 512)--tools:randi(256, 256)--tools:randi(64, 512) -- 64-512
   setting.enough = tools:rand(0.5, 1)--tools:rand(0.5, 0.5)--tools:rand(0.5, 1) -- 0.1-0.9
-  setting.cohen = tools:rand(0.1, 2)--tools:rand(0.3, 0.3)--tools:rand(0.1, 2) -- 0.1-0.9
+  setting.cohen = tools:rand(0.2, 2)--tools:rand(0.3, 0.3)--tools:rand(0.1, 2) -- 0.1-0.9
   setting.bins = tools:rand(0.5, 0.9)--tools:rand(0.5, 0.5)--tools:rand(0.5, 0.9) -- dies at less than 0.5
   setting.support = tools:rand(0.1, 10)--tools:rand(2, 2)--tools:rand(0.1, 10) -- 0.5-5
   return setting

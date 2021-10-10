@@ -237,7 +237,7 @@ function num:unsuper(sample_list_collection, binsize, iota)
        -- It cannot break ranges unless the current lowest i value is different then
        -- the last value being checked at j
        -- unneeded, will fail the next chekck if they are the same
-       --((sample_list_collection[i][1] ~= sample_list_collection[j][1]) and
+       --((sample_list_collection[j - 1][1] ~= sample_list_collection[j][1]) and
        
        -- It cannot break unless the value range of the items are more different ( max - min > 0.3 * sd)
        -- max = where j is (the next item to not include in this break)

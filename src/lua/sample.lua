@@ -109,7 +109,8 @@ function sample:createSubSample(list)
   newSample.settings = self.settings
   
   for i = 1, #self.headers do
-    newSample.headers[i] = getmetatable(self.headers[i]):new(self.headers[i].name)
+    -- wont  use weight if it isnt a goal
+    newSample.headers[i] = getmetatable(self.headers[i]):new(self.headers[i].name, self.headers[i].weight)
   end
   
   for i = 1, #list do
@@ -372,11 +373,13 @@ function sample:discretize()
   print()
 end
 
-function sample:matches_best(bin, list)
+function sample:matches(bin)
   local matching_rows = {}
+  local non_matching_rows = {}
+
   local index = bin.col_index
   
-  for key, value in pairs(list) do
+  for key, value in pairs(self.rows) do
     local item = value[index]
     if item == "?" or
         (bin.low == bin.high and item == bin.low) or
@@ -384,31 +387,15 @@ function sample:matches_best(bin, list)
         (bin.last and item > bin.low) or
         (bin.low < item and item <= bin.high) then
       table.insert(matching_rows, value)
+    else
+      table.insert(non_matching_rows, value)
     end
   end
   
-  return matching_rows
+  return matching_rows, non_matching_rows
 end
 
-function sample:matches_rest(bin, list)
-  local matching_rows = {}
-  local index = bin.col_index
-  
-  for key, value in pairs(list) do
-    local item = value[index]
-    if item == "?" or
-       (bin.low == bin.high and item ~= bin.low) or
-       (bin.first and item > bin.high) or
-       (bin.last and item <= bin.low) or
-       (bin.low >= item and item > bin.high) then
-         table.insert(matching_rows, value)
-    end
-  end
-  
-  return matching_rows
-end
-
-function sample:show_best(bin)
+function sample:show(bin)
   if bin.low == bin.high then
     return bin.col_name .. ' == ' .. bin.low
   elseif bin.first then
@@ -420,31 +407,19 @@ function sample:show_best(bin)
   return bin.low .. ' < ' .. bin.col_name .. ' <= ' .. bin.high
 end
 
-function sample:show_rest(bin)
-  if bin.low == bin.high then
-    return bin.col_name .. ' != ' .. bin.low
-  elseif bin.first then
-    return bin.col_name .. ' > ' .. bin.high
-  elseif bin.last then
-    return bin.col_name .. ' <= ' .. bin.low
-  end
-  
-  return bin.low .. ' >= ' .. bin.col_name .. ' > ' .. bin.high
-end
-
 function sample:fft(max_choices)
   local stop = stop or 2 * (#self.rows)^self.settings.bins --0.5 should be bins hyperparameter
   
   -- call discretize to get the bins (the low, high, etc)
-  self:discretize()
+  --self:discretize()
   
   -- call values on plan and monitor, return the highest
   -- scoring item, one will be best because plan calculates
   -- differently than monitor, and monitor is rest
-  local bestIdeas = self:score_best_plan(self.bins)
-  local worstIdeas = self:score_best_monitor(self.bins)
+  --local bestIdeas = self:score_best_plan(self.bins)
+  --local worstIdeas = self:score_best_monitor(self.bins)
   
-  
+  --[[
   for key, value in pairs(bestIdeas) do
     io.write(value[1] .. ' ')
     value[2]:print_out()
@@ -455,9 +430,7 @@ function sample:fft(max_choices)
     value[2]:print_out()
   end
   print()
-  
-  
-  
+  ]]
   
   -- bestIdea and worstIdea still a bin
   local tree = {}
@@ -466,7 +439,7 @@ function sample:fft(max_choices)
   -- a yes, no, bin (1, 0, best)
   -- a yes, no, bin (0, 1, worst)
   
-  self:fft_recurse(tree, {}, bestIdeas, worstIdeas, self.rows, stop, 1, 1)
+  self:fft_recurse(tree, {}, stop)
   
   for key, value in pairs(tree) do
     if #value <= max_choices then
@@ -484,18 +457,21 @@ function sample:fft(max_choices)
           io.write("elseif ")
         end
         
-        -- if it is a 1, then use bestIdea to index
-        -- else use the worstIdea to index
-        if v[1] == 1 then
-          io.write(self:show_best(bestIdeas[v[2]][2]), '\t\t')
-        else
-          io.write(self:show_rest(worstIdeas[v[2]][2]), '\t\t')
+        if k ~= #value then
+          -- if it is a 1, then use bestIdea to index
+          -- else use the worstIdea to index
+          if v[1] == 1 then
+            io.write(self:show(v[2]), '\t\t')
+          else
+            io.write(self:show(v[2]), '\t\t')
+          end
         end
         
         table.sort(v[3], function (a, b) return self:zitler(a, b) end)
         
+        
         if #v[3] > 0 then
-          io.write(self:goalString(v[3][1]), ' ')
+          io.write(self:goalString(v[3][(#v[3] // 2) + 1]), ' ')
         end
         
         io.write('(' .. #v[3] .. ')', '\n')
@@ -504,68 +480,55 @@ function sample:fft(max_choices)
       print()
       end
   end
-  
-  --for key, value in pairs(tree) do
-    --print(value)
-    --print()
-  --end
-    --table.insert(level_string, '1 ' .. self:show(bestIdeas[best_index][2]) .. ' (' .. #new_matches_list .. ')')
-    --table.insert(tree, table.concat(level_string, '\n'))
-    --table.sort(new_matches_list, function (a, b) return self:zitler(a, b) end)
-    --for key, value in pairs(new_matches_list) do
-    --print(self:goalString(value))
-    --end
-    --print(self:goalString(new_matches_list[1]))
-    --print()
-    
-    --table.insert(level_string, '0 ' .. self:show(worstIdeas[worst_index][2]) .. ' (' .. #new_matches_list_2 .. ')')
-    --table.insert(tree, table.concat(level_string, '\n'))
-    --table.remove(level_string, #level_string)
-    
-    --table.sort(new_matches_list_2, function (a, b) return self:zitler(a, b) end)
-    --for key, value in pairs(new_matches_list_2) do
-    --print(self:goalString(value))
-    --end
-    --print(self:goalString(new_matches_list_2[1]))
-    --print()
 end
 
-function sample:fft_recurse(tree, level_info, bestIdeas, worstIdeas, matches_list, stop, best_index, worst_index)
-  local old_matches_size = #matches_list
+function sample:fft_recurse(tree, level_info, stop)
+  self:discretize()
   
+  local bestIdeas = self:score_best_plan()
+  local worstIdeas = self:score_best_monitor()
+  
+  local i = 1
   -- do 1
-  local new_matches_list = self:matches_best(bestIdeas[best_index][2], matches_list)
+  local matching_list, non_matching_list = self:matches(bestIdeas[1][2])
   
-  while (best_index + 1 <= #bestIdeas and (#new_matches_list == 0 or #new_matches_list == old_matches_size) ) do
-    best_index = best_index + 1
-    new_matches_list = self:matches_best(bestIdeas[best_index][2], matches_list)
+  while (#matching_list < stop and i < #bestIdeas) do
+    i = i + 1
+    matching_list, non_matching_list = self:matches(bestIdeas[i][2])
   end
   
-  table.insert(level_info, { 1, best_index, {table.unpack(new_matches_list)} })
+  table.insert(level_info, { 1, bestIdeas[1][2], {table.unpack(matching_list)} })
   
-  if #new_matches_list < stop or best_index + 1 > #bestIdeas then
+  if #non_matching_list < stop then
+    table.insert(level_info, { 0, nil, {table.unpack(non_matching_list)} })
     table.insert(tree, { table.unpack(level_info) })
+    table.remove(level_info, #level_info)
   else
-    self:fft_recurse(tree, level_info, bestIdeas, worstIdeas, new_matches_list, stop, best_index + 1, worst_index)
+    local sample_list = self:createSubSample(non_matching_list)
+    sample_list:fft_recurse(tree, level_info, stop)
   end
   
   -- clean up the 1
   table.remove(level_info, #level_info)
   
+  i = 1
   -- do 0
-  new_matches_list = self:matches_rest(worstIdeas[worst_index][2], matches_list)
+  matching_list, non_matching_list = self:matches(worstIdeas[1][2])
   
-  while (worst_index + 1 <= #worstIdeas and (#new_matches_list == 0 or #new_matches_list == old_matches_size) ) do
-    worst_index = worst_index + 1
-    new_matches_list = self:matches_rest(worstIdeas[worst_index][2], matches_list)
+  while (#matching_list < stop and i < #bestIdeas) do
+    i = i + 1
+    matching_list, non_matching_list = self:matches(bestIdeas[i][2])
   end
   
-  table.insert(level_info, { 0, worst_index, {table.unpack(new_matches_list)} })
+  table.insert(level_info, { 0, worstIdeas[1][2], {table.unpack(matching_list)} })
   
-  if #new_matches_list < stop or worst_index + 1 > #worstIdeas then
+  if #non_matching_list < stop then
+    table.insert(level_info, { 1, nil, {table.unpack(non_matching_list)} })
     table.insert(tree, { table.unpack(level_info) })
+    table.remove(level_info, #level_info)
   else
-    self:fft_recurse(tree, level_info, bestIdeas, worstIdeas, new_matches_list, stop, best_index, worst_index + 1)
+    local sample_list = self:createSubSample(non_matching_list)
+    sample_list:fft_recurse(tree, level_info, stop)
   end
   
   -- clean up the 0
@@ -573,12 +536,12 @@ function sample:fft_recurse(tree, level_info, bestIdeas, worstIdeas, matches_lis
 end
 
 
-function sample:score_best_plan(bins)
+function sample:score_best_plan()
   local bins_w_score = {}
   
   local s = self.settings.support
   
-  for key, value in pairs(bins) do
+  for key, value in pairs(self.bins) do
     local b = value.best / value.bests
     local r = value.rest / value.rests
     
@@ -594,12 +557,12 @@ function sample:score_best_plan(bins)
   return bins_w_score
 end
 
-function sample:score_best_monitor(bins)
+function sample:score_best_monitor()
   local bins_w_score = {}
   
   local s = self.settings.support
   
-  for key, value in pairs(bins) do
+  for key, value in pairs(self.bins) do
     local b = value.best / value.bests
     local r = value.rest / value.rests
     

@@ -16,7 +16,7 @@ local auto93Sample = sample:new()
 auto93Sample:load('../../data/auto93.csv')
 
 -- task 1: clustering 
-auto93Sample:fft(5)
+auto93Sample:fft(10)
 --auto93Sample:dendogram()
 
 --[[

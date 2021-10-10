@@ -349,6 +349,7 @@ function sample:discretize()
   
   local best, worst = leafs[1][1], leafs[#leafs][1]
   
+  --[[
   print('best')
  
   for key, value in pairs(best.rows) do
@@ -359,18 +360,19 @@ function sample:discretize()
     print(table.concat(value, ' '))
   end
   print()
+  ]]
   
   for i = 1, #best.headers do
     if getmetatable(best.headers[i]) == num or getmetatable(best.headers[i]) == sym then
       for discretized_item in best.headers[i]:discretize(worst.headers[i]) do
         discretized_item.col_index = i
-        discretized_item:print_out()
+        --discretized_item:print_out()
         table.insert(self.bins, discretized_item)
       end
-      print()
+      --print()
     end
   end
-  print()
+  --print()
 end
 
 function sample:matches(bin)

@@ -19,7 +19,7 @@ if (NEWHYPER):
       writer = csv.writer(f)
       row = Config.getAsArray()[0]
       names = [x.name for x in s.y]
-      writer.writerow(row+names)
+      writer.writerow(row+names+["N+"])
 
   for i in range(HyperNum):
     print(f"{i+1}:  ", end = "")

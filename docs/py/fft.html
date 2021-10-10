@@ -77,12 +77,12 @@ class Fft():
       (leaf if idea.matches(row) else other).add(row) # match the rows to leaf, tree
     #branch1  = deepcopy(branch)
     tree += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
-    self.leaves.append(leaf.mid())
+    self.leaves.append(leaf.mid()+[len(leaf.rows)])
     
     #Stop if we reach too far or past the tree level
     if len(other.rows) &lt;= stop or level &gt;= Config.FFTLength - 2: #end two before the end, not a magic number
       tree  += [Branch(typ = no, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
-      self.leaves.append(leaf.mid())
+      self.leaves.append(leaf.mid()+[len(leaf.rows)])
       self.tree = tree
     else:
       self.FFThelper(other, sample, tree,stop=stop,level=level+1)
@@ -106,7 +106,7 @@ class Fft():
     names = []
     for y in self.sample.y:
       names.append(y.name)
-    s = Sample([names])
+    s = Sample([names+[&#34;N+&#34;]])
     
     for l in self.leaves:
       s.add(l)
@@ -122,6 +122,8 @@ class Fft():
   &#39;&#39;&#39;
   def getBestPath(self):
     bestString = f&#34;{self.best}&#34;
+    #Get the best string with out the N+ row
+    bestString = bestString[:bestString.rfind(&#39;,&#39;)]+&#34;]&#34;
     bestPath = &#34;&#34;
       
     i = 0
@@ -199,12 +201,12 @@ class Fft():
       (leaf if idea.matches(row) else other).add(row) # match the rows to leaf, tree
     #branch1  = deepcopy(branch)
     tree += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
-    self.leaves.append(leaf.mid())
+    self.leaves.append(leaf.mid()+[len(leaf.rows)])
     
     #Stop if we reach too far or past the tree level
     if len(other.rows) &lt;= stop or level &gt;= Config.FFTLength - 2: #end two before the end, not a magic number
       tree  += [Branch(typ = no, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
-      self.leaves.append(leaf.mid())
+      self.leaves.append(leaf.mid()+[len(leaf.rows)])
       self.tree = tree
     else:
       self.FFThelper(other, sample, tree,stop=stop,level=level+1)
@@ -228,7 +230,7 @@ class Fft():
     names = []
     for y in self.sample.y:
       names.append(y.name)
-    s = Sample([names])
+    s = Sample([names+[&#34;N+&#34;]])
     
     for l in self.leaves:
       s.add(l)
@@ -244,6 +246,8 @@ class Fft():
   &#39;&#39;&#39;
   def getBestPath(self):
     bestString = f&#34;{self.best}&#34;
+    #Get the best string with out the N+ row
+    bestString = bestString[:bestString.rfind(&#39;,&#39;)]+&#34;]&#34;
     bestPath = &#34;&#34;
       
     i = 0
@@ -283,12 +287,12 @@ class Fft():
     (leaf if idea.matches(row) else other).add(row) # match the rows to leaf, tree
   #branch1  = deepcopy(branch)
   tree += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
-  self.leaves.append(leaf.mid())
+  self.leaves.append(leaf.mid()+[len(leaf.rows)])
   
   #Stop if we reach too far or past the tree level
   if len(other.rows) &lt;= stop or level &gt;= Config.FFTLength - 2: #end two before the end, not a magic number
     tree  += [Branch(typ = no, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
-    self.leaves.append(leaf.mid())
+    self.leaves.append(leaf.mid()+[len(leaf.rows)])
     self.tree = tree
   else:
     self.FFThelper(other, sample, tree,stop=stop,level=level+1)</code></pre>
@@ -308,7 +312,7 @@ class Fft():
   names = []
   for y in self.sample.y:
     names.append(y.name)
-  s = Sample([names])
+  s = Sample([names+[&#34;N+&#34;]])
   
   for l in self.leaves:
     s.add(l)
@@ -331,6 +335,8 @@ class Fft():
 </summary>
 <pre><code class="python">def getBestPath(self):
   bestString = f&#34;{self.best}&#34;
+  #Get the best string with out the N+ row
+  bestString = bestString[:bestString.rfind(&#39;,&#39;)]+&#34;]&#34;
   bestPath = &#34;&#34;
     
   i = 0

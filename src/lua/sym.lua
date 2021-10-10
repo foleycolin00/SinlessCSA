@@ -7,6 +7,8 @@ local sym = {}
 
 sym.__index = sym
 
+local bin = require('bin')
+
 --- This function creates a new sym object.
 -- @function new
 -- @param col_name the column name
@@ -80,12 +82,16 @@ function sym:discretize(other_sym)
   ---
   local symbol_list_collection = {}
   
+  local n1 = 0
   for key, value in pairs(self.symbol_list) do
     symbol_list_collection[key] = 1
+    n1 = n1 + self.symbol_list[key]
   end
   
+  local n2 = 0
   for key, value in pairs(other_sym.symbol_list) do
     symbol_list_collection[key] = 1
+    n2 = n2 + other_sym.symbol_list[key]
   end
   
   local sym_col = {}
@@ -99,13 +105,9 @@ function sym:discretize(other_sym)
   return function()
     if curr_index <= #sym_col then
       local item = sym_col[curr_index]
-      local ret = self.name .. 
-        ' low = ' .. item .. ' hi = ' .. item .. 
-        ' best = ' .. tostring(self.symbol_list[item] or 0) .. ' rest = ' .. tostring(other_sym.symbol_list[item] or 0) ..
-        ' first = ' .. 'FALSE' .. ' last = ' .. 'FALSE'
+      
       curr_index = curr_index + 1
-    
-      return ret
+      return bin:new(-1, self.name, item, item, self.symbol_list[item] or 0, n1, other_sym.symbol_list[item] or 0, n2)
     end
   end
 end

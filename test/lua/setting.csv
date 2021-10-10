@@ -4,3 +4,4 @@ p = 2                         # dimension used for distance calculation
 far = 0.9                     # distance of farthest item to take
 samples = 128                 # number of sample items to take for faraway
 enough = 0.5                  # power to represent sampling root (0.5 = sqrt)
+support = 2                   # TODO

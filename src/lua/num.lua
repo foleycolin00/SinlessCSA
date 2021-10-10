@@ -9,6 +9,7 @@ num.__index = num
 
 local some = require('some')
 local settings = require('settings')
+local bin = require('bin')
 
 --- This function creates a new num object.
 -- @function new
@@ -178,10 +179,7 @@ function num:discretize(other_num)
         counts[best_or_worst] = counts[best_or_worst] + 1
       end
       
-      return self.name ..
-        ' low = ' .. lo .. ' hi = ' .. hi ..
-        ' best = ' .. counts[2] .. ' rest = ' .. counts[1] ..
-        ' first = ' .. tostring(curr_index == 1) .. ' last = ' .. tostring(curr_index == #ranges)
+      return bin:new(-1, self.name, lo, hi, counts[2], n1, counts[1], n2,  curr_index == 1, curr_index == #ranges)
     end
   end
 end

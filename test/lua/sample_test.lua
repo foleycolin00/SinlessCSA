@@ -94,7 +94,7 @@ print()
 local dendoTest = sample:new()
 dendoTest:load('../../data/weather.csv')
 
-local check = dendoTest:discretize()
+dendoTest:discretize()
 print('end discretize')
 
 local leafs = dendoTest:divide()

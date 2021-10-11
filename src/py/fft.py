@@ -36,6 +36,10 @@ class Fft():
     #use the discretize method to get all of our options
     discs = remaining.discretize()
     
+    if len(discs) == 0:
+      print("ERROR: Issue with Discretization")
+      return
+    
     yes = int(Config.FFTType[level])
     no = abs(yes-1)
     idea = None

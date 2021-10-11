@@ -127,7 +127,7 @@ class Num:
     temp = self.some.getAll()
     middle = math.floor(len(temp)/2)
     if len(temp) % 2 == 1:
-      return float(temp[middle])
+      return temp[middle]
     else:
       return (temp[middle] + temp[middle - 1]) / 2
   

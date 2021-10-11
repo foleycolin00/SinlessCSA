@@ -105,13 +105,10 @@ def readCSV(file):
 :param num: the string
 :return: the number or string as a result&#39;&#39;&#39;
 def convertNumber(num):
-  try:
-    return int(num)
+  try: 
+    return float(num)
   except ValueError:
-    try: 
-      return float(num)
-    except ValueError:
-      return str(num)</code></pre>
+    return str(num)</code></pre>
 </details>
 </section>
 <section>
@@ -131,13 +128,10 @@ def convertNumber(num):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def convertNumber(num):
-  try:
-    return int(num)
+  try: 
+    return float(num)
   except ValueError:
-    try: 
-      return float(num)
-    except ValueError:
-      return str(num)</code></pre>
+    return str(num)</code></pre>
 </details>
 </dd>
 <dt id="src.py.readCSV.readCSV"><code class="name flex">

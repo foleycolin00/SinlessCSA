@@ -20,12 +20,12 @@ auto93Sample:load('../../data/auto93.csv')
 
 local best = {}
 
-for i = 1, 3 do
+for i = 1, 1000 do
   auto93Sample.settings = settings:random()
-  print(settings:print_out(auto93Sample.settings))
+  --print(settings:print_out(auto93Sample.settings))
   local fft_leaves = auto93Sample:fft(100)
   table.insert(best, {fft_leaves[1], settings:print_out(auto93Sample.settings)} )
-  print(auto93Sample:goalString(fft_leaves[1][1]) .. ' ' .. fft_leaves[1][2])
+  --print(auto93Sample:goalString(fft_leaves[1][1]) .. ' ' .. fft_leaves[1][2])
 end
 print()
 

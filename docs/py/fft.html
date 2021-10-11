@@ -64,6 +64,10 @@ class Fft():
     #use the discretize method to get all of our options
     discs = remaining.discretize()
     
+    if len(discs) == 0:
+      print(&#34;ERROR: Issue with Discretization&#34;)
+      return
+    
     yes = int(Config.FFTType[level])
     no = abs(yes-1)
     idea = None
@@ -188,6 +192,10 @@ class Fft():
     #use the discretize method to get all of our options
     discs = remaining.discretize()
     
+    if len(discs) == 0:
+      print(&#34;ERROR: Issue with Discretization&#34;)
+      return
+    
     yes = int(Config.FFTType[level])
     no = abs(yes-1)
     idea = None
@@ -273,6 +281,10 @@ class Fft():
   
   #use the discretize method to get all of our options
   discs = remaining.discretize()
+  
+  if len(discs) == 0:
+    print(&#34;ERROR: Issue with Discretization&#34;)
+    return
   
   yes = int(Config.FFTType[level])
   no = abs(yes-1)

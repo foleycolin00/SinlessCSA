@@ -77,10 +77,7 @@ def readCSV(file):
 :param num: the string
 :return: the number or string as a result'''
 def convertNumber(num):
-  try:
-    return int(num)
+  try: 
+    return float(num)
   except ValueError:
-    try: 
-      return float(num)
-    except ValueError:
-      return str(num)
+    return str(num)

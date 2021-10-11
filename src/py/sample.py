@@ -167,7 +167,13 @@ class Sample:
     for col in self.y:
       w = col.w
       x = col.norm(row1[col.at])
+      if x=="?":
+        #row1 is NOT better than row2
+        return False
       y = col.norm(row2[col.at])
+      if y=="?":
+        #row1 is NOT better than row2
+        return True
       s1 = s1 - math.pow(e, w * (x-y)/n)
       s2 = s2 - math.pow(e, w * (y-x)/n)
     #"row1 is better than row2"

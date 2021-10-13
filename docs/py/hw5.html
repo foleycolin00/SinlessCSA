@@ -64,20 +64,22 @@ for row in s.cols:
 print()
 
 print(&#34;BEST LEAF:&#34;)
-for i in range(5):
-  for data in best.rows[i]:
-    print(str(data).ljust(20), end=&#34;&#34;)
-  print()
+if len(best.rows) &gt; 5 :
+  for i in range(5):
+    for data in best.rows[i]:
+      print(str(data).ljust(20), end=&#34;&#34;)
+    print()
 
-for row in s.cols:
-  print(str(&#34;...&#34;).ljust(20), end=&#34;&#34;)
-print()
+  for row in s.cols:
+    print(str(&#34;...&#34;).ljust(20), end=&#34;&#34;)
+  print()
 
 print(&#34;WORST LEAF:&#34;)
-for i in range(5):
-  for data in worst.rows[i]:
-    print(str(data).ljust(20), end=&#34;&#34;)
-  print()
+if len(worst.rows) &gt; 5 :
+  for i in range(5):
+    for data in worst.rows[i]:
+      print(str(data).ljust(20), end=&#34;&#34;)
+    print()
 
 for row in s.cols:
   print(str(&#34;...&#34;).ljust(20), end=&#34;&#34;)

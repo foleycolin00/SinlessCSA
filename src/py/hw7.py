@@ -9,7 +9,7 @@ s = Sample()
 myPath = os.path.dirname(os.path.abspath(__file__))
 myPath = myPath[:myPath.rindex("/")]
 myPath = myPath[:myPath.rindex("/")]
-s.fromFile(myPath + "/data/pom3a.csv")
+s.fromFile(myPath + "/data/auto93.csv")
 
 NEWHYPER = True
 HyperNum = 30

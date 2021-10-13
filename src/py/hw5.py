@@ -36,7 +36,7 @@ for row in s.cols:
 print()
 
 print("BEST LEAF:")
-if len(best.rows > 5) :
+if len(best.rows) > 5 :
   for i in range(5):
     for data in best.rows[i]:
       print(str(data).ljust(20), end="")
@@ -47,7 +47,7 @@ if len(best.rows > 5) :
   print()
 
 print("WORST LEAF:")
-if len(worst.rows > 5) :
+if len(worst.rows) > 5 :
   for i in range(5):
     for data in worst.rows[i]:
       print(str(data).ljust(20), end="")

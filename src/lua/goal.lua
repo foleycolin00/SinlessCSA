@@ -9,6 +9,7 @@ local num = require('num')
 
 goal.__index = goal
 setmetatable(goal, num)
+
 --- This function creates a new goal object.
 -- @function new
 -- @param col_name the column name

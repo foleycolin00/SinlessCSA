@@ -55,7 +55,7 @@ end
 
 ## 7: Learn a good policy 
 
-## 8:Report 
+## 8: Report 
 
 ### 1. What were the run times of your optimizer as you increased r?
 

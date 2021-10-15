@@ -1,4 +1,4 @@
---- This sample class is used for classification.
+--- This sample class is create and manipulate a given sample.
 -- @module sample.lua
 -- @author Steven Jones & Azeeza Eagal
 local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
@@ -34,7 +34,7 @@ function sample:new()
               rows = {},
               settings = settings:new(),
               children = {},
-              c,
+              c, -- what's c?
               bins = {}}
   setmetatable(o, self)
   
@@ -58,7 +58,7 @@ function sample:load(fileName)
   end
 end
   
---- This function discerns the attributes of the columns.
+--- This function discerns the attributes of the given columns.
 -- @function header
 -- @param list a list of the headers
 function sample:header(list)
@@ -228,6 +228,9 @@ function sample:neighbors(row, rows)
   return neighbor_list
 end
 
+--- This function is used to ???
+-- @function mid 
+-- @return midRow ????
 function sample:mid()
   local midRow = {}
   for key, value in pairs(self.headers) do
@@ -241,6 +244,9 @@ function sample:mid()
   return midRow
 end
 
+--- This function is used to output a goal row 
+-- @param a single row 
+-- @return ret output of the data point goal
 function sample:goalString(row)
   local ret = '[ '
   
@@ -261,11 +267,11 @@ function sample:sort_by_goal()
   table.sort(self.rows, function (a, b) return self:zitler(a, b) end)
 end
 
----This function returns a list of ___. 
+---This function returns a faraway point. 
 -- @function faraway 
 -- @param row a single row
 -- @param rows all other rows
--- @return 
+-- @return a random faraway point
 function sample:faraway(row, rows)
   rows = rows or self.rows
   local distance_list = self:neighbors(row, rows)
@@ -309,7 +315,7 @@ end
 
 ---This function splits rows via their distance to 2 faraway points.
 -- @param rows all rows 
--- @return ___.
+-- @return left node of parent tree, right node of parent tree and center.
 function sample:div(rows)
   rows = rows or self.rows
   local one = self:faraway(rows[ math.floor(tools:rand() * #rows) + 1 ],
@@ -341,6 +347,8 @@ function sample:div(rows)
   return l, r, c
 end
 
+--- This function discretizes a sample
+-- @function discretize 
 function sample:discretize()
   local ret = {}
   self.bins = {}
@@ -375,6 +383,10 @@ function sample:discretize()
   --print()
 end
 
+---This function distinguishes the points that are in the given bins. 
+-- @function matches 
+-- @param bin a bin object
+-- @return a list of matching rows to the bin object and not matching rows 
 function sample:matches(bin)
   local matching_rows = {}
   local non_matching_rows = {}
@@ -383,6 +395,7 @@ function sample:matches(bin)
   
   for key, value in pairs(self.rows) do
     local item = value[index]
+  
     if item == "?" or
         (bin.first and item <= bin.high) or
         (bin.last and item > bin.low) or
@@ -397,6 +410,10 @@ function sample:matches(bin)
   return matching_rows, non_matching_rows
 end
 
+--- This function shows the discretized "chunk" we are working with. 
+-- @function show 
+-- @param bin a bin object 
+-- @return the range we are working with
 function sample:show(bin)
   if bin.first then
     return bin.col_name .. ' <= ' .. bin.high
@@ -409,6 +426,9 @@ function sample:show(bin)
   return bin.low .. ' < ' .. bin.col_name .. ' <= ' .. bin.high
 end
 
+--- This function fast and frugal forrest. 
+-- @function fft 
+-- @param the maximum amount of choices
 function sample:fft(max_choices)
   local stop = stop or 2 * (#self.rows)^self.settings.bins --0.5 should be bins hyperparameter
   

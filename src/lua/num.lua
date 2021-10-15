@@ -60,6 +60,9 @@ function num:add(x)
   return x
 end
 
+--- This function returns the mean.
+-- @function mid 
+-- @return the column mean 
 function num:mid()
   return self.mean
 end
@@ -113,6 +116,10 @@ function num:distance(x, y)
   return math.abs(x - y)
 end
 
+--- This function discretizes a column's values
+-- @function discretize
+-- @param other_num the "rest" of the column
+-- @return a discretized bin object
 function num:discretize(other_num)
   -- i = good sample (for us it is self)
   -- j = bad sample (for us it it other_num)
@@ -184,8 +191,13 @@ function num:discretize(other_num)
   end
 end
 
+--- This function calculates the variance in a range 
+-- @function variance 
+-- @param range a discretized range 
+-- @return information about the variance in the range (best/rest)
 function num:variance(range)
   local counts = {0, 0}
+
   for key, value in pairs(range) do
     local best_or_worst = value[2] + 1
     counts[best_or_worst] = counts[best_or_worst] + 1
@@ -203,6 +215,12 @@ function num:variance(range)
   return -(p1 * w1 + p2 * w2)
 end
 
+--- This function divides the sample into a set of ranges
+-- @function unsuper 
+-- @param sample_list_collection a subsample with best/rest col
+-- @param binsize max of binsize
+-- @param iota minimum break span 
+-- @return split the sample split into seperate "bins" (not the object 'bin')
 function num:unsuper(sample_list_collection, binsize, iota)
   --[[
   print("here first")
@@ -271,6 +289,10 @@ function num:unsuper(sample_list_collection, binsize, iota)
   return split
 end
 
+--- This function goes through the ranges that were made in unsuper and merges bins that are "uneven."
+-- @function merge
+-- @param ranges ranges made in unsuper 
+-- @return ranges ranges 
 function num:merge(ranges)
   local i = 1
   

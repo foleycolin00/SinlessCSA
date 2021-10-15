@@ -9,14 +9,14 @@ local settings = require('settings')
 local auto93Sample = sample:new()
 auto93Sample:load('../../data/auto93.csv')
 
---auto93Sample.settings = settings:random()
---local fft_leaves = auto93Sample:fft(10)
+auto93Sample.settings = settings:random()
+local fft_leaves = auto93Sample:fft(10)
 
 --print(auto93Sample:goalString(fft_leaves[1]))
 
---for key, value in pairs(fft_leaves) do
-  --print(auto93Sample:goalString(value))
---end
+for key, value in pairs(fft_leaves) do
+  print(auto93Sample:goalString(value))
+end
 
 local best = {}
 
@@ -29,9 +29,9 @@ for i = 1, 1000 do
 end
 print()
 
-table.sort(best, function(x, y) return auto93Sample:zitler(x[1][1], y[1][1]) end)
-print(auto93Sample:goalString(best[1][1][1]) .. ' ' .. best[1][1][2])
-print(best[1][2])
+--table.sort(best, function(x, y) return auto93Sample:zitler(x[1][1], y[1][1]) end)
+--print(auto93Sample:goalString(best[1][1][1]) .. ' ' .. best[1][1][2])
+--print(best[1][2])
 
 
 

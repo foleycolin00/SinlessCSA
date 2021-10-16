@@ -256,6 +256,39 @@ function sample:goalString(row)
   return ret .. ']'
 end
 
+--- This function is used to output a goal row 
+-- @param a single row 
+-- @return ret output of the data point goal
+function sample:goalCSV(row)
+  local ret = ''
+  
+  for key, value in pairs(self.headers) do
+    if getmetatable(value) == goal then
+      ret = ret .. string.format('%.1f', row[key])
+    elseif getmetatable(value) == klass then
+      ret = ret .. row[key]
+    end
+    
+    if key ~= #self.headers and (getmetatable(value) == goal or getmetatable(value) == klass) then
+      ret = ret .. ','
+    end
+  end  
+  
+  return ret
+end
+
+function sample:headerCSV()
+  local header_strings = {}
+  
+  for i = 1, #self.headers do
+    if getmetatable(self.headers[i]) == goal or getmetatable(self.headers[i]) == klass then
+      table.insert(header_strings, self.headers[i].name)
+    end
+  end
+  
+  return table.concat(header_strings, ',')
+end
+
 --- This function sorts a table by its goal using the zitler continous domination predicate. 
 -- @function sort_by_goal
 function sample:sort_by_goal()
@@ -433,7 +466,7 @@ function sample:fft(max_choices)
   self:fft_recurse(tree, {}, stop)
   
   -- pretty print the tree
-  
+--[[
   for key, value in pairs(tree) do
     if #value <= max_choices then
       print(key)
@@ -476,8 +509,34 @@ function sample:fft(max_choices)
       print()
       end
   end
+  ]]
   
+--[[
+  -- place all the leaves into a new sample with N+ as a new goal?
+  local leaves_sample = sample:new()
   
+  -- recreate the original headers
+  for i = 1, #self.headers do
+    -- wont  use weight if it isnt a goal
+    leaves_sample.headers[i] = getmetatable(self.headers[i]):new(self.headers[i].name, self.headers[i].weight)
+  end
+  
+  -- insert the new value N+
+  table.insert(leaves_sample.headers, goal:new('N+', 1))
+  
+  -- add to header the values in the tree
+  for key, value in pairs(leaves_sample.headers) do
+    -- go through tree
+    for k, v in pairs(tree) do
+      
+    end
+    
+  end
+  ]]
+  
+  -- leaves_sample.headers -- all the same headers as current, with N+ as additional
+  -- leaves_sample.rows -- all the leaves are rows that fit with original and then N+ as well
+  -- leaves_sample.settings -- settings will be default settings unless overwritten
   
   local leaves = {}
   -- build the leaves from the tree
@@ -514,16 +573,21 @@ function sample:fft_recurse(tree, level_info, stop)
   print()
   
   for key, value in pairs(bestIdeas) do
-    io.write(value[1] .. ' ')
-    value[2]:print_out()
+    if value[1] > 0 then
+      io.write(value[1] .. ' ')
+      value[2]:print_out()
+    end
   end
   print()
   for key, value in pairs(worstIdeas) do
-    io.write(value[1] .. ' ')
-    value[2]:print_out()
+    if value[1] > 0 then
+      io.write(value[1] .. ' ')
+      value[2]:print_out()
+    end
   end
   print()
   ]]
+  
   
   
   local i = 1
@@ -532,6 +596,7 @@ function sample:fft_recurse(tree, level_info, stop)
   local matching_list, non_matching_list = self:matches(bestIdeas[1][2])
   
   local tmp_match, tmp_non_match
+  
   while (i < #bestIdeas) do
     i = i + 1
     

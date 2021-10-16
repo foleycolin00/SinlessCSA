@@ -13,7 +13,7 @@ local settings = require('settings')
 
 -- load auto93
 local auto93Sample = sample:new()
-auto93Sample:load('../../data/pom3a.csv')
+auto93Sample:load('../../data/auto93.csv')
 
 -- task 1: clustering 
 auto93Sample:fft(100)

@@ -61,7 +61,14 @@ function tools:rand(lo,hi,     mult,mod)
   lo,hi = lo or 0, hi or 1
   mult, mod = 16807, 2147483647
   Seed = (mult * Seed) % mod 
-  return lo + (hi-lo) * Seed / mod end 
+  return lo + (hi-lo) * Seed / mod end
+
+
+-- round a number to number of decimal places
+function tools:round(number, decimal_places)
+  return tonumber(string.format("%." .. (decimal_places or 0) .. "f", number))
+end
+
 
 --- This function takes in a csv and returns the column headers and rows that match.
 -- @function csv

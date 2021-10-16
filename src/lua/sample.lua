@@ -47,7 +47,7 @@ end
 function sample:load(fileName)
   for row in tools:csv(fileName) do
     if #self.headers == 0 then
-      if #row > 0 then self:header(row) end
+      self:header(row)
     else
       local tmp = {}
       for i = 1, #row do
@@ -205,11 +205,6 @@ function sample:distance(row1, row2)
   return (sum / n)^(1 / self.settings.p)
 end
 
---[[
-function sample:distance_heuristic(row1, row2)  
-end
-]]
-
 ---This function returns the neighbors of a row. 
 -- @function neighbors
 -- @param row a single row
@@ -275,7 +270,8 @@ end
 function sample:faraway(row, rows)
   rows = rows or self.rows
   local distance_list = self:neighbors(row, rows)
-  return distance_list[math.floor(self.settings.far * #rows)][1]
+  local index = math.floor(self.settings.far * #rows)
+  return distance_list[index > 0 and index or 1][1]
 end
 
 
@@ -437,7 +433,7 @@ function sample:fft(max_choices)
   self:fft_recurse(tree, {}, stop)
   
   -- pretty print the tree
-
+  
   for key, value in pairs(tree) do
     if #value <= max_choices then
       print(key)
@@ -457,15 +453,10 @@ function sample:fft(max_choices)
         if k ~= #value then
           -- if it is a 1, then use bestIdea to index
           -- else use the worstIdea to index
-          if v[1] == 1 then
-            io.write(self:show(v[2]), '\t\t')
-          else
-            io.write(self:show(v[2]), '\t\t')
-          end
+          io.write(self:show(v[2]), '\t\t')
         end
         
         table.sort(v[3], function (a, b) return self:zitler(a, b) end)
-        
         
         if #v[3] > 0 then
           io.write(self:goalString(v[3][(#v[3] // 2) + 1]), ' ')
@@ -473,10 +464,19 @@ function sample:fft(max_choices)
         
         io.write('(' .. #v[3] .. ')', '\n')
         
+        
+        if k == #value and key == -1 then
+          for ke, va in pairs(v[3]) do
+            print(table.unpack(va))
+          end
+        end
+        
+        
       end
       print()
       end
   end
+  
   
   
   local leaves = {}
@@ -505,7 +505,14 @@ function sample:fft_recurse(tree, level_info, stop)
   local bestIdeas = self:score_best_plan()
   local worstIdeas = self:score_best_monitor()
   
+  
+  
   --[[
+  for i = 1, #level_info do
+    io.write(level_info[i][1], ' ')
+  end
+  print()
+  
   for key, value in pairs(bestIdeas) do
     io.write(value[1] .. ' ')
     value[2]:print_out()
@@ -518,32 +525,29 @@ function sample:fft_recurse(tree, level_info, stop)
   print()
   ]]
   
+  
   local i = 1
+  local selected_rule = 1
   -- do 1
   local matching_list, non_matching_list = self:matches(bestIdeas[1][2])
-  
-  --[[
-  while (#matching_list < stop and i < #bestIdeas) do
-    i = i + 1
-    matching_list, non_matching_list = self:matches(bestIdeas[i][2])
-    
-    if i == #bestIdeas then
-      matching_list, non_matching_list = self:matches(bestIdeas[1][2])
-    end
-  end
-  ]]
   
   local tmp_match, tmp_non_match
   while (i < #bestIdeas) do
     i = i + 1
+    
+    if bestIdeas[i][1] == 0 then
+      break
+    end
+    
     tmp_match, tmp_non_match = self:matches(bestIdeas[i][2])
     
     if (#tmp_match)^bestIdeas[i][1] > #matching_list then
       matching_list, non_matching_list = tmp_match, tmp_non_match
+      selected_rule = i
     end
   end
   
-  table.insert(level_info, { 1, bestIdeas[1][2], {table.unpack(matching_list)} })
+  table.insert(level_info, { 1, bestIdeas[selected_rule][2], {table.unpack(matching_list)} })
   
   if #non_matching_list < stop then
     table.insert(level_info, { 0, nil, {table.unpack(non_matching_list)} })
@@ -558,31 +562,26 @@ function sample:fft_recurse(tree, level_info, stop)
   table.remove(level_info, #level_info)
   
   i = 1
+  selected_rule = 1
   -- do 0
   matching_list, non_matching_list = self:matches(worstIdeas[1][2])
   
-  --[[
-  while (#matching_list < stop and i < #worstIdeas) do
-    i = i + 1
-    matching_list, non_matching_list = self:matches(worstIdeas[i][2])
-    
-    if i == #bestIdeas then
-      matching_list, non_matching_list = self:matches(worstIdeas[1][2])
-    end
-    
-  end
-  ]]
-  
   while (i < #worstIdeas) do
     i = i + 1
+    
+    if worstIdeas[i][1] == 0 then
+      break
+    end
+    
     tmp_match, tmp_non_match = self:matches(worstIdeas[i][2])
     
     if (#tmp_match)^worstIdeas[i][1]  > #matching_list then
       matching_list, non_matching_list = tmp_match, tmp_non_match
+      selected_rule = i
     end
   end
   
-  table.insert(level_info, { 0, worstIdeas[1][2], {table.unpack(matching_list)} })
+  table.insert(level_info, { 0, worstIdeas[selected_rule][2], {table.unpack(matching_list)} })
   
   if #non_matching_list < stop then
     table.insert(level_info, { 1, nil, {table.unpack(non_matching_list)} })
@@ -607,9 +606,11 @@ function sample:score_best_plan()
     local b = value.best / value.bests
     local r = value.rest / value.rests
     
-    if b > r then
-      table.insert(bins_w_score, {(b^s)/(b + r), value})
-    end
+    --if b > r then
+      --table.insert(bins_w_score, {(b^s)/(b + r), value})
+    --end
+    
+    table.insert(bins_w_score, b > r and {(b^s)/(b + r), value} or { 0, value })
   end
   
   table.sort(bins_w_score, function(x, y) return x[1] > y[1] end)
@@ -626,9 +627,11 @@ function sample:score_best_monitor()
     local b = value.best / value.bests
     local r = value.rest / value.rests
     
-    if r > b then
-      table.insert(bins_w_score, {(r^s)/(b + r), value})
-    end
+    --if r > b then
+      --table.insert(bins_w_score, {(r^s)/(b + r), value})
+    --end
+    
+    table.insert(bins_w_score, r > b and {(r^s)/(b + r), value} or {0, value})
   end
   
   table.sort(bins_w_score, function(x, y) return x[1] > y[1] end)

@@ -222,6 +222,10 @@ end
 -- @param iota minimum break span 
 -- @return split the sample split into seperate "bins" (not the object 'bin')
 function num:unsuper(sample_list_collection, binsize, iota)
+  if binsize < 1 then
+    print('error!! bin too small')
+  end
+  
   --[[
   print("here first")
   for i = 1, #sample_list_collection do

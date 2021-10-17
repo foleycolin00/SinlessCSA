@@ -23,7 +23,7 @@ local best = {}
 
 local csv_lines = {}
 
-local num_runs = {30, 60, 125, 250, 500, 1000}
+local num_runs = {1000}
 
 for _, run_n in pairs(num_runs) do
   for i = 1, run_n do

@@ -18,7 +18,7 @@ local fft_leaves = auto93Sample:fft(100)
 for key, value in pairs(fft_leaves) do
   --print(auto93Sample:goalString(value[1]))
 end
-
+local runtime = os.clock();
 local best = {}
 
 local csv_lines = {}
@@ -56,7 +56,7 @@ for _, run_n in pairs(num_runs) do
   end
 
   file:close()
-  
+ 
   local optimized = sample:new()
   optimized:load(tostring(run_n) .. '.csv')
 
@@ -64,6 +64,9 @@ for _, run_n in pairs(num_runs) do
 
   print(table.unpack(optimized_leaves[1][1]))
   print()
+  local endtime = os.clock()
+  local deltaaa = endtime - runtime 
+  print("Time: " .. deltaaa)
   --print(optimized_leaves[1][2])
 end
 

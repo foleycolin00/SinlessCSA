@@ -150,3 +150,281 @@ and
 ```
 
 The code for this assignment can be found at [test/lua/hw5.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/test/lua/hw5.lua), [src/lua/sample.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/sample.lua), [src/lua/num.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/num.lua), and [src/lua/sym.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw5-lua/src/lua/sym.lua).
+
+## Code: 
+
+### sample.lua 
+```
+function sample:discretize()
+  local ret = {}
+  self.bins = {}
+  
+  local leafs = self:divide()
+  
+  local best, worst = leafs[1][1], leafs[#leafs][1]
+  
+  --[[
+  print('best')
+ 
+  for key, value in pairs(best.rows) do
+    print(table.concat(value, ' '))
+  end
+  print('worst')
+  for key, value in pairs(worst.rows) do
+    print(table.concat(value, ' '))
+  end
+  print()
+  ]]
+  
+  for i = 1, #best.headers do
+    if getmetatable(best.headers[i]) == num or getmetatable(best.headers[i]) == sym then
+      for discretized_item in best.headers[i]:discretize(worst.headers[i]) do
+        discretized_item.col_index = i
+        --discretized_item:print_out()
+        table.insert(self.bins, discretized_item)
+      end
+      --print()
+    end
+  end
+  --print()
+end
+```
+
+### num.lua 
+```
+function num:discretize(other_num)
+  -- i = good sample (for us it is self)
+  -- j = bad sample (for us it it other_num)
+  
+  -- go through some (which is a sample of num)
+  -- so for the good one it would be every item in some's sample list
+  -- and attach 1 to it, { { self.some[1], 1 }, { self.some[2], 1 }, ... }
+  -- do the same for the bad sample (other_num), but attach 0 to it
+  -- { { other_num.some[1], 0 }, { other_num.some[2], 0 }, ... }
+  local sample_list_collection = {}
+
+  -- every key should be given a zero
+  for key, value in pairs(other_num.sample_list.sample_list) do
+    table.insert(sample_list_collection, { value, 0 })
+  end
+
+  -- every key should be given a one
+  for key, value in pairs(self.sample_list.sample_list) do
+    table.insert(sample_list_collection, { value, 1 })
+  end
+
+  -- find minimum break space (.3 * expected value of standard deviation)
+  local n1 = #self.sample_list.sample_list
+  local n2 = #other_num.sample_list.sample_list
+
+  local iota = self.settings.cohen * ( (self.stdev * n1 + other_num.stdev * n2) / (n1 + n2) )
+  --print("Iota")
+  --print(iota)
+  --print()
+
+  local ranges = self:merge(self:unsuper(sample_list_collection, (#sample_list_collection)^self.settings.bins, iota))
+
+  --[[
+  for i = 1, #ranges do
+    for j = 1, #ranges[i] do
+      io.write(table.concat(ranges[i][j], ' '), ', ')
+    end
+    print('\n')
+  end
+  print()
+  ]]
+  
+ local curr_index = 0
+
+  return function()
+    curr_index = curr_index + 1
+    
+    if curr_index <= #ranges then
+      local lo
+      if curr_index > 1 then
+        lo = ranges[curr_index - 1][#ranges[curr_index - 1]][1]
+      else
+        lo = ranges[curr_index][1][1]
+      end
+      
+      local hi = ranges[curr_index][#ranges[curr_index]][1]
+      
+      local counts = {0, 0}
+        
+      for key, value in pairs(ranges[curr_index]) do       
+        
+        local best_or_worst = value[2] + 1
+        
+        counts[best_or_worst] = counts[best_or_worst] + 1
+      end
+      
+      return bin:new(-1, self.name, lo, hi, counts[2], n1, counts[1], n2,  curr_index == 1, curr_index == #ranges)
+    end
+  end
+end
+
+--- This function calculates the variance in a range 
+-- @function variance 
+-- @param range a discretized range 
+-- @return information about the variance in the range (best/rest)
+function num:variance(range)
+  local counts = {0, 0}
+
+  for key, value in pairs(range) do
+    local best_or_worst = value[2] + 1
+    counts[best_or_worst] = counts[best_or_worst] + 1
+  end
+  
+  if counts[1] == 0 or counts[2] == 0 then
+    return 0
+  end
+  
+  local p1 = counts[1] / #range
+  local p2 = 1 - p1
+  
+  local w1 = math.log(p1, 2)
+  local w2 = math.log(p2, 2)
+  return -(p1 * w1 + p2 * w2)
+end
+
+--- This function divides the sample into a set of ranges
+-- @function unsuper 
+-- @param sample_list_collection a subsample with best/rest col
+-- @param binsize max of binsize
+-- @param iota minimum break span 
+-- @return split the sample split into seperate "bins" (not the object 'bin')
+function num:unsuper(sample_list_collection, binsize, iota)
+  if binsize < 1 then
+    print('error!! bin too small')
+  end
+  
+  --[[
+  print("here first")
+  for i = 1, #sample_list_collection do
+    io.write(sample_list_collection[i][1] .. ' ' .. sample_list_collection[i][2] .. ', ')
+  end
+  print()
+  ]]
+  
+  -- sort it by value so max min collecting works
+  table.sort(sample_list_collection, function(x, y) return x[1] < y[1] end)
+  
+  --[[
+  print("here second")
+  for i = 1, #sample_list_collection do
+    io.write(sample_list_collection[i][1] .. ' ' .. sample_list_collection[i][2] .. ', ')
+  end
+  print()
+  ]]
+  
+  local split = {}
+
+  local i = 1
+  local j = 2
+  
+  -- while j is not off the end of the list
+  while (j <= #sample_list_collection + 1) do
+    
+    -- If j is at the end, do the break (bin the remaining items)
+    if j > #sample_list_collection or
+    
+       -- It cannot break ranges unless the current lowest i value is different then
+       -- the last value being checked at j
+       -- unneeded, will fail the next chekck if they are the same
+       --((sample_list_collection[j - 1][1] ~= sample_list_collection[j][1]) and
+       
+       -- It cannot break unless the value range of the items are more different ( max - min > 0.3 * sd)
+       -- max = where j is (the next item to not include in this break)
+       -- min = where i is (the lowest item in the sorted list
+       (sample_list_collection[j][1] - sample_list_collection[i][1] > iota and
+       -- It cannot break unless there are enough items (sqrt(N)) after the break (so we can break some more, later)
+       j - i > binsize and
+       -- there are bin size or more items left in the list
+       (#sample_list_collection - j  > binsize)) then
+       
+      table.insert(split, {table.unpack(sample_list_collection, i, j - 1)})
+
+      i = j
+    end
+    
+    j = j + 1
+  end
+  
+  --[[
+  print()
+  for i = 1, #split do
+    for j = 1, #split[i] do
+      io.write(table.concat(split[i][j], ' '), ', ')
+    end
+    print()
+  end
+  print()
+  ]]
+  
+
+  return split
+end
+
+--- This function goes through the ranges that were made in unsuper and merges bins that are "uneven."
+-- @function merge
+-- @param ranges ranges made in unsuper 
+-- @return ranges ranges 
+function num:merge(ranges)
+  local i = 1
+  
+  while i < #ranges do 
+    local a = ranges[i]
+    local b = ranges[i + 1]
+    local c = {}
+    table.move(a, 1, #a, 1, c)
+    table.move(b, 1, #b, #c + 1, c)
+
+    if (self:variance(c) * 0.95) <= (self:variance(a) * #a + self:variance(b) * #b) / (#a + #b) then
+      ranges[i + 1] = c
+      table.remove(ranges, i)
+    else
+      i = i + 1 
+    end 
+  end
+ 
+  return ranges
+end
+```
+
+### sym.lua 
+```
+function sym:discretize(other_sym)
+  ---
+  local symbol_list_collection = {}
+  
+  local n1 = 0
+  for key, value in pairs(self.symbol_list) do
+    symbol_list_collection[key] = 1
+    n1 = n1 + self.symbol_list[key]
+  end
+  
+  local n2 = 0
+  for key, value in pairs(other_sym.symbol_list) do
+    symbol_list_collection[key] = 1
+    n2 = n2 + other_sym.symbol_list[key]
+  end
+  
+  local sym_col = {}
+  
+  for key, value in pairs(symbol_list_collection) do
+    table.insert(sym_col, key)
+  end
+  
+  local curr_index = 1
+  
+  return function()
+    if curr_index <= #sym_col then
+      local item = sym_col[curr_index]
+      
+      curr_index = curr_index + 1
+      return bin:new(-1, self.name, item, item, self.symbol_list[item] or 0, n1, other_sym.symbol_list[item] or 0, n2)
+    end
+  end
+end
+```
+

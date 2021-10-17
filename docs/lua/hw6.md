@@ -3,109 +3,163 @@
 ## Output: 
 ```
 1
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 1   elseif Cylinders <= 6              [ 2930.0 15.5 20.0 ] (87)
- 1   elseif Displacement <= 318         [ 3672.0 11.5 20.0 ] (47)
- 1   elseif Model > 72          [ 4668.0 11.5 20.0 ] (32)
- 0   else [ 4274.0 12.0 10.0 ] (24)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 1   elseif Cylinders <= 4              [ 2123.0 14.0 30.0 ] (47)
+ 1   elseif Cylinders <= 6              [ 3121.0 16.5 20.0 ] (20)
+ 1   elseif Horsepower <= 153           [ 4294.0 16.0 10.0 ] (23)
+ 1   elseif Model <= 70         [ 4341.0 10.0 20.0 ] (13)
+ 1   elseif Cylinders <= 8              [ 4499.0 12.5 10.0 ] (22)
+ 0   else (0)
 
 2
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 1   elseif Cylinders <= 6              [ 2930.0 15.5 20.0 ] (87)
- 1   elseif Displacement <= 318         [ 3672.0 11.5 20.0 ] (47)
- 0   elseif Displacement > 351          [ 4654.0 13.0 10.0 ] (29)
- 1   else [ 3664.0 11.0 10.0 ] (27)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 1   elseif Cylinders <= 4              [ 2123.0 14.0 30.0 ] (47)
+ 1   elseif Cylinders <= 6              [ 3121.0 16.5 20.0 ] (20)
+ 1   elseif Horsepower <= 153           [ 4294.0 16.0 10.0 ] (23)
+ 1   elseif Model <= 70         [ 4341.0 10.0 20.0 ] (13)
+ 0   elseif Cylinders <= 8              [ 4499.0 12.5 10.0 ] (22)
+ 1   else (0)
 
 3
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 1   elseif Cylinders <= 6              [ 2930.0 15.5 20.0 ] (87)
- 0   elseif Horsepower > 215            [ 4425.0 10.0 10.0 ] (5)
- 1   elseif Displacement <= 305         [ 3880.0 12.5 20.0 ] (45)
- 1   elseif Displacement <= 318         [ 4732.0 18.5 10.0 ] (19)
- 0   else [ 4274.0 12.0 10.0 ] (34)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 1   elseif Cylinders <= 4              [ 2123.0 14.0 30.0 ] (47)
+ 1   elseif Cylinders <= 6              [ 3121.0 16.5 20.0 ] (20)
+ 1   elseif Horsepower <= 153           [ 4294.0 16.0 10.0 ] (23)
+ 0   elseif Model > 70          [ 4499.0 12.5 10.0 ] (22)
+ 1   else [ 4341.0 10.0 20.0 ] (13)
 
 4
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 1   elseif Cylinders <= 6              [ 2930.0 15.5 20.0 ] (87)
- 0   elseif Horsepower > 215            [ 4425.0 10.0 10.0 ] (5)
- 1   elseif Displacement <= 305         [ 3880.0 12.5 20.0 ] (45)
- 0   elseif Displacement > 318          [ 4274.0 12.0 10.0 ] (34)
- 1   else [ 4732.0 18.5 10.0 ] (19)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 1   elseif Cylinders <= 4              [ 2123.0 14.0 30.0 ] (47)
+ 1   elseif Cylinders <= 6              [ 3121.0 16.5 20.0 ] (20)
+ 0   elseif Horsepower > 153            [ 4274.0 12.0 10.0 ] (35)
+ 1   elseif Cylinders <= 8              [ 4294.0 16.0 10.0 ] (23)
+ 0   else (0)
 
 5
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 1   elseif Cylinders <= 6              [ 2930.0 15.5 20.0 ] (87)
- 0   elseif Horsepower > 215            [ 4425.0 10.0 10.0 ] (5)
- 0   elseif Displacement > 305          [ 4154.0 13.5 10.0 ] (71)
- 1   else [ 4141.0 14.0 20.0 ] (27)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 1   elseif Cylinders <= 4              [ 2123.0 14.0 30.0 ] (47)
+ 1   elseif Cylinders <= 6              [ 3121.0 16.5 20.0 ] (20)
+ 0   elseif Horsepower > 153            [ 4274.0 12.0 10.0 ] (35)
+ 0   elseif Cylinders <= 8              [ 4294.0 16.0 10.0 ] (23)
+ 1   else (0)
 
 6
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 0   elseif Displacement > 350          [ 4615.0 14.0 10.0 ] (37)
- 1   elseif Cylinders <= 6              [ 2930.0 15.5 20.0 ] (87)
- 1   elseif Model > 72          [ 4082.0 13.0 20.0 ] (46)
- 0   else [ 4077.0 14.0 10.0 ] (20)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 1   elseif Cylinders <= 4              [ 2123.0 14.0 30.0 ] (47)
+ 0   elseif Displacement > 258          [ 4129.0 13.0 10.0 ] (58)
+ 1   elseif Displacement <= 200         [ 2472.0 14.0 20.0 ] (7)
+ 0   else [ 3288.0 15.5 20.0 ] (13)
 
 7
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 0   elseif Displacement > 350          [ 4615.0 14.0 10.0 ] (37)
- 1   elseif Cylinders <= 6              [ 2930.0 15.5 20.0 ] (87)
- 0   elseif Displacement > 340          [ 3664.0 11.0 10.0 ] (18)
- 1   else [ 4140.0 13.7 20.0 ] (48)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 1   elseif Cylinders <= 4              [ 2123.0 14.0 30.0 ] (47)
+ 0   elseif Displacement > 258          [ 4129.0 13.0 10.0 ] (58)
+ 0   elseif Model > 70          [ 2807.0 13.5 20.0 ] (16)
+ 1   else [ 2774.0 15.5 20.0 ] (4)
 
 8
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 0   elseif Displacement > 350          [ 4615.0 14.0 10.0 ] (37)
- 0   elseif Cylinders > 6               [ 4190.0 13.0 20.0 ] (66)
- 1   elseif Model > 76          [ 2965.0 15.8 20.0 ] (38)
- 0   else [ 3730.0 19.0 20.0 ] (49)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 0   elseif origin == 1         [ 3761.0 9.5 20.0 ] (89)
+ 1   elseif Model <= 71         [ 2065.0 14.5 30.0 ] (15)
+ 1   elseif origin == 2         [ 2979.0 19.5 20.0 ] (12)
+ 0   else [ 2278.0 15.5 20.0 ] (9)
 
 9
- 1      if Cylinders <= 4               [ 1925.0 14.0 30.0 ] (208)
- 0   elseif Displacement > 350          [ 4615.0 14.0 10.0 ] (37)
- 0   elseif Cylinders > 6               [ 4190.0 13.0 20.0 ] (66)
- 0   elseif origin == 1         [ 3620.0 18.7 20.0 ] (74)
- 1   else [ 2930.0 15.5 20.0 ] (13)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 0   elseif origin == 1         [ 3761.0 9.5 20.0 ] (89)
+ 1   elseif Model <= 71         [ 2065.0 14.5 30.0 ] (15)
+ 0   elseif Horsepower > 75             [ 2124.0 13.5 20.0 ] (16)
+ 1   else [ 2254.0 23.5 20.0 ] (5)
 
 10
- 0      if Cylinders > 4                [ 3830.0 15.2 20.0 ] (190)
- 1   elseif origin == 3         [ 2100.0 16.5 30.0 ] (73)
- 1   elseif origin == 2         [ 1925.0 14.0 30.0 ] (63)
- 1   elseif Model <= 77         [ 2125.0 14.5 30.0 ] (28)
- 0   else [ 2635.0 16.4 30.0 ] (44)
+ 1      if Model > 73           [ 3035.0 20.5 20.0 ] (273)
+ 0   elseif origin == 1         [ 3761.0 9.5 20.0 ] (89)
+ 0   elseif Model > 71          [ 2158.0 15.5 20.0 ] (21)
+ 1   else [ 2065.0 14.5 30.0 ] (15)
 
 11
- 0      if Cylinders > 4                [ 3830.0 15.2 20.0 ] (190)
- 1   elseif origin == 3         [ 2100.0 16.5 30.0 ] (73)
- 1   elseif origin == 2         [ 1925.0 14.0 30.0 ] (63)
- 0   elseif Displacement > 140          [ 2572.0 14.9 30.0 ] (39)
- 1   else [ 2075.0 15.9 30.0 ] (33)
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 1   elseif Horsepower <= 77            [ 2254.0 23.5 20.0 ] (83)
+ 1   elseif Horsepower <= 92            [ 2130.0 14.5 30.0 ] (27)
+ 1   elseif Cylinders <= 4              [ 2489.0 15.0 20.0 ] (29)
+ 0   else [ 2807.0 13.5 20.0 ] (10)
 
 12
- 0      if Cylinders > 4                [ 3830.0 15.2 20.0 ] (190)
- 1   elseif origin == 3         [ 2100.0 16.5 30.0 ] (73)
- 0   elseif Displacement > 114          [ 2592.0 18.5 20.0 ] (66)
- 1   elseif Model > 71          [ 1963.0 15.5 30.0 ] (60)
- 0   else [ 2046.0 19.0 30.0 ] (9)
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 1   elseif Horsepower <= 77            [ 2254.0 23.5 20.0 ] (83)
+ 1   elseif Horsepower <= 92            [ 2130.0 14.5 30.0 ] (27)
+ 0   elseif Displacement > 108          [ 2795.0 15.7 20.0 ] (33)
+ 1   else [ 2330.0 13.5 20.0 ] (6)
 
 13
- 0      if Cylinders > 4                [ 3830.0 15.2 20.0 ] (190)
- 1   elseif origin == 3         [ 2100.0 16.5 30.0 ] (73)
- 0   elseif Displacement > 114          [ 2592.0 18.5 20.0 ] (66)
- 0   elseif Horsepower > 62             [ 1990.0 14.9 30.0 ] (56)
- 1   else [ 1835.0 20.5 30.0 ] (13)
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 1   elseif Horsepower <= 77            [ 2254.0 23.5 20.0 ] (83)
+ 0   elseif Horsepower > 92             [ 2330.0 13.5 20.0 ] (39)
+ 1   elseif origin == 3         [ 2130.0 14.5 30.0 ] (9)
+ 1   elseif Model > 74          [ 2202.0 15.3 30.0 ] (10)
+ 0   else [ 2300.0 14.5 30.0 ] (8)
 
 14
- 0      if Cylinders > 4                [ 3830.0 15.2 20.0 ] (190)
- 0   elseif origin == 2         [ 2635.0 16.4 30.0 ] (153)
- 1   elseif origin == 2         [ 1867.0 19.5 30.0 ] (14)
- 0   else [ 2003.0 19.0 30.0 ] (41)
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 1   elseif Horsepower <= 77            [ 2254.0 23.5 20.0 ] (83)
+ 0   elseif Horsepower > 92             [ 2330.0 13.5 20.0 ] (39)
+ 1   elseif origin == 3         [ 2130.0 14.5 30.0 ] (9)
+ 0   elseif Horsepower > 78             [ 2123.0 14.0 30.0 ] (14)
+ 1   else [ 2190.0 14.1 30.0 ] (4)
 
 15
- 0      if Cylinders > 4                [ 3830.0 15.2 20.0 ] (190)
- 0   elseif origin == 2         [ 2635.0 16.4 30.0 ] (153)
- 0   elseif origin == 1         [ 2380.0 20.7 30.0 ] (50)
- 1   else [ 2085.0 21.7 40.0 ] (5)
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 1   elseif Horsepower <= 77            [ 2254.0 23.5 20.0 ] (83)
+ 0   elseif Horsepower > 92             [ 2330.0 13.5 20.0 ] (39)
+ 0   elseif origin == 2         [ 2123.0 14.0 30.0 ] (18)
+ 1   else [ 2130.0 14.5 30.0 ] (9)
+
+16
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 0   elseif Horsepower > 77             [ 2671.0 13.5 30.0 ] (68)
+ 1   elseif Horsepower <= 62            [ 2050.0 17.3 40.0 ] (21)
+ 1   elseif origin == 3         [ 2145.0 18.0 30.0 ] (36)
+ 1   elseif Horsepower <= 74            [ 1963.0 15.5 30.0 ] (16)
+ 0   else [ 3530.0 20.1 30.0 ] (8)
+
+17
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 0   elseif Horsepower > 77             [ 2671.0 13.5 30.0 ] (68)
+ 1   elseif Horsepower <= 62            [ 2050.0 17.3 40.0 ] (21)
+ 1   elseif origin == 3         [ 2145.0 18.0 30.0 ] (36)
+ 0   elseif Horsepower > 74             [ 3530.0 20.1 30.0 ] (8)
+ 1   else [ 1963.0 15.5 30.0 ] (16)
+
+18
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 0   elseif Horsepower > 77             [ 2671.0 13.5 30.0 ] (68)
+ 1   elseif Horsepower <= 62            [ 2050.0 17.3 40.0 ] (21)
+ 0   elseif origin == 2         [ 1937.0 14.2 30.0 ] (24)
+ 1   elseif Horsepower <= 68            [ 2020.0 19.2 30.0 ] (21)
+ 0   else [ 2155.0 16.4 30.0 ] (15)
+
+19
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 0   elseif Horsepower > 77             [ 2671.0 13.5 30.0 ] (68)
+ 1   elseif Horsepower <= 62            [ 2050.0 17.3 40.0 ] (21)
+ 0   elseif origin == 2         [ 1937.0 14.2 30.0 ] (24)
+ 0   elseif Model > 74          [ 1990.0 17.0 30.0 ] (32)
+ 1   else [ 1773.0 19.0 30.0 ] (4)
+
+20
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 0   elseif Horsepower > 77             [ 2671.0 13.5 30.0 ] (68)
+ 0   elseif Horsepower > 62             [ 1985.0 16.0 30.0 ] (60)
+ 1   elseif origin == 2         [ 1835.0 20.5 30.0 ] (11)
+ 0   else [ 1985.0 19.4 30.0 ] (10)
+
+21
+ 0      if origin == 1          [ 3651.0 17.7 20.0 ] (249)
+ 0   elseif Horsepower > 77             [ 2671.0 13.5 30.0 ] (68)
+ 0   elseif Horsepower > 62             [ 1985.0 16.0 30.0 ] (60)
+ 0   elseif origin == 3         [ 1985.0 19.4 30.0 ] (10)
+ 1   else [ 1835.0 20.5 30.0 ] (11)
  ```
 
  ## Code: 

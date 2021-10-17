@@ -154,7 +154,7 @@ The code for this assignment can be found at [test/lua/hw5.lua](https://github.c
 ## Code: 
 
 ### sample.lua 
-```
+````lua
 function sample:discretize()
   local ret = {}
   self.bins = {}
@@ -188,10 +188,10 @@ function sample:discretize()
   end
   --print()
 end
-```
+````
 
 ### num.lua 
-```
+````lua
 function num:discretize(other_num)
   -- i = good sample (for us it is self)
   -- j = bad sample (for us it it other_num)
@@ -389,10 +389,10 @@ function num:merge(ranges)
  
   return ranges
 end
-```
+````
 
 ### sym.lua 
-```
+````lua
 function sym:discretize(other_sym)
   ---
   local symbol_list_collection = {}
@@ -426,5 +426,5 @@ function sym:discretize(other_sym)
     end
   end
 end
-```
+````
 

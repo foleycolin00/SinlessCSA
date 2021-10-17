@@ -16,20 +16,20 @@ function num:distance(x, y)
   
   return math.abs(x - y)
 end
-```
+````
 
 ### sym.lua
-```
+````lua
 function sym:distance(x, y)
   -- unknown should always be max distance
   if x == '?' or y == '?' then return 1 end
   
   return x == y and 0 or 1
 end
-```
+````
 
 ### sample.lua
-```
+````lua
 function sample:distance(row1, row2)
   local sum = 0
   local n = 0
@@ -43,8 +43,7 @@ function sample:distance(row1, row2)
 
   return (sum / n)^(1 / self.settings.p)
 end
-```
-
+````
 
 An example of the output: 
 ```
@@ -61,16 +60,16 @@ The last task given was to complement the faraway function by implementing a div
 
 ### sample.lua 
 
-```
+````lua
 function sample:faraway(row, rows)
   rows = rows or self.rows
   local distance_list = self:neighbors(row, rows)
   local index = math.floor(self.settings.far * #rows)
   return distance_list[index > 0 and index or 1][1]
 end
-```
+````
 
-```
+````lua
 function sample:divide()
   local out = {}
   local enough = (#self.rows)^self.settings.enough
@@ -102,9 +101,9 @@ function sample:divide()
   
   return out_sortedMid
 end
-```
+````
 
-```
+````lua
 function sample:div(rows)
   rows = rows or self.rows
   local one = self:faraway(rows[ math.floor(tools:rand() * #rows) + 1 ],
@@ -135,4 +134,4 @@ function sample:div(rows)
   
   return l, r, c
 end
-```
+````

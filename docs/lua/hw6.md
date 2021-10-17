@@ -164,7 +164,7 @@
 
  ## Code: 
  ### bin.lua
- ```
+ ````lua
  local b4 = {}; for k,_ in pairs(_ENV) do b4[k] = k end
 
 local bin = {}
@@ -202,9 +202,9 @@ end
 for k,_ in pairs(_ENV) do if not b4[k] then print("?? ".. k) end end
 
 return bin
-```
+````
  ### sample.lua 
-```
+````lua
 function sample:fft(max_choices)
   local stop = stop or 2 * (#self.rows)^self.settings.bins --0.5 should be bins hyperparameter
   
@@ -411,4 +411,4 @@ function sample:score_best_monitor()
   
   return bins_w_score
 end
-```
+````

@@ -5,7 +5,7 @@ In this homework assignment, we attempt to implement the cluster and contrast pe
 The first task of this homework was to implement an AHA distance function for Nums and Syms and for each row, print the row item, it's nearest item and the distance between them, and its furthest item and the distance between them. The runtime of this is 0.75 seconds on both the weather dataset and the AUTO93 set; the POM3a set took a LONG time. The code can be found at [test/lua/hw4.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw4-lua/test/lua/hw4.lua) and [src/lua/sample.lua](https://github.com/foleycolin00/SinlessCSA/blob/hw4-lua/src/lua/sample.lua). 
 
 ### num.lua
-```
+````lua
 function num:distance(x, y)
   x = self:norm(x)
   y = self:norm(y)

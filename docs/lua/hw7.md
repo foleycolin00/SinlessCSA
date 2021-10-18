@@ -45,18 +45,18 @@ Exclusive Optimized Tree Run:
 ```
 ### 2. Does Hyperparameter optimization change a learner's behavior?
 
-Yes, hyperparameter optimizaton changes the learner's behavior by choosing the best magic numbers to create the most accurate predicitons. 
+Yes, hyperparameter optimizaton changes the learner's behavior by searching for the hyperparameters that create the best output for some desired metric. Changing the learner's output is changing the behavior of the learner.
 
 ### 3. Does Hyperparameter optimization improve a learner's behavior?
-When compared to the best leaf previous to incorporating hyperparameter optimization, [ 2098.2 16.8 35.6 ], the hyperparameter optimzation improved the best leaf.
+When compared to the best leaf previous to incorporating hyperparameter optimization, [ 2098.2 16.8 35.6 ], the hyperparameter optimization improved the best leaf.
+
+It should improve the learner's behavior, at least for the dataset the hyperparameter optimization was done for.
 
 ### 4. Does the Villalobos hypothesis hold for car design? If not, how many random staggers do you suggest?
 
-The Villalobos hypothesis does hold. After 60 runs, we recieve more or less the same best leaf. 
+The Villalobos hypothesis does hold. After 60 runs, we receive more or less the same best leaf. More runs may report different leafs that zitler more or less deems identical, but for the most part it settles on [2085.0 21.7 40] starting from 60 or 125 runs and onward.
 
-Although, it could be that we favor a specific value of ranges of a hyperparameter even though the program can find a better hyperparameter for the situation.
-
-For example, __(Steve)
+Although, it could be that we favor one set of values over another. For example, when run twice and looking at the 60 run, we get the following 2 outputs. But we would argue that the first is better than the second. It has lower dimensions for the distance calculation (4 vs 26), a higher value for far (0.923 vs 0.54), etc. On almost all values, due to domain knowledge of the hyperparameters, the first set looks much more reasonable. So we would recommend do multiple runs at the 60 and then choose the most reasonable.
 
 ![first_screenshot](https://user-images.githubusercontent.com/89092830/137640903-6c3fdaef-a003-4d4e-8998-65ddcb599d6d.png)
 

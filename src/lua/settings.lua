@@ -17,13 +17,13 @@ settings.__index = settings
 -- @return a new settings object
 function settings:new(fileName)
     local o = { name = 'default',
-                p = 20,--2,
-                far = 0.9,--0.9,
-                samples = 800,--128,
-                enough = 0.606,--0.5,
-                cohen = 2.42,--0.3,
-                bins = 0.35,--0.5,
-                support = 2.032}--2}
+                p = 2,
+                far = 0.9,
+                samples = 128,
+                enough = 0.5,
+                cohen = 0.3,
+                bins = 0.5,
+                support = 2}
     
     setmetatable(o, self)
     

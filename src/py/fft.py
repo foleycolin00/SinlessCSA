@@ -67,11 +67,6 @@ class Fft():
       leaf,tree = sample.clone(), sample.clone()
       i = 0
       for row in remaining.rows:
-        #temp
-        if idea.closeMatches(row, sample.cols):
-          print(idea)
-          print(row[idea.at])
-      
         if Config.BASEBALLTREES:
           if idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
             if yes:

@@ -13,11 +13,11 @@ class Config:
   BASEBALLTREES = False
   BaseballStrikes = 3
   BaseballFFTLength = 7
-  SPILLTREES = True
+  SPILLTREES = False
   SpillPercent = .01
   #Explainability
-  BINARYCHOPS = True
-  PRUNETREES = True
+  BINARYCHOPS = False
+  PRUNETREES = False
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections

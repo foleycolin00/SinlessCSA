@@ -129,7 +129,7 @@ class Num:
     if len(temp) % 2 == 1:
       return temp[middle]
     else:
-      return (temp[middle] + temp[middle - 1]) / 2
+      return round((temp[middle] + temp[middle - 1]) / 2, Config.Round)
   
   '''
   Discretize values

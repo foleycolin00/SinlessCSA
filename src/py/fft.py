@@ -26,6 +26,8 @@ class Fft():
     self.best = self.getBest()
     self.bestPath = self.getBestPath()
     
+    self.discs = []
+    
   '''
   Helper class
   '''
@@ -34,23 +36,33 @@ class Fft():
       stop = len(sample.rows)**Config.FFTstop   # stopping coding
     
     #use the discretize method to get all of our options
-    discs = remaining.discretize()
+    if level == 0 or not Config.DISCLESS:
+      self.discs = remaining.discretize()
+    else:
+      for d in self.discs:
+          count = 0
+          for row in remaining.rows:
+            if d.matches(row):
+              count+=1
+          if count == 0:
+            self.discs.remove(d)
     
-    if len(discs) == 0:
-      print("ERROR: Issue with Discretization")
+    if len(self.discs) == 0:
       return
     
-    bestIdea = Fft.sortDiscs(discs, Discretization.DiscMethod.MAXIMIZE)[-1]
-    worstIdea = Fft.sortDiscs(discs, Discretization.DiscMethod.MINIMIZE)[-1]
+    bestIdea = Fft.sortDiscs(self.discs, Discretization.DiscMethod.MAXIMIZE)[-1]
+    worstIdea = Fft.sortDiscs(self.discs, Discretization.DiscMethod.MINIMIZE)[-1]
     for yes,no,idea in [(1,0,bestIdea), (0,1,worstIdea)]: # build 2 trees
       leaf,tree = sample.clone(), sample.clone()
       for row in remaining.rows:
         (leaf if idea.matches(row) else tree).add(row) # match the rows to leaf, tree
-      branch1  = deepcopy(branch)
-      branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
-      #if len(tree.rows) <= stop:
-      if len(tree.rows) <= stop or level >= 3:
-        branch1  += [Branch(typ = no, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
+      branch1  = deepcopy(branch)   
+      
+      if len(tree.rows) != 0 and len(leaf.rows) != 0:
+        branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
+      
+      if len(tree.rows) <= stop or level >= 3 or len(tree.rows) == 0 or len(leaf.rows) == 0:
+        branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows))] # make a final leaf
         self.trees.append(branch1)
       else:
         self.FFThelper(tree, sample, branch1,stop=stop,level=level+1)
@@ -80,7 +92,7 @@ class Fft():
       for b in f:
         arr = b.mid.replace("]", "").replace("[", "").split(", ")
         for i in range(len(arr)):
-          arr[i] = round(float(arr[i]), 2)
+          arr[i] = round(float(arr[i]), Config.Round)
         s.add(arr + [b.n])
     
     #sort the leaves

@@ -6,14 +6,14 @@ Class for all of the configurations/hyperparameters
 '''
 class Config:
   #Time
-  discLess = True
-  shortTrees = True
+  DISCLESS = False
+  SHORTTREES = True
   #Impermanence
-  baseballTrees = True
-  spillTrees = True
+  BASEBALLTREES = True
+  SPILLTREES = True
   #Explainability
-  binaryChops = True
-  pruneTrees = True
+  BINARYCHOPS = True
+  PRUNETREES = True
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
@@ -27,6 +27,7 @@ class Config:
   support = 2           #support for discretization scoring a range for sort
   
   verbose = True        #Set verbose
+  Round = 2
   
   #Min, Max(inclusive), Step
   bins_range = [0.1, .9, .1]

@@ -7,7 +7,7 @@ Class for all of the configurations/hyperparameters
 class Config:
   #Time
   DISCLESS = False
-  SHORTTREES = True
+  SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
   BASEBALLTREES = True

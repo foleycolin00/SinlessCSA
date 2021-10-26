@@ -8,11 +8,11 @@ s = Sample()
 myPath = os.path.dirname(os.path.abspath(__file__))
 myPath = myPath[:myPath.rindex("/")]
 myPath = myPath[:myPath.rindex("/")]
-s.fromFile(myPath + "/data/pom3a.csv")
+#s.fromFile(myPath + "/data/pom3a.csv")
+s.fromFile(myPath + "/data/auto93.csv")
 
 Config.verbose = False
-branch=[]
-fft = Fft(s, s, branch)
+fft = Fft(s)
 Config.verbose = True
 
 n = 0

@@ -65,7 +65,19 @@ class Discretization:
     if   v==&#34;?&#34;   : return True
     elif self.first: return v &lt;= self.hi
     elif self.last : return v &gt;= self.lo
-    else          : return self.lo &lt;= v &lt;= self.hi</code></pre>
+    else          : return self.lo &lt;= v &lt;= self.hi
+    
+  def closeMatches(self, row, cols):
+    if not self.name[0].isupper(): #not for sym
+      return
+    v=cols[self.at].norm(row[self.at])
+    high = cols[self.at].norm(self.hi)
+    low = cols[self.at].norm(self.lo)
+    
+    if   v==&#34;?&#34;   : return False
+    elif self.first: return abs(high-v) &lt;= Config.SpillPercent
+    elif self.last : return abs(low-v) &lt;= Config.SpillPercent
+    else          : return (abs(high-v) &lt;= Config.SpillPercent) or (abs(lo-v) &lt;= Config.SpillPercent)</code></pre>
 </details>
 </section>
 <section>
@@ -121,7 +133,19 @@ class Discretization:
     if   v==&#34;?&#34;   : return True
     elif self.first: return v &lt;= self.hi
     elif self.last : return v &gt;= self.lo
-    else          : return self.lo &lt;= v &lt;= self.hi</code></pre>
+    else          : return self.lo &lt;= v &lt;= self.hi
+    
+  def closeMatches(self, row, cols):
+    if not self.name[0].isupper(): #not for sym
+      return
+    v=cols[self.at].norm(row[self.at])
+    high = cols[self.at].norm(self.hi)
+    low = cols[self.at].norm(self.lo)
+    
+    if   v==&#34;?&#34;   : return False
+    elif self.first: return abs(high-v) &lt;= Config.SpillPercent
+    elif self.last : return abs(low-v) &lt;= Config.SpillPercent
+    else          : return (abs(high-v) &lt;= Config.SpillPercent) or (abs(lo-v) &lt;= Config.SpillPercent)</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -132,6 +156,28 @@ class Discretization:
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="src.py.discretization.Discretization.closeMatches"><code class="name flex">
+<span>def <span class="ident">closeMatches</span></span>(<span>self, row, cols)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def closeMatches(self, row, cols):
+  if not self.name[0].isupper(): #not for sym
+    return
+  v=cols[self.at].norm(row[self.at])
+  high = cols[self.at].norm(self.hi)
+  low = cols[self.at].norm(self.lo)
+  
+  if   v==&#34;?&#34;   : return False
+  elif self.first: return abs(high-v) &lt;= Config.SpillPercent
+  elif self.last : return abs(low-v) &lt;= Config.SpillPercent
+  else          : return (abs(high-v) &lt;= Config.SpillPercent) or (abs(lo-v) &lt;= Config.SpillPercent)</code></pre>
+</details>
+</dd>
 <dt id="src.py.discretization.Discretization.matches"><code class="name flex">
 <span>def <span class="ident">matches</span></span>(<span>self, row)</span>
 </code></dt>
@@ -187,6 +233,7 @@ class Discretization:
 <h4><code><a title="src.py.discretization.Discretization" href="#src.py.discretization.Discretization">Discretization</a></code></h4>
 <ul class="">
 <li><code><a title="src.py.discretization.Discretization.DiscMethod" href="#src.py.discretization.Discretization.DiscMethod">DiscMethod</a></code></li>
+<li><code><a title="src.py.discretization.Discretization.closeMatches" href="#src.py.discretization.Discretization.closeMatches">closeMatches</a></code></li>
 <li><code><a title="src.py.discretization.Discretization.matches" href="#src.py.discretization.Discretization.matches">matches</a></code></li>
 <li><code><a title="src.py.discretization.Discretization.show" href="#src.py.discretization.Discretization.show">show</a></code></li>
 </ul>

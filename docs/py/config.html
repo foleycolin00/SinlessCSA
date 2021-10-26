@@ -35,14 +35,17 @@ Class for all of the configurations/hyperparameters
 class Config:
   #Time
   DISCLESS = False
-  SHORTTREES = True
+  SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
-  BASEBALLTREES = True
-  SPILLTREES = True
+  BASEBALLTREES = False
+  BaseballStrikes = 3
+  BaseballFFTLength = 7
+  SPILLTREES = False
+  SpillPercent = .01
   #Explainability
-  BINARYCHOPS = True
-  PRUNETREES = True
+  BINARYCHOPS = False
+  PRUNETREES = False
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
@@ -128,14 +131,17 @@ class Config:
 <pre><code class="python">class Config:
   #Time
   DISCLESS = False
-  SHORTTREES = True
+  SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
-  BASEBALLTREES = True
-  SPILLTREES = True
+  BASEBALLTREES = False
+  BaseballStrikes = 3
+  BaseballFFTLength = 7
+  SPILLTREES = False
+  SpillPercent = .01
   #Explainability
-  BINARYCHOPS = True
-  PRUNETREES = True
+  BINARYCHOPS = False
+  PRUNETREES = False
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
@@ -209,6 +215,14 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="src.py.config.Config.BaseballFFTLength"><code class="name">var <span class="ident">BaseballFFTLength</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.BaseballStrikes"><code class="name">var <span class="ident">BaseballStrikes</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.py.config.Config.DISCLESS"><code class="name">var <span class="ident">DISCLESS</span></code></dt>
 <dd>
 <div class="desc"></div>
@@ -246,6 +260,10 @@ class Config:
 <div class="desc"></div>
 </dd>
 <dt id="src.py.config.Config.ShortTreesNum"><code class="name">var <span class="ident">ShortTreesNum</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.SpillPercent"><code class="name">var <span class="ident">SpillPercent</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -409,6 +427,8 @@ class Config:
 <ul class="two-column">
 <li><code><a title="src.py.config.Config.BASEBALLTREES" href="#src.py.config.Config.BASEBALLTREES">BASEBALLTREES</a></code></li>
 <li><code><a title="src.py.config.Config.BINARYCHOPS" href="#src.py.config.Config.BINARYCHOPS">BINARYCHOPS</a></code></li>
+<li><code><a title="src.py.config.Config.BaseballFFTLength" href="#src.py.config.Config.BaseballFFTLength">BaseballFFTLength</a></code></li>
+<li><code><a title="src.py.config.Config.BaseballStrikes" href="#src.py.config.Config.BaseballStrikes">BaseballStrikes</a></code></li>
 <li><code><a title="src.py.config.Config.DISCLESS" href="#src.py.config.Config.DISCLESS">DISCLESS</a></code></li>
 <li><code><a title="src.py.config.Config.FFTLength" href="#src.py.config.Config.FFTLength">FFTLength</a></code></li>
 <li><code><a title="src.py.config.Config.FFTLength_range" href="#src.py.config.Config.FFTLength_range">FFTLength_range</a></code></li>
@@ -419,6 +439,7 @@ class Config:
 <li><code><a title="src.py.config.Config.SHORTTREES" href="#src.py.config.Config.SHORTTREES">SHORTTREES</a></code></li>
 <li><code><a title="src.py.config.Config.SPILLTREES" href="#src.py.config.Config.SPILLTREES">SPILLTREES</a></code></li>
 <li><code><a title="src.py.config.Config.ShortTreesNum" href="#src.py.config.Config.ShortTreesNum">ShortTreesNum</a></code></li>
+<li><code><a title="src.py.config.Config.SpillPercent" href="#src.py.config.Config.SpillPercent">SpillPercent</a></code></li>
 <li><code><a title="src.py.config.Config.bins" href="#src.py.config.Config.bins">bins</a></code></li>
 <li><code><a title="src.py.config.Config.bins_range" href="#src.py.config.Config.bins_range">bins_range</a></code></li>
 <li><code><a title="src.py.config.Config.enough" href="#src.py.config.Config.enough">enough</a></code></li>

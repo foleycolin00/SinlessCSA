@@ -19,17 +19,17 @@ class Fft():
   '''
   def __init__(self, remaining, sample, branch, level=0):
     self.sample = sample
-    self.tree = [] # the branches
+    self.trees = [] # the branches
     self.leaves =  [] # the leaves
     
-    self.FFThelper(remaining, sample, branch)
+    self.FFThelper(remaining, sample, branch, level)
     self.best = self.getBest()
     self.bestPath = self.getBestPath()
     
   '''
   Helper class
   '''
-  def FFThelper(self, remaining, sample, tree, stop = None, level=0):
+  def FFThelper(self, remaining, sample, branch, stop = None, level=0):
     if not stop:
       stop = len(sample.rows)**Config.FFTstop   # stopping coding
     
@@ -40,28 +40,20 @@ class Fft():
       print("ERROR: Issue with Discretization")
       return
     
-    yes = int(Config.FFTType[level])
-    no = abs(yes-1)
-    idea = None
-    if yes == 1:
-      idea = Fft.sortDiscs(discs, Discretization.DiscMethod.MAXIMIZE)[-1]
-    else:
-      idea = Fft.sortDiscs(discs, Discretization.DiscMethod.MINIMIZE)[-1]
-    
-    leaf,other = sample.clone(), sample.clone()
-    for row in remaining.rows:
-      (leaf if idea.matches(row) else other).add(row) # match the rows to leaf, tree
-    #branch1  = deepcopy(branch)
-    tree += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
-    self.leaves.append(leaf.mid()+[len(leaf.rows)])
-    
-    #Stop if we reach too far or past the tree level
-    if len(other.rows) <= stop or level >= Config.FFTLength - 2: #end two before the end, not a magic number
-      tree  += [Branch(typ = no, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
-      self.leaves.append(leaf.mid()+[len(leaf.rows)])
-      self.tree = tree
-    else:
-      self.FFThelper(other, sample, tree,stop=stop,level=level+1)
+    bestIdea = Fft.sortDiscs(discs, Discretization.DiscMethod.MAXIMIZE)[-1]
+    worstIdea = Fft.sortDiscs(discs, Discretization.DiscMethod.MINIMIZE)[-1]
+    for yes,no,idea in [(1,0,bestIdea), (0,1,worstIdea)]: # build 2 trees
+      leaf,tree = sample.clone(), sample.clone()
+      for row in remaining.rows:
+        (leaf if idea.matches(row) else tree).add(row) # match the rows to leaf, tree
+      branch1  = deepcopy(branch)
+      branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
+      #if len(tree.rows) <= stop:
+      if len(tree.rows) <= stop or level >= 3:
+        branch1  += [Branch(typ = no, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
+        self.trees.append(branch1)
+      else:
+        self.FFThelper(tree, sample, branch1,stop=stop,level=level+1)
   
   '''
   Helper sort method for discs created by discretization
@@ -84,8 +76,12 @@ class Fft():
       names.append(y.name)
     s = Sample([names+["N+"]])
     
-    for l in self.leaves:
-      s.add(l)
+    for f in self.trees:
+      for b in f:
+        arr = b.mid.replace("]", "").replace("[", "").split(", ")
+        for i in range(len(arr)):
+          arr[i] = round(float(arr[i]), 2)
+        s.add(arr + [b.n])
     
     #sort the leaves
     s.rows.sort(key=functools.cmp_to_key(s.rowCompare))
@@ -100,10 +96,14 @@ class Fft():
     bestString = f"{self.best}"
     #Get the best string with out the N+ row
     bestString = bestString[:bestString.rfind(',')]+"]"
+    print(bestString)
     bestPath = ""
       
     i = 0
-    while bestString not in bestPath:
-      bestPath += str(self.tree[i])
-      i+=1
-    return bestPath
+    for tree in self.trees: 
+      for branch in tree:
+        bestPath += str(branch) + "\n"
+        if bestString in bestPath:
+          return bestPath
+      bestPath = ""
+    return None

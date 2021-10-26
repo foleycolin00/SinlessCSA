@@ -8,6 +8,7 @@ class Config:
   #Time
   DISCLESS = False
   SHORTTREES = True
+  ShortTreesNum = 5
   #Impermanence
   BASEBALLTREES = True
   SPILLTREES = True

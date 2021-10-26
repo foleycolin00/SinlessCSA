@@ -39,34 +39,52 @@ class Fft():
     if level == 0 or not Config.DISCLESS:
       self.discs = remaining.discretize()
     else:
+      #Remove discs that do not sort anything
       for d in self.discs:
-          count = 0
-          for row in remaining.rows:
-            if d.matches(row):
-              count+=1
-          if count == 0:
+          if Fft.countMatches(d, remaining.rows) == 0:
             self.discs.remove(d)
     
     if len(self.discs) == 0:
       return
     
-    bestIdea = Fft.sortDiscs(self.discs, Discretization.DiscMethod.MAXIMIZE)[-1]
-    worstIdea = Fft.sortDiscs(self.discs, Discretization.DiscMethod.MINIMIZE)[-1]
+    #Sort the discs
+    if Config.SHORTTREES:
+      bestIdea = Fft.sortDiscsShort(self.discs, Discretization.DiscMethod.MAXIMIZE, remaining.rows)[-1]
+      worstIdea = Fft.sortDiscsShort(self.discs, Discretization.DiscMethod.MINIMIZE, remaining.rows)[-1]
+    else:
+      bestIdea = Fft.sortDiscs(self.discs, Discretization.DiscMethod.MAXIMIZE)[-1]
+      worstIdea = Fft.sortDiscs(self.discs, Discretization.DiscMethod.MINIMIZE)[-1]
+      
+      
     for yes,no,idea in [(1,0,bestIdea), (0,1,worstIdea)]: # build 2 trees
       leaf,tree = sample.clone(), sample.clone()
       for row in remaining.rows:
         (leaf if idea.matches(row) else tree).add(row) # match the rows to leaf, tree
-      branch1  = deepcopy(branch)   
+      branch1  = deepcopy(branch)
       
+      #Do not add if the split leaves either the tree or the leaf with 0 nodes, just stop
       if len(tree.rows) != 0 and len(leaf.rows) != 0:
         branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
       
-      if len(tree.rows) <= stop or level >= 3 or len(tree.rows) == 0 or len(leaf.rows) == 0:
+      if len(tree.rows) == 0: # if this break just leaves nothing left
+        branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
+        self.trees.append(branch1)
+      elif len(tree.rows) <= stop or level >= 3 or len(leaf.rows) == 0:
         branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows))] # make a final leaf
         self.trees.append(branch1)
       else:
         self.FFThelper(tree, sample, branch1,stop=stop,level=level+1)
   
+  '''
+  Helper to count number of matches for a disc
+  '''
+  def countMatches(d, rows):
+    count = 0
+    for r in rows:
+      if d.matches(r):
+        count+=1
+    return count
+    
   '''
   Helper sort method for discs created by discretization
   '''
@@ -77,6 +95,21 @@ class Fft():
       return sorted(discs, key=lambda d: d.rest**Config.support / (d.best+d.rest))
     else:
       return sorted(discs, key=lambda d: 1 / (d.best+d.rest))
+  
+  '''
+  Helper sort method for discs created by discretization for SHORTTREES
+  '''
+  def sortDiscsShort(discs, method, rows):
+    arr = None
+    if method == Discretization.DiscMethod.MAXIMIZE:
+      arr =  sorted(discs, key=lambda d: d.best**Config.support / (d.best+d.rest))[::-1]
+    elif method == Discretization.DiscMethod.MINIMIZE:
+      arr = sorted(discs, key=lambda d: d.best**Config.support / (d.best+d.rest))[::-1]
+    else:
+      arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))
+    
+    arr = arr[0:Config.ShortTreesNum]
+    return sorted(discs, key=lambda d: Fft.countMatches(d, rows))
   
   '''
   Gets the best leaf from the FFT tree

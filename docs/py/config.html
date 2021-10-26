@@ -34,14 +34,15 @@ Class for all of the configurations/hyperparameters
 &#39;&#39;&#39;
 class Config:
   #Time
-  discLess = True
-  shortTrees = True
+  DISCLESS = False
+  SHORTTREES = True
+  ShortTreesNum = 5
   #Impermanence
-  baseballTrees = True
-  spillTrees = True
+  BASEBALLTREES = True
+  SPILLTREES = True
   #Explainability
-  binaryChops = True
-  pruneTrees = True
+  BINARYCHOPS = True
+  PRUNETREES = True
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
@@ -55,6 +56,7 @@ class Config:
   support = 2           #support for discretization scoring a range for sort
   
   verbose = True        #Set verbose
+  Round = 2
   
   #Min, Max(inclusive), Step
   bins_range = [0.1, .9, .1]
@@ -125,14 +127,15 @@ class Config:
 </summary>
 <pre><code class="python">class Config:
   #Time
-  discLess = True
-  shortTrees = True
+  DISCLESS = False
+  SHORTTREES = True
+  ShortTreesNum = 5
   #Impermanence
-  baseballTrees = True
-  spillTrees = True
+  BASEBALLTREES = True
+  SPILLTREES = True
   #Explainability
-  binaryChops = True
-  pruneTrees = True
+  BINARYCHOPS = True
+  PRUNETREES = True
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
@@ -146,6 +149,7 @@ class Config:
   support = 2           #support for discretization scoring a range for sort
   
   verbose = True        #Set verbose
+  Round = 2
   
   #Min, Max(inclusive), Step
   bins_range = [0.1, .9, .1]
@@ -197,6 +201,18 @@ class Config:
 </details>
 <h3>Class variables</h3>
 <dl>
+<dt id="src.py.config.Config.BASEBALLTREES"><code class="name">var <span class="ident">BASEBALLTREES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.BINARYCHOPS"><code class="name">var <span class="ident">BINARYCHOPS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.DISCLESS"><code class="name">var <span class="ident">DISCLESS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.py.config.Config.FFTLength"><code class="name">var <span class="ident">FFTLength</span></code></dt>
 <dd>
 <div class="desc"></div>
@@ -213,11 +229,23 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.baseballTrees"><code class="name">var <span class="ident">baseballTrees</span></code></dt>
+<dt id="src.py.config.Config.PRUNETREES"><code class="name">var <span class="ident">PRUNETREES</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.binaryChops"><code class="name">var <span class="ident">binaryChops</span></code></dt>
+<dt id="src.py.config.Config.Round"><code class="name">var <span class="ident">Round</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.SHORTTREES"><code class="name">var <span class="ident">SHORTTREES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.SPILLTREES"><code class="name">var <span class="ident">SPILLTREES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.ShortTreesNum"><code class="name">var <span class="ident">ShortTreesNum</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -226,10 +254,6 @@ class Config:
 <div class="desc"></div>
 </dd>
 <dt id="src.py.config.Config.bins_range"><code class="name">var <span class="ident">bins_range</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.discLess"><code class="name">var <span class="ident">discLess</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -273,23 +297,11 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="src.py.config.Config.pruneTrees"><code class="name">var <span class="ident">pruneTrees</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
 <dt id="src.py.config.Config.samples"><code class="name">var <span class="ident">samples</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="src.py.config.Config.samples_range"><code class="name">var <span class="ident">samples_range</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.shortTrees"><code class="name">var <span class="ident">shortTrees</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.spillTrees"><code class="name">var <span class="ident">spillTrees</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -395,15 +407,20 @@ class Config:
 <li>
 <h4><code><a title="src.py.config.Config" href="#src.py.config.Config">Config</a></code></h4>
 <ul class="two-column">
+<li><code><a title="src.py.config.Config.BASEBALLTREES" href="#src.py.config.Config.BASEBALLTREES">BASEBALLTREES</a></code></li>
+<li><code><a title="src.py.config.Config.BINARYCHOPS" href="#src.py.config.Config.BINARYCHOPS">BINARYCHOPS</a></code></li>
+<li><code><a title="src.py.config.Config.DISCLESS" href="#src.py.config.Config.DISCLESS">DISCLESS</a></code></li>
 <li><code><a title="src.py.config.Config.FFTLength" href="#src.py.config.Config.FFTLength">FFTLength</a></code></li>
 <li><code><a title="src.py.config.Config.FFTLength_range" href="#src.py.config.Config.FFTLength_range">FFTLength_range</a></code></li>
 <li><code><a title="src.py.config.Config.FFTstop" href="#src.py.config.Config.FFTstop">FFTstop</a></code></li>
 <li><code><a title="src.py.config.Config.FFTstop_range" href="#src.py.config.Config.FFTstop_range">FFTstop_range</a></code></li>
-<li><code><a title="src.py.config.Config.baseballTrees" href="#src.py.config.Config.baseballTrees">baseballTrees</a></code></li>
-<li><code><a title="src.py.config.Config.binaryChops" href="#src.py.config.Config.binaryChops">binaryChops</a></code></li>
+<li><code><a title="src.py.config.Config.PRUNETREES" href="#src.py.config.Config.PRUNETREES">PRUNETREES</a></code></li>
+<li><code><a title="src.py.config.Config.Round" href="#src.py.config.Config.Round">Round</a></code></li>
+<li><code><a title="src.py.config.Config.SHORTTREES" href="#src.py.config.Config.SHORTTREES">SHORTTREES</a></code></li>
+<li><code><a title="src.py.config.Config.SPILLTREES" href="#src.py.config.Config.SPILLTREES">SPILLTREES</a></code></li>
+<li><code><a title="src.py.config.Config.ShortTreesNum" href="#src.py.config.Config.ShortTreesNum">ShortTreesNum</a></code></li>
 <li><code><a title="src.py.config.Config.bins" href="#src.py.config.Config.bins">bins</a></code></li>
 <li><code><a title="src.py.config.Config.bins_range" href="#src.py.config.Config.bins_range">bins_range</a></code></li>
-<li><code><a title="src.py.config.Config.discLess" href="#src.py.config.Config.discLess">discLess</a></code></li>
 <li><code><a title="src.py.config.Config.enough" href="#src.py.config.Config.enough">enough</a></code></li>
 <li><code><a title="src.py.config.Config.enough_range" href="#src.py.config.Config.enough_range">enough_range</a></code></li>
 <li><code><a title="src.py.config.Config.far" href="#src.py.config.Config.far">far</a></code></li>
@@ -417,11 +434,8 @@ class Config:
 <li><code><a title="src.py.config.Config.mergeVariance_range" href="#src.py.config.Config.mergeVariance_range">mergeVariance_range</a></code></li>
 <li><code><a title="src.py.config.Config.p" href="#src.py.config.Config.p">p</a></code></li>
 <li><code><a title="src.py.config.Config.p_range" href="#src.py.config.Config.p_range">p_range</a></code></li>
-<li><code><a title="src.py.config.Config.pruneTrees" href="#src.py.config.Config.pruneTrees">pruneTrees</a></code></li>
 <li><code><a title="src.py.config.Config.samples" href="#src.py.config.Config.samples">samples</a></code></li>
 <li><code><a title="src.py.config.Config.samples_range" href="#src.py.config.Config.samples_range">samples_range</a></code></li>
-<li><code><a title="src.py.config.Config.shortTrees" href="#src.py.config.Config.shortTrees">shortTrees</a></code></li>
-<li><code><a title="src.py.config.Config.spillTrees" href="#src.py.config.Config.spillTrees">spillTrees</a></code></li>
 <li><code><a title="src.py.config.Config.support" href="#src.py.config.Config.support">support</a></code></li>
 <li><code><a title="src.py.config.Config.support_range" href="#src.py.config.Config.support_range">support_range</a></code></li>
 <li><code><a title="src.py.config.Config.verbose" href="#src.py.config.Config.verbose">verbose</a></code></li>

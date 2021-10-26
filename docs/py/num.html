@@ -157,7 +157,7 @@ class Num:
     if len(temp) % 2 == 1:
       return temp[middle]
     else:
-      return (temp[middle] + temp[middle - 1]) / 2
+      return round((temp[middle] + temp[middle - 1]) / 2, Config.Round)
   
   &#39;&#39;&#39;
   Discretize values
@@ -395,7 +395,7 @@ We must already know it is a goal
     if len(temp) % 2 == 1:
       return temp[middle]
     else:
-      return (temp[middle] + temp[middle - 1]) / 2
+      return round((temp[middle] + temp[middle - 1]) / 2, Config.Round)
   
   &#39;&#39;&#39;
   Discretize values
@@ -609,7 +609,7 @@ We must already know it is a goal
   if len(temp) % 2 == 1:
     return temp[middle]
   else:
-    return (temp[middle] + temp[middle - 1]) / 2</code></pre>
+    return round((temp[middle] + temp[middle - 1]) / 2, Config.Round)</code></pre>
 </details>
 </dd>
 <dt id="src.py.num.Num.norm"><code class="name flex">

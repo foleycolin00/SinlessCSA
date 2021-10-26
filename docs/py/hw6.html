@@ -43,10 +43,17 @@ branch=[]
 fft = Fft(s, s, branch)
 Config.verbose = True
 
-for b in fft.tree:
-  print(str(b))
-  
-print(fft.best)</code></pre>
+n = 0
+for f in fft.trees:
+  for b in f:
+    print(str(n)+ &#34; &#34; + str(b))
+    n+=1
+  print(n)
+  n+=1
+ 
+print(&#34;\n\n\n--------------BEST PATH------------&#34;)
+print(fft.best)
+print(fft.bestPath)</code></pre>
 </details>
 </section>
 <section>

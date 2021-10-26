@@ -24,7 +24,7 @@ class Fft():
     
     #Baseball trees should be three times as long
     if Config.BASEBALLTREES:
-      Config.FFTLength = 6
+      Config.FFTLength = Config.BaseballFFTLength
     
     self.FFThelper(sample, sample, [], level)
     self.best = self.getBest()
@@ -67,26 +67,33 @@ class Fft():
       leaf,tree = sample.clone(), sample.clone()
       i = 0
       for row in remaining.rows:
-        # print(i)
-        # print(len(strikes))
-        # print("\n")
+        #temp
+        if idea.closeMatches(row, sample.cols):
+          print(idea)
+          print(row[idea.at])
+      
         if Config.BASEBALLTREES:
-          if idea.matches(row):
+          if idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
             if yes:
               yStrikes[i]+=1
             if no:
               nStrikes[i]+=1
-            if (yes and yStrikes[i] == 3) or (no and nStrikes[i] == 3):
-              yStrikes.pop(i)
-              nStrikes.pop(i)
+            if (yes and yStrikes[i] == Config.BaseballStrikes) or (no and nStrikes[i] == Config.BaseballStrikes):
+              if not Config.SPILLTREES and idea.closeMatches(row, sample.cols):
+                yStrikes.pop(i)
+                nStrikes.pop(i)
               leaf.add(row)
               i-=1
             else:
               tree.add(row)
-          else:
+              
+          if not idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
             tree.add(row)
         else:
           (leaf if idea.matches(row) else tree).add(row) # match the rows to leaf, tree
+          if Config.SPILLTREES and idea.closeMatches(row, sample.cols):
+            leaf.add(row)
+            tree.add(row)
         i+=1
       branch1  = deepcopy(branch)
       

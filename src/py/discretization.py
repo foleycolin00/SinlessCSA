@@ -38,3 +38,15 @@ class Discretization:
     elif self.first: return v <= self.hi
     elif self.last : return v >= self.lo
     else          : return self.lo <= v <= self.hi
+    
+  def closeMatches(self, row, cols):
+    if not self.name[0].isupper(): #not for sym
+      return
+    v=cols[self.at].norm(row[self.at])
+    high = cols[self.at].norm(self.hi)
+    low = cols[self.at].norm(self.lo)
+    
+    if   v=="?"   : return False
+    elif self.first: return abs(high-v) <= Config.SpillPercent
+    elif self.last : return abs(low-v) <= Config.SpillPercent
+    else          : return (abs(high-v) <= Config.SpillPercent) or (abs(lo-v) <= Config.SpillPercent)

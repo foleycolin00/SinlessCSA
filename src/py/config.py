@@ -10,8 +10,11 @@ class Config:
   SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
-  BASEBALLTREES = True
+  BASEBALLTREES = False
+  BaseballStrikes = 3
+  BaseballFFTLength = 7
   SPILLTREES = True
+  SpillPercent = .01
   #Explainability
   BINARYCHOPS = True
   PRUNETREES = True

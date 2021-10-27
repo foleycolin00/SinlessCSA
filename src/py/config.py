@@ -12,7 +12,7 @@ class Config:
   #Impermanence
   BASEBALLTREES = False
   BaseballStrikes = 3
-  BaseballFFTLength = 7
+  BaseballFFTLength = 15
   SPILLTREES = False
   SpillPercent = .01
   #Explainability

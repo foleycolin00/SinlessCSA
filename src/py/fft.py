@@ -33,10 +33,10 @@ class Fft():
   '''
   Helper class
   '''
-  def FFThelper(self, remaining, sample, branch, stop = None, level=0, yesStrikes = [], noStrikes = []):
+  def FFThelper(self, remaining, sample, branch, stop = None, level=0, goodStrikes = [], badStrikes = []):
     if Config.BASEBALLTREES and level == 0:
-      yesStrikes = [0 for i in range(len(remaining.rows))]
-      noStrikes = [0 for i in range(len(remaining.rows))]
+      goodStrikes = [0 for i in range(len(remaining.rows))]
+      badStrikes = [0 for i in range(len(remaining.rows))]
       
     if not stop:
       stop = len(sample.rows)**Config.FFTstop   # stopping coding
@@ -62,21 +62,21 @@ class Fft():
       worstIdea = Fft.sortDiscs(self.discs, Discretization.DiscMethod.MINIMIZE)[-1]
     
     for yes,no,idea in [(1,0,bestIdea), (0,1,worstIdea)]: # build 2 trees
-      yStrikes = yesStrikes[:]
-      nStrikes = noStrikes[:]
+      gStrikes = goodStrikes[:]
+      bStrikes = badStrikes[:]
       leaf,tree = sample.clone(), sample.clone()
       i = 0
       for row in remaining.rows:
         if Config.BASEBALLTREES:
           if idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
             if yes:
-              yStrikes[i]+=1
+              gStrikes[i]+=1
             if no:
-              nStrikes[i]+=1
-            if (yes and yStrikes[i] == Config.BaseballStrikes) or (no and nStrikes[i] == Config.BaseballStrikes):
+              bStrikes[i]+=1
+            if (yes and gStrikes[i] == Config.BaseballStrikes) or (no and bStrikes[i] == Config.BaseballStrikes):
               if not Config.SPILLTREES and idea.closeMatches(row, sample.cols):
-                yStrikes.pop(i)
-                nStrikes.pop(i)
+                gStrikes.pop(i)
+                bStrikes.pop(i)
               leaf.add(row)
               i-=1
             else:
@@ -85,10 +85,14 @@ class Fft():
           if not idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
             tree.add(row)
         else:
-          (leaf if idea.matches(row) else tree).add(row) # match the rows to leaf, tree
-          if Config.SPILLTREES and idea.closeMatches(row, sample.cols):
+          if idea.matches(row):
             leaf.add(row)
+            if Config.SPILLTREES:
+              tree.add(row)
+          else:
             tree.add(row)
+            if Config.SPILLTREES:
+              leaf.add(row)
         i+=1
       branch1  = deepcopy(branch)
       
@@ -103,7 +107,7 @@ class Fft():
         branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows))] # make a final leaf
         self.trees.append(branch1)
       else:
-        self.FFThelper(tree, sample, branch1,stop,level+1, yStrikes, nStrikes)
+        self.FFThelper(tree, sample, branch1,stop,level+1, gStrikes, bStrikes)
   
   '''
   Helper to count number of matches for a disc
@@ -132,14 +136,11 @@ class Fft():
   def sortDiscsShort(discs, method, rows):
     arr = None
     if method == Discretization.DiscMethod.MAXIMIZE:
-      arr =  sorted(discs, key=lambda d: d.best**Config.support / (d.best+d.rest))[::-1]
+      arr =  sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) ** Fft.countMatches(d, rows) )[::-1]
     elif method == Discretization.DiscMethod.MINIMIZE:
-      arr = sorted(discs, key=lambda d: d.best**Config.support / (d.best+d.rest))[::-1]
+      arr = sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) ** Fft.countMatches(d, rows))[::-1]
     else:
       arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))
-    
-    arr = arr[0:Config.ShortTreesNum]
-    return sorted(discs, key=lambda d: Fft.countMatches(d, rows))
   
   '''
   Gets the best leaf from the FFT tree

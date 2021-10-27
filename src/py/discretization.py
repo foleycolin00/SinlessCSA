@@ -49,4 +49,4 @@ class Discretization:
     if   v=="?"   : return False
     elif self.first: return abs(high-v) <= Config.SpillPercent
     elif self.last : return abs(low-v) <= Config.SpillPercent
-    else          : return (abs(high-v) <= Config.SpillPercent) or (abs(lo-v) <= Config.SpillPercent)
+    else          : return (abs(high-v) <= Config.SpillPercent) or (abs(low-v) <= Config.SpillPercent)

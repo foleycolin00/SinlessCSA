@@ -43,7 +43,10 @@ class Fft():
     
     #use the discretize method to get all of our options
     if level == 0 or not Config.DISCLESS:
-      self.discs = remaining.discretize()
+      if Config.BINARYCHOPS:
+        self.discs = remaining.binaryChops()
+      else:
+        self.discs = remaining.discretize()
     else:
       #Remove discs that do not sort anything
       for d in self.discs:
@@ -98,13 +101,13 @@ class Fft():
       
       #Do not add if the split leaves either the tree or the leaf with 0 nodes, just stop
       if len(tree.rows) != 0 and (len(leaf.rows) != 0 or Config.BASEBALLTREES):
-        branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
+        branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), at=idea.at, disc = idea)]
       
       if len(tree.rows) == 0: # if this break just leaves nothing left
-        branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
+        branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), at=idea.at)] # make a final leaf
         self.trees.append(branch1)
       elif len(tree.rows) <= stop or level >= Config.FFTLength or (len(leaf.rows) == 0 and not Config.BASEBALLTREES): #if it hits stopping criteria
-        branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows))] # make a final leaf
+        branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows), at=idea.at)] # make a final leaf
         self.trees.append(branch1)
       else:
         self.FFThelper(tree, sample, branch1,stop,level+1, gStrikes, bStrikes)
@@ -141,6 +144,7 @@ class Fft():
       arr = sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) ** Fft.countMatches(d, rows))[::-1]
     else:
       arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))
+    return arr
   
   '''
   Gets the best leaf from the FFT tree

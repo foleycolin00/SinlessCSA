@@ -6,11 +6,12 @@ class Branch:
   '''
   Initilization for the Discretization class
   '''
-  def __init__(self, typ, level, mid, n, disc = None):
+  def __init__(self, typ, level, mid, n, at, disc = None):
     self.typ = typ
     self.level = level
     self.mid = mid
     self.n = n
+    self.at = at
     
     self.disc = disc
   

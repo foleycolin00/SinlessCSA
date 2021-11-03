@@ -335,3 +335,28 @@ class Sample:
   '''
   def ys(self, fmt):
     return 
+  
+  '''
+  Discretize with Binary Chops
+  '''
+  def binaryChops(self):
+    arr = []
+    clusters = self.divs()
+    best, worst = clusters[0], clusters[-1]
+    for i, x in enumerate(self.x):
+      if isinstance(x, Num): 
+        #Count the best and worst in this new range
+        bestCount = len([y for y in best.x[i]._all() if y <= x.mid()])
+        worstCount = len([y for y in worst.x[i]._all() if y <= x.mid()])
+        if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+          arr.append(Discretization(at=x.at, name=x.name, lo=x.lo, hi=x.mid(), best= bestCount, rest=worstCount, first = True, last = False))
+        
+        bestCount = len([y for y in best.x[i]._all() if y > x.mid()])
+        worstCount = len([y for y in worst.x[i]._all() if y > x.mid()])
+        if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+          arr.append(Discretization(at=x.at, name=x.name, lo=x.mid(), hi=x.hi, best= bestCount, rest=worstCount, first = False, last = True))
+      else:
+        for good, bad in zip(best.x, worst.x):
+          for d in good.discretize(good, bad):
+            arr.append(d)
+    return arr;

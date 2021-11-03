@@ -11,12 +11,12 @@ class Config:
   ShortTreesNum = 5
   #Impermanence
   BASEBALLTREES = False
-  BaseballStrikes = 3
-  BaseballFFTLength = 15
+  BaseballStrikes = 2
+  BaseballFFTLength = 10
   SPILLTREES = False
   SpillPercent = .01
   #Explainability
-  BINARYCHOPS = False
+  BINARYCHOPS = True
   PRUNETREES = False
 
   bins =  .5            #Min bin size n**bins for discretize

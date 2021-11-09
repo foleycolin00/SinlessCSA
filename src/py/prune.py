@@ -5,6 +5,38 @@ import numpy as np
 '''
 Class that handles pruning
 '''
+
+  # a <= x
+  # b <= y
+  # where y > x
+
+  # a >= x
+  # b >= y
+  # where y < x
+
+  # x <= a <= w
+  # y <= b <= z
+  # where y < x
+  # where z > w
+
+  # we dont care about == because output is too specific to merge and requires more changes
+  # the changes would be too distinct, the rules stand on their own so to speak
+
+  # would a following item flip sign? probably dont care about y <= a <= x
+  # a <= x
+  # b >= y
+
+  # a >= x
+  # b <= y
+  # x <= a <= y
+
+
+
+  # x <= a <= y
+  # a <= z
+  
+  # x <= a <= z
+  
 #tree is a list of branches 
 class Prune:    
     def pruneBranches(trees):
@@ -16,26 +48,28 @@ class Prune:
                 j = i + 1
                 branch1 = tree[i]
                 branch2 = tree[j]
-                if branch1.disc and branch2.disc and (branch1.disc.first or branch1.disc.last): 
+                if branch1.disc and branch2.disc: 
+                    if branch1.typ == branch2.typ and branch1.disc.name == branch2.disc.name and (branch1.disc.first == branch2.disc.first or branch1.disc.last == branch2.disc.last):
+                        if branch1.disc.lo != branch1.disc.hi and branch2.disc.lo != branch2.disc.hi:
+                            print()
+                            print(str(branch1))
+                            print(str(branch2))
                     
-                    if branch1.typ == branch2.typ and branch1.disc.name == branch2.disc.name and (branch1.disc.first == branch2.disc.first or branch1.disc.last == branch2.disc.last): 
-                        print()
-                        print(str(branch1))
-                        print(str(branch2))
-                
-                        for z in branch2.leaf.rows:
-                            branch1.leaf.add(z)
-                        
-                        branch1.mid = str(branch1.leaf)
-                        branch1.n = len(branch1.leaf.rows)
+                            for z in branch2.leaf.rows:
+                                branch1.leaf.add(z)
+                            
+                            branch1.mid = str(branch1.leaf)
+                            branch1.n = len(branch1.leaf.rows)
 
-                        if branch1.disc.first and branch2.disc.first:
-                            branch1.disc.hi = branch2.disc.hi
+                            if branch1.disc.first:
+                                branch1.disc.hi = branch2.disc.hi
+                            else:
+                                branch1.disc.lo = branch2.disc.lo
 
-                        tree.pop(j)
-                        #need to update the levels 
-                        print(str(tree[i]))
-                        print()
+                            tree.pop(j)
+                            #need to update the levels 
+                            print(str(tree[i]))
+                            print()
                 i+=1            
         
 

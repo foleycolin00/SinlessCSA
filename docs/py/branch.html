@@ -35,22 +35,19 @@ class Branch:
   &#39;&#39;&#39;
   Initilization for the Discretization class
   &#39;&#39;&#39;
-  def __init__(self, typ, level, mid, n, at, disc = None):
+  def __init__(self, typ, level, leaf, at, disc = None):
     self.typ = typ
     self.level = level
-    self.mid = mid
-    self.n = n
     self.at = at
-    
+    self.leaf = leaf
+    self.mid = str(self.leaf)
+    self.n = len(self.leaf.rows)
     self.disc = disc
 
-    #added variables for pruning 
   
   def __str__(self):
-    if self.disc and not Config.PRUNETREES:
+    if self.disc:
       return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.disc.show()} then {self.mid} ({self.n})&#34;)
-    elif Config.PRUNETREES:
-       return str(&#34;yeehaw&#34;)
     else:
       return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.mid} ({self.n})&#34;)</code></pre>
 </details>
@@ -66,7 +63,7 @@ class Branch:
 <dl>
 <dt id="src.py.branch.Branch"><code class="flex name class">
 <span>class <span class="ident">Branch</span></span>
-<span>(</span><span>typ, level, mid, n, at, disc=None)</span>
+<span>(</span><span>typ, level, leaf, at, disc=None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Initilization for the Discretization class</p></div>
@@ -79,22 +76,19 @@ class Branch:
   &#39;&#39;&#39;
   Initilization for the Discretization class
   &#39;&#39;&#39;
-  def __init__(self, typ, level, mid, n, at, disc = None):
+  def __init__(self, typ, level, leaf, at, disc = None):
     self.typ = typ
     self.level = level
-    self.mid = mid
-    self.n = n
     self.at = at
-    
+    self.leaf = leaf
+    self.mid = str(self.leaf)
+    self.n = len(self.leaf.rows)
     self.disc = disc
 
-    #added variables for pruning 
   
   def __str__(self):
-    if self.disc and not Config.PRUNETREES:
+    if self.disc:
       return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.disc.show()} then {self.mid} ({self.n})&#34;)
-    elif Config.PRUNETREES:
-       return str(&#34;yeehaw&#34;)
     else:
       return str(f&#34;{self.typ} {&#39;if&#39; if self.level == 0 else &#39;elseif&#39; if self.disc else &#39;else&#39;} {self.mid} ({self.n})&#34;)</code></pre>
 </details>

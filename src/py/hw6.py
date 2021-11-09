@@ -14,7 +14,7 @@ s.fromFile(myPath + "/data/auto93.csv")
 #s.fromFile(myPath + "/data/heart_cleveland_upload.csv")
 
 Config.verbose = False
-fft = Fft(s)
+fft = Fft(s, prune = True)
 Config.verbose = True
 
 n = 0
@@ -24,13 +24,14 @@ for f in fft.trees:
     n+=1
   print(n)
   n+=1
-
+'''
 if Config.PRUNETREES:
   for tree in fft.trees:
     #f = newClass.function(f)
     Prune.pruneBranches(tree)
     #print(str(tree))
     print("---------------------------------------------------------------------")
+'''
   
 '''print("\n\n\n--------------BEST PATH------------")
 print(fft.best)

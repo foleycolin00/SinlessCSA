@@ -3,6 +3,8 @@ from discretization import *
 from copy import deepcopy
 from branch import *
 from sample import *
+from prune import *
+
 '''
 Class for Fast and Frugal Tree
 '''
@@ -17,7 +19,7 @@ class Fft():
   :param stop: the stop parameter
   :param level: the level of the tree
   '''
-  def __init__(self, sample, level=0):
+  def __init__(self, sample, level=0, prune = False):
     self.sample = sample
     self.trees = [] # the branches
     self.leaves =  [] # the leaves
@@ -27,6 +29,11 @@ class Fft():
       Config.FFTLength = Config.BaseballFFTLength
     
     self.FFThelper(sample, sample, [], level)
+
+    #prune here as an option
+    if prune:
+      Prune.pruneBranches(self.trees)
+
     self.best = self.getBest()
     self.bestPath = self.getBestPath()
     

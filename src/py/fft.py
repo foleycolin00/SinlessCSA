@@ -108,7 +108,7 @@ class Fft():
       
       #Do not add if the split leaves either the tree or the leaf with 0 nodes, just stop
       if len(tree.rows) != 0 and (len(leaf.rows) != 0 or Config.BASEBALLTREES):
-        branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), at=idea.at, disc = idea)]
+        branch1 += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at, disc = idea)]
         
         #different branches for prune trees
         #if Config.PRUNETREES:
@@ -116,7 +116,7 @@ class Fft():
 
       
       if len(tree.rows) == 0: # if this break just leaves nothing left
-        branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), at=idea.at)] # make a final leaf
+        branch1  += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at)] # make a final leaf
         
         #different branches for prune trees
         #if Config.PRUNETREES:
@@ -124,7 +124,7 @@ class Fft():
 
         self.trees.append(branch1)
       elif len(tree.rows) <= stop or level >= Config.FFTLength or (len(leaf.rows) == 0 and not Config.BASEBALLTREES): #if it hits stopping criteria
-        branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows), at=idea.at)] # make a final leaf
+        branch1  += [Branch(typ = no, level= level, leaf = deepcopy(tree), at=idea.at)] # make a final leaf
        
         #different branches for prune trees
         #if Config.PRUNETREES:

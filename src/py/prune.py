@@ -7,21 +7,39 @@ Class that handles pruning
 '''
 #tree is a list of branches 
 class Prune:    
-    def pruneBranches(tree):
+    def pruneBranches(trees):
 
         # [ a, b, c, d, e]
+        for tree in trees:
+            i = 0
+            while(i != (len(tree) - 1)):
+                j = i + 1
+                branch1 = tree[i]
+                branch2 = tree[j]
+                if branch1.disc and branch2.disc and (branch1.disc.first or branch1.disc.last): 
+                    
+                    if branch1.typ == branch2.typ and branch1.disc.name == branch2.disc.name and (branch1.disc.first == branch2.disc.first or branch1.disc.last == branch2.disc.last): 
+                        print()
+                        print(str(branch1))
+                        print(str(branch2))
+                
+                        for z in branch2.leaf.rows:
+                            branch1.leaf.add(z)
+                        
+                        branch1.mid = str(branch1.leaf)
+                        branch1.n = len(branch1.leaf.rows)
 
-        for i in range(0, len(tree) - 1):
-            j = i + 1
-            branch1 = tree[i]
-            branch2 = tree[j]
+                        if branch1.disc.first and branch2.disc.first:
+                            branch1.disc.hi = branch2.disc.hi
 
-            if branch1.typ == branch2.typ and branch1.name == branch2.name:
-                print(str(branch1))
-                print(str(branch2))
-            
+                        tree.pop(j)
+                        #need to update the levels 
+                        print(str(tree[i]))
+                        print()
+                i+=1            
+        
 
-
+                
 
 
         '''

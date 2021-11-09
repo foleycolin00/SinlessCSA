@@ -7,16 +7,15 @@ class Branch:
   '''
   Initilization for the Discretization class
   '''
-  def __init__(self, typ, level, mid, n, at, disc = None):
+  def __init__(self, typ, level, leaf, at, disc = None):
     self.typ = typ
     self.level = level
-    self.mid = mid
-    self.n = n
     self.at = at
-    
+    self.leaf = leaf
+    self.mid = str(self.leaf)
+    self.n = len(self.leaf.rows)
     self.disc = disc
 
-    #added variables for pruning 
   
   def __str__(self):
     if self.disc:

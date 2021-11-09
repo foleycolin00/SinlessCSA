@@ -14,6 +14,7 @@ Class that handles pruning
   # b >= y
   # where y < x
 
+  # ranges could not be overlapping, not doing range extensions either
   # x <= a <= w
   # y <= b <= z
   # where y < x
@@ -22,21 +23,16 @@ Class that handles pruning
   # we dont care about == because output is too specific to merge and requires more changes
   # the changes would be too distinct, the rules stand on their own so to speak
 
-  # would a following item flip sign? probably dont care about y <= a <= x
+  # flip sign, a <= 0.6 and b >= 2.6 confirmed
   # a <= x
   # b >= y
+  # must be a <= 0.6 or a >= 2.6
+  # so flip signs are always an or statement and not a range
 
-  # a >= x
-  # b <= y
-  # x <= a <= y
-
-
-
+  # the z rule can violate the first range, doesnt extend, would be an or
   # x <= a <= y
   # a <= z
-  
-  # x <= a <= z
-  
+
 #tree is a list of branches 
 class Prune:    
     def pruneBranches(trees):
@@ -70,6 +66,7 @@ class Prune:
                             #need to update the levels 
                             print(str(tree[i]))
                             print()
+                            i-=1
                 i+=1            
         
 

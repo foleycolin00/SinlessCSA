@@ -8,9 +8,7 @@ s = Sample()
 myPath = os.path.dirname(os.path.abspath(__file__))
 myPath = myPath[:myPath.rindex("/")]
 myPath = myPath[:myPath.rindex("/")]
-#s.fromFile(myPath + "/data/pom3a.csv")
-#s.fromFile(myPath + "/data/auto93.csv")
-s.fromFile(myPath + "/data/heart_cleveland_upload.csv")
+s.fromFile(myPath + Config.dataSet)
 
 Config.verbose = False
 fft = Fft(s)
@@ -35,7 +33,7 @@ for f in fft.trees:
   treeCorrect = 0;
   treeIncorrect = 0;
   firstRow = True
-  for row in readCSV(myPath + "/data/heart_cleveland_upload.csv"):
+  for row in readCSV(myPath + Config.dataSet):
     if firstRow:
       firstRow = False
     else:
@@ -48,6 +46,7 @@ for f in fft.trees:
               treeCorrect+=1
             else:
               treeIncorrect+=1
+            break;
         #last row
         else:
           if b.typ == result:

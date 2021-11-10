@@ -5,9 +5,16 @@ import math
 Class for all of the configurations/hyperparameters
 '''
 class Config:
+  #dataSet = "/data/auto93.csv"
+  #dataSet = "/data/pom3a.csv"
+  
+  #dataSet = "/data/heart_cleveland_upload.csv"
+  dataSet = "/data/change_job.csv"
+  #dataSet = "/data/credit_card_leads.csv"
+  
   #Time
   DISCLESS = False
-  SHORTTREES = False
+  SHORTTREES = True
   ShortTreesNum = 5
   #Impermanence
   BASEBALLTREES = False
@@ -16,7 +23,7 @@ class Config:
   SPILLTREES = False
   SpillPercent = .01
   #Explainability
-  BINARYCHOPS = True
+  BINARYCHOPS = False
   PRUNETREES = False
 
   bins =  .5            #Min bin size n**bins for discretize

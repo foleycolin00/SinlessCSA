@@ -161,9 +161,9 @@ class Fft():
   def sortDiscsShort(discs, method, rows):
     arr = None
     if method == Discretization.DiscMethod.MAXIMIZE:
-      arr =  sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) * Fft.countMatches(d, rows) )[::-1]
+      arr =  sorted(discs, key=lambda d: Fft.countMatches(d, rows) ** (d.best**Config.support / (d.best+d.rest)))[::-1]
     elif method == Discretization.DiscMethod.MINIMIZE:
-      arr = sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) * Fft.countMatches(d, rows))[::-1]
+      arr = sorted(discs, key=lambda d: Fft.countMatches(d, rows) ** (d.best**Config.support / (d.best+d.rest)))[::-1]
     else:
       arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))
     return arr

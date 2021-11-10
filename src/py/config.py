@@ -17,7 +17,7 @@ class Config:
   SpillPercent = .01
   #Explainability
   BINARYCHOPS = False
-  PRUNETREES = True
+  PRUNETREES = False
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections

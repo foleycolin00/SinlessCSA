@@ -1,5 +1,6 @@
 from enum import *
 from config import *
+from readCSV import *
 '''
 Class for holding discretizations created for decision trees
 '''
@@ -32,12 +33,13 @@ class Discretization:
     elif self.last : return f"{self.name} >= {self.lo}"
     else: return f"{self.lo} <= {self.name} <= {self.hi}"
   
+  #Note that after the prune class was made; there was a type error that was introduced that i used convertNumber() from the readCSV file to get around! 
   def matches(self, row):
     v=row[self.at]
     if   v=="?"   : return True
-    elif self.first: return v <= self.hi
-    elif self.last : return v >= self.lo
-    else          : return self.lo <= v <= self.hi
+    elif self.first: return convertNumber(v) <= convertNumber(self.hi)
+    elif self.last : return convertNumber(v) >= convertNumber(self.lo)
+    else          : return convertNumber(self.lo) <= convertNumber(v) <= convertNumber(self.hi)
     
   def closeMatches(self, row, cols):
     if not self.name[0].isupper(): #not for sym

@@ -8,13 +8,13 @@ class Config:
   #dataSet = "/data/auto93.csv"
   #dataSet = "/data/pom3a.csv"
   
-  #dataSet = "/data/heart_cleveland_upload.csv"
-  dataSet = "/data/change_job.csv"
+  dataSet = "/data/heart_cleveland_upload.csv"
+  #dataSet = "/data/change_job.csv"
   #dataSet = "/data/credit_card_leads.csv"
   
   #Time
-  DISCLESS = False
-  SHORTTREES = True
+  DISCLESS = True
+  SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
   BASEBALLTREES = False

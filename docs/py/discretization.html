@@ -28,6 +28,7 @@
 </summary>
 <pre><code class="python">from enum import *
 from config import *
+from readCSV import *
 &#39;&#39;&#39;
 Class for holding discretizations created for decision trees
 &#39;&#39;&#39;
@@ -60,12 +61,13 @@ class Discretization:
     elif self.last : return f&#34;{self.name} &gt;= {self.lo}&#34;
     else: return f&#34;{self.lo} &lt;= {self.name} &lt;= {self.hi}&#34;
   
+  #Note that after the prune class was made; there was a type error that was introduced that i used convertNumber() from the readCSV file to get around! 
   def matches(self, row):
     v=row[self.at]
     if   v==&#34;?&#34;   : return True
-    elif self.first: return v &lt;= self.hi
-    elif self.last : return v &gt;= self.lo
-    else          : return self.lo &lt;= v &lt;= self.hi
+    elif self.first: return convertNumber(v) &lt;= convertNumber(self.hi)
+    elif self.last : return convertNumber(v) &gt;= convertNumber(self.lo)
+    else          : return convertNumber(self.lo) &lt;= convertNumber(v) &lt;= convertNumber(self.hi)
     
   def closeMatches(self, row, cols):
     if not self.name[0].isupper(): #not for sym
@@ -128,12 +130,13 @@ class Discretization:
     elif self.last : return f&#34;{self.name} &gt;= {self.lo}&#34;
     else: return f&#34;{self.lo} &lt;= {self.name} &lt;= {self.hi}&#34;
   
+  #Note that after the prune class was made; there was a type error that was introduced that i used convertNumber() from the readCSV file to get around! 
   def matches(self, row):
     v=row[self.at]
     if   v==&#34;?&#34;   : return True
-    elif self.first: return v &lt;= self.hi
-    elif self.last : return v &gt;= self.lo
-    else          : return self.lo &lt;= v &lt;= self.hi
+    elif self.first: return convertNumber(v) &lt;= convertNumber(self.hi)
+    elif self.last : return convertNumber(v) &gt;= convertNumber(self.lo)
+    else          : return convertNumber(self.lo) &lt;= convertNumber(v) &lt;= convertNumber(self.hi)
     
   def closeMatches(self, row, cols):
     if not self.name[0].isupper(): #not for sym
@@ -190,9 +193,9 @@ class Discretization:
 <pre><code class="python">def matches(self, row):
   v=row[self.at]
   if   v==&#34;?&#34;   : return True
-  elif self.first: return v &lt;= self.hi
-  elif self.last : return v &gt;= self.lo
-  else          : return self.lo &lt;= v &lt;= self.hi</code></pre>
+  elif self.first: return convertNumber(v) &lt;= convertNumber(self.hi)
+  elif self.last : return convertNumber(v) &gt;= convertNumber(self.lo)
+  else          : return convertNumber(self.lo) &lt;= convertNumber(v) &lt;= convertNumber(self.hi)</code></pre>
 </details>
 </dd>
 <dt id="src.py.discretization.Discretization.show"><code class="name flex">

@@ -3,6 +3,8 @@ from discretization import *
 from copy import deepcopy
 from branch import *
 from sample import *
+from prune import *
+
 '''
 Class for Fast and Frugal Tree
 '''
@@ -17,7 +19,7 @@ class Fft():
   :param stop: the stop parameter
   :param level: the level of the tree
   '''
-  def __init__(self, sample, level=0):
+  def __init__(self, sample, level=0, prune = False):
     self.sample = sample
     self.trees = [] # the branches
     self.leaves =  [] # the leaves
@@ -27,6 +29,11 @@ class Fft():
       Config.FFTLength = Config.BaseballFFTLength
     
     self.FFThelper(sample, sample, [], level)
+
+    #prune here as an option
+    if Config.PRUNETREES:
+      Prune.pruneBranches(self.trees)
+
     self.best = self.getBest()
     self.bestPath = self.getBestPath()
     
@@ -101,13 +108,28 @@ class Fft():
       
       #Do not add if the split leaves either the tree or the leaf with 0 nodes, just stop
       if len(tree.rows) != 0 and (len(leaf.rows) != 0 or Config.BASEBALLTREES):
-        branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), at=idea.at, disc = idea)]
+        branch1 += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at, disc = idea)]
+        
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+          #branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
       
       if len(tree.rows) == 0: # if this break just leaves nothing left
-        branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), at=idea.at)] # make a final leaf
+        branch1  += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at)] # make a final leaf
+        
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+         # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
         self.trees.append(branch1)
       elif len(tree.rows) <= stop or level >= Config.FFTLength or (len(leaf.rows) == 0 and not Config.BASEBALLTREES): #if it hits stopping criteria
-        branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows), at=idea.at)] # make a final leaf
+        branch1  += [Branch(typ = no, level= level, leaf = deepcopy(tree), at=idea.at)] # make a final leaf
+       
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+         # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
         self.trees.append(branch1)
       else:
         self.FFThelper(tree, sample, branch1,stop,level+1, gStrikes, bStrikes)

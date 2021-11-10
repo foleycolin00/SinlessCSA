@@ -31,6 +31,8 @@ from discretization import *
 from copy import deepcopy
 from branch import *
 from sample import *
+from prune import *
+
 &#39;&#39;&#39;
 Class for Fast and Frugal Tree
 &#39;&#39;&#39;
@@ -45,7 +47,7 @@ class Fft():
   :param stop: the stop parameter
   :param level: the level of the tree
   &#39;&#39;&#39;
-  def __init__(self, sample, level=0):
+  def __init__(self, sample, level=0, prune = False):
     self.sample = sample
     self.trees = [] # the branches
     self.leaves =  [] # the leaves
@@ -55,6 +57,11 @@ class Fft():
       Config.FFTLength = Config.BaseballFFTLength
     
     self.FFThelper(sample, sample, [], level)
+
+    #prune here as an option
+    if Config.PRUNETREES:
+      Prune.pruneBranches(self.trees)
+
     self.best = self.getBest()
     self.bestPath = self.getBestPath()
     
@@ -71,7 +78,10 @@ class Fft():
     
     #use the discretize method to get all of our options
     if level == 0 or not Config.DISCLESS:
-      self.discs = remaining.discretize()
+      if Config.BINARYCHOPS:
+        self.discs = remaining.binaryChops()
+      else:
+        self.discs = remaining.discretize()
     else:
       #Remove discs that do not sort anything
       for d in self.discs:
@@ -126,13 +136,28 @@ class Fft():
       
       #Do not add if the split leaves either the tree or the leaf with 0 nodes, just stop
       if len(tree.rows) != 0 and (len(leaf.rows) != 0 or Config.BASEBALLTREES):
-        branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
+        branch1 += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at, disc = idea)]
+        
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+          #branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
       
       if len(tree.rows) == 0: # if this break just leaves nothing left
-        branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
+        branch1  += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at)] # make a final leaf
+        
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+         # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
         self.trees.append(branch1)
       elif len(tree.rows) &lt;= stop or level &gt;= Config.FFTLength or (len(leaf.rows) == 0 and not Config.BASEBALLTREES): #if it hits stopping criteria
-        branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows))] # make a final leaf
+        branch1  += [Branch(typ = no, level= level, leaf = deepcopy(tree), at=idea.at)] # make a final leaf
+       
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+         # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
         self.trees.append(branch1)
       else:
         self.FFThelper(tree, sample, branch1,stop,level+1, gStrikes, bStrikes)
@@ -169,6 +194,7 @@ class Fft():
       arr = sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) ** Fft.countMatches(d, rows))[::-1]
     else:
       arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))
+    return arr
   
   &#39;&#39;&#39;
   Gets the best leaf from the FFT tree
@@ -225,7 +251,7 @@ class Fft():
 <dl>
 <dt id="src.py.fft.Fft"><code class="flex name class">
 <span>class <span class="ident">Fft</span></span>
-<span>(</span><span>sample, level=0)</span>
+<span>(</span><span>sample, level=0, prune=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Initilize the FFT tree
@@ -250,7 +276,7 @@ class Fft():
   :param stop: the stop parameter
   :param level: the level of the tree
   &#39;&#39;&#39;
-  def __init__(self, sample, level=0):
+  def __init__(self, sample, level=0, prune = False):
     self.sample = sample
     self.trees = [] # the branches
     self.leaves =  [] # the leaves
@@ -260,6 +286,11 @@ class Fft():
       Config.FFTLength = Config.BaseballFFTLength
     
     self.FFThelper(sample, sample, [], level)
+
+    #prune here as an option
+    if Config.PRUNETREES:
+      Prune.pruneBranches(self.trees)
+
     self.best = self.getBest()
     self.bestPath = self.getBestPath()
     
@@ -276,7 +307,10 @@ class Fft():
     
     #use the discretize method to get all of our options
     if level == 0 or not Config.DISCLESS:
-      self.discs = remaining.discretize()
+      if Config.BINARYCHOPS:
+        self.discs = remaining.binaryChops()
+      else:
+        self.discs = remaining.discretize()
     else:
       #Remove discs that do not sort anything
       for d in self.discs:
@@ -331,13 +365,28 @@ class Fft():
       
       #Do not add if the split leaves either the tree or the leaf with 0 nodes, just stop
       if len(tree.rows) != 0 and (len(leaf.rows) != 0 or Config.BASEBALLTREES):
-        branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
+        branch1 += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at, disc = idea)]
+        
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+          #branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
       
       if len(tree.rows) == 0: # if this break just leaves nothing left
-        branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
+        branch1  += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at)] # make a final leaf
+        
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+         # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
         self.trees.append(branch1)
       elif len(tree.rows) &lt;= stop or level &gt;= Config.FFTLength or (len(leaf.rows) == 0 and not Config.BASEBALLTREES): #if it hits stopping criteria
-        branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows))] # make a final leaf
+        branch1  += [Branch(typ = no, level= level, leaf = deepcopy(tree), at=idea.at)] # make a final leaf
+       
+        #different branches for prune trees
+        #if Config.PRUNETREES:
+         # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
         self.trees.append(branch1)
       else:
         self.FFThelper(tree, sample, branch1,stop,level+1, gStrikes, bStrikes)
@@ -374,6 +423,7 @@ class Fft():
       arr = sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) ** Fft.countMatches(d, rows))[::-1]
     else:
       arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))
+    return arr
   
   &#39;&#39;&#39;
   Gets the best leaf from the FFT tree
@@ -439,7 +489,10 @@ class Fft():
   
   #use the discretize method to get all of our options
   if level == 0 or not Config.DISCLESS:
-    self.discs = remaining.discretize()
+    if Config.BINARYCHOPS:
+      self.discs = remaining.binaryChops()
+    else:
+      self.discs = remaining.discretize()
   else:
     #Remove discs that do not sort anything
     for d in self.discs:
@@ -494,13 +547,28 @@ class Fft():
     
     #Do not add if the split leaves either the tree or the leaf with 0 nodes, just stop
     if len(tree.rows) != 0 and (len(leaf.rows) != 0 or Config.BASEBALLTREES):
-      branch1 += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows), disc = idea)]
+      branch1 += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at, disc = idea)]
+      
+      #different branches for prune trees
+      #if Config.PRUNETREES:
+        #branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
     
     if len(tree.rows) == 0: # if this break just leaves nothing left
-      branch1  += [Branch(typ = yes, level= level, mid = str(leaf), n = len(leaf.rows))] # make a final leaf
+      branch1  += [Branch(typ = yes, level= level, leaf = deepcopy(leaf), at=idea.at)] # make a final leaf
+      
+      #different branches for prune trees
+      #if Config.PRUNETREES:
+       # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
       self.trees.append(branch1)
     elif len(tree.rows) &lt;= stop or level &gt;= Config.FFTLength or (len(leaf.rows) == 0 and not Config.BASEBALLTREES): #if it hits stopping criteria
-      branch1  += [Branch(typ = no, level= level, mid = str(tree), n = len(tree.rows))] # make a final leaf
+      branch1  += [Branch(typ = no, level= level, leaf = deepcopy(tree), at=idea.at)] # make a final leaf
+     
+      #different branches for prune trees
+      #if Config.PRUNETREES:
+       # branch1 += [Branch(typ = yes, level= level, leafList = leaf, at=idea.at, disc = idea)]
+
       self.trees.append(branch1)
     else:
       self.FFThelper(tree, sample, branch1,stop,level+1, gStrikes, bStrikes)</code></pre>
@@ -614,7 +682,8 @@ class Fft():
   elif method == Discretization.DiscMethod.MINIMIZE:
     arr = sorted(discs, key=lambda d: (d.best**Config.support / (d.best+d.rest)) ** Fft.countMatches(d, rows))[::-1]
   else:
-    arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))</code></pre>
+    arr = sorted(discs, key=lambda d: 1 / (d.best+d.rest))
+  return arr</code></pre>
 </details>
 </dd>
 </dl>

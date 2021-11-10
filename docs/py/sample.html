@@ -362,7 +362,32 @@ class Sample:
   Report the central tendcany of goals
   &#39;&#39;&#39;
   def ys(self, fmt):
-    return </code></pre>
+    return 
+  
+  &#39;&#39;&#39;
+  Discretize with Binary Chops
+  &#39;&#39;&#39;
+  def binaryChops(self):
+    arr = []
+    clusters = self.divs()
+    best, worst = clusters[0], clusters[-1]
+    for i, x in enumerate(self.x):
+      if isinstance(x, Num): 
+        #Count the best and worst in this new range
+        bestCount = len([y for y in best.x[i]._all() if y &lt;= x.mid()])
+        worstCount = len([y for y in worst.x[i]._all() if y &lt;= x.mid()])
+        if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+          arr.append(Discretization(at=x.at, name=x.name, lo=x.lo, hi=x.mid(), best= bestCount, rest=worstCount, first = True, last = False))
+        
+        bestCount = len([y for y in best.x[i]._all() if y &gt; x.mid()])
+        worstCount = len([y for y in worst.x[i]._all() if y &gt; x.mid()])
+        if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+          arr.append(Discretization(at=x.at, name=x.name, lo=x.mid(), hi=x.hi, best= bestCount, rest=worstCount, first = False, last = True))
+      else:
+        for good, bad in zip(best.x, worst.x):
+          for d in good.discretize(good, bad):
+            arr.append(d)
+    return arr;</code></pre>
 </details>
 </section>
 <section>
@@ -736,7 +761,32 @@ klass = klass value</p></div>
   Report the central tendcany of goals
   &#39;&#39;&#39;
   def ys(self, fmt):
-    return </code></pre>
+    return 
+  
+  &#39;&#39;&#39;
+  Discretize with Binary Chops
+  &#39;&#39;&#39;
+  def binaryChops(self):
+    arr = []
+    clusters = self.divs()
+    best, worst = clusters[0], clusters[-1]
+    for i, x in enumerate(self.x):
+      if isinstance(x, Num): 
+        #Count the best and worst in this new range
+        bestCount = len([y for y in best.x[i]._all() if y &lt;= x.mid()])
+        worstCount = len([y for y in worst.x[i]._all() if y &lt;= x.mid()])
+        if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+          arr.append(Discretization(at=x.at, name=x.name, lo=x.lo, hi=x.mid(), best= bestCount, rest=worstCount, first = True, last = False))
+        
+        bestCount = len([y for y in best.x[i]._all() if y &gt; x.mid()])
+        worstCount = len([y for y in worst.x[i]._all() if y &gt; x.mid()])
+        if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+          arr.append(Discretization(at=x.at, name=x.name, lo=x.mid(), hi=x.hi, best= bestCount, rest=worstCount, first = False, last = True))
+      else:
+        for good, bad in zip(best.x, worst.x):
+          for d in good.discretize(good, bad):
+            arr.append(d)
+    return arr;</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -782,6 +832,38 @@ klass = klass value</p></div>
     s2 = s2 - math.pow(e, w * (y-x)/n)
   #&#34;row1 is better than row2&#34;
   return s1/n &lt; s2/n</code></pre>
+</details>
+</dd>
+<dt id="src.py.sample.Sample.binaryChops"><code class="name flex">
+<span>def <span class="ident">binaryChops</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def binaryChops(self):
+  arr = []
+  clusters = self.divs()
+  best, worst = clusters[0], clusters[-1]
+  for i, x in enumerate(self.x):
+    if isinstance(x, Num): 
+      #Count the best and worst in this new range
+      bestCount = len([y for y in best.x[i]._all() if y &lt;= x.mid()])
+      worstCount = len([y for y in worst.x[i]._all() if y &lt;= x.mid()])
+      if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+        arr.append(Discretization(at=x.at, name=x.name, lo=x.lo, hi=x.mid(), best= bestCount, rest=worstCount, first = True, last = False))
+      
+      bestCount = len([y for y in best.x[i]._all() if y &gt; x.mid()])
+      worstCount = len([y for y in worst.x[i]._all() if y &gt; x.mid()])
+      if (bestCount != 0 or worstCount!=0) and (bestCount != len(best.x[i]._all()) or worstCount != len(worst.x[i]._all())):
+        arr.append(Discretization(at=x.at, name=x.name, lo=x.mid(), hi=x.hi, best= bestCount, rest=worstCount, first = False, last = True))
+    else:
+      for good, bad in zip(best.x, worst.x):
+        for d in good.discretize(good, bad):
+          arr.append(d)
+  return arr;</code></pre>
 </details>
 </dd>
 <dt id="src.py.sample.Sample.clone"><code class="name flex">
@@ -1121,6 +1203,7 @@ klass = klass value</p></div>
 <ul class="two-column">
 <li><code><a title="src.py.sample.Sample.add" href="#src.py.sample.Sample.add">add</a></code></li>
 <li><code><a title="src.py.sample.Sample.better" href="#src.py.sample.Sample.better">better</a></code></li>
+<li><code><a title="src.py.sample.Sample.binaryChops" href="#src.py.sample.Sample.binaryChops">binaryChops</a></code></li>
 <li><code><a title="src.py.sample.Sample.clone" href="#src.py.sample.Sample.clone">clone</a></code></li>
 <li><code><a title="src.py.sample.Sample.data" href="#src.py.sample.Sample.data">data</a></code></li>
 <li><code><a title="src.py.sample.Sample.discretize" href="#src.py.sample.Sample.discretize">discretize</a></code></li>

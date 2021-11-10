@@ -47,9 +47,9 @@ class Prune:
                 if branch1.disc and branch2.disc: 
                     if branch1.typ == branch2.typ and branch1.disc.name == branch2.disc.name and (branch1.disc.first == branch2.disc.first or branch1.disc.last == branch2.disc.last):
                         if branch1.disc.lo != branch1.disc.hi and branch2.disc.lo != branch2.disc.hi:
-                            print()
-                            print(str(branch1))
-                            print(str(branch2))
+                            #print()
+                            #print(str(branch1)) #prints are used to visualize the comparison of branches
+                            #print(str(branch2))
                     
                             for z in branch2.leaf.rows:
                                 branch1.leaf.add(z)
@@ -64,8 +64,8 @@ class Prune:
 
                             tree.pop(j)
                             #need to update the levels 
-                            print(str(tree[i]))
-                            print()
+                            #print(str(tree[i]))
+                            #print()
                             i-=1
                 i+=1            
         

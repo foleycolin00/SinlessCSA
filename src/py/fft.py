@@ -31,7 +31,7 @@ class Fft():
     self.FFThelper(sample, sample, [], level)
 
     #prune here as an option
-    if prune:
+    if Config.PRUNETREES:
       Prune.pruneBranches(self.trees)
 
     self.best = self.getBest()

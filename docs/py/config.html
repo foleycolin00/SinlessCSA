@@ -33,8 +33,15 @@ import math
 Class for all of the configurations/hyperparameters
 &#39;&#39;&#39;
 class Config:
+  #dataSet = &#34;/data/auto93.csv&#34;
+  #dataSet = &#34;/data/pom3a.csv&#34;
+  
+  dataSet = &#34;/data/heart_cleveland_upload.csv&#34;
+  #dataSet = &#34;/data/change_job.csv&#34;
+  #dataSet = &#34;/data/credit_card_leads.csv&#34;
+  
   #Time
-  DISCLESS = False
+  DISCLESS = True
   SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
@@ -129,8 +136,15 @@ class Config:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Config:
+  #dataSet = &#34;/data/auto93.csv&#34;
+  #dataSet = &#34;/data/pom3a.csv&#34;
+  
+  dataSet = &#34;/data/heart_cleveland_upload.csv&#34;
+  #dataSet = &#34;/data/change_job.csv&#34;
+  #dataSet = &#34;/data/credit_card_leads.csv&#34;
+  
   #Time
-  DISCLESS = False
+  DISCLESS = True
   SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
@@ -272,6 +286,10 @@ class Config:
 <div class="desc"></div>
 </dd>
 <dt id="src.py.config.Config.bins_range"><code class="name">var <span class="ident">bins_range</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.dataSet"><code class="name">var <span class="ident">dataSet</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -442,6 +460,7 @@ class Config:
 <li><code><a title="src.py.config.Config.SpillPercent" href="#src.py.config.Config.SpillPercent">SpillPercent</a></code></li>
 <li><code><a title="src.py.config.Config.bins" href="#src.py.config.Config.bins">bins</a></code></li>
 <li><code><a title="src.py.config.Config.bins_range" href="#src.py.config.Config.bins_range">bins_range</a></code></li>
+<li><code><a title="src.py.config.Config.dataSet" href="#src.py.config.Config.dataSet">dataSet</a></code></li>
 <li><code><a title="src.py.config.Config.enough" href="#src.py.config.Config.enough">enough</a></code></li>
 <li><code><a title="src.py.config.Config.enough_range" href="#src.py.config.Config.enough_range">enough_range</a></code></li>
 <li><code><a title="src.py.config.Config.far" href="#src.py.config.Config.far">far</a></code></li>

@@ -13,7 +13,7 @@ class Config:
   #dataSet = "/data/credit_card_leads.csv"
   
   #Time
-  DISCLESS = True
+  DISCLESS = False
   SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
@@ -25,6 +25,7 @@ class Config:
   #Explainability
   BINARYCHOPS = False
   PRUNETREES = False
+  COMPACTPRINT = True
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections

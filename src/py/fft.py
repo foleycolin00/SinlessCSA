@@ -4,6 +4,7 @@ from copy import deepcopy
 from branch import *
 from sample import *
 from prune import *
+from compact import *
 
 '''
 Class for Fast and Frugal Tree
@@ -33,6 +34,9 @@ class Fft():
     #prune here as an option
     if Config.PRUNETREES:
       Prune.pruneBranches(self.trees)
+
+    if Config.COMPACTPRINT:
+      Compact.printCompact(self.trees) 
 
     self.best = self.getBest()
     self.bestPath = self.getBestPath()

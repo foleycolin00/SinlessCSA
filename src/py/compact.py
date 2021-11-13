@@ -1,6 +1,4 @@
 from branch import * 
-from discretization import *
-import numpy as np
 
 '''
 Class that handles compact printing 

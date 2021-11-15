@@ -82,6 +82,13 @@ class Fft():
       i = 0
       for row in remaining.rows:
         if Config.BASEBALLTREES:
+          if not idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
+            tree.add(row)
+          
+          if Config.SPILLTREES and idea.closeMatches(row, sample.cols):
+            gStrikes.append(gStrikes[i])
+            bStrikes.append(bStrikes[i])
+        
           if idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
             if yes:
               gStrikes[i]+=1
@@ -94,10 +101,7 @@ class Fft():
               leaf.add(row)
               i-=1
             else:
-              tree.add(row)
-              
-          if not idea.matches(row) or (Config.SPILLTREES and idea.closeMatches(row, sample.cols)):
-            tree.add(row)
+              tree.add(row)         
         else:
           if idea.matches(row):
             leaf.add(row)
@@ -203,7 +207,6 @@ class Fft():
     bestString = f"{self.best}"
     #Get the best string with out the N+ row
     bestString = bestString[:bestString.rfind(',')]+"]"
-    print(bestString)
     bestPath = ""
       
     i = 0

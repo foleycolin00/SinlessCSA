@@ -34,7 +34,6 @@ if Config.verbose:
 print(fft.best)
 print(fft.bestPath)'''
 
-print("\n\n\n--------------ACCURACY------------")
 treesSort = []
 for f in fft.trees:
   #Get accuracy for each tree
@@ -59,9 +58,9 @@ for f in fft.trees:
           #False
           else:
             if result == 1:
-              FP+=1
-            if result == 0:
               FN+=1
+            if result == 0:
+              FP+=1
           break;
           break;
   treesSort.append([f, TP, TN, FP, FN])
@@ -74,6 +73,7 @@ chosenTree = treesSort[-1]
 if Config.verbose:
   for b in f:
     print(str(b))
+print("\n\n\n--------------ACCURACY------------")
 #Accuracy = TP+TN / TP+TN+FP+FN
 print((chosenTree[1]+chosenTree[2])/(chosenTree[1]+chosenTree[2]+chosenTree[3]+chosenTree[4]))
 

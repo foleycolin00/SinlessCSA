@@ -17,15 +17,17 @@ class Config:
   SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
-  BASEBALLTREES = False
+  BASEBALLTREES = True
   BaseballStrikes = 2
   BaseballFFTLength = 10
-  SPILLTREES = False
+  SPILLTREES = True
   SpillPercent = .01
   #Explainability
   BINARYCHOPS = False
   PRUNETREES = False
-  COMPACTPRINT = True
+  
+  
+  COMPACTPRINT = False
 
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
@@ -38,7 +40,7 @@ class Config:
   samples = 128         #number of neighbors to explore
   support = 2           #support for discretization scoring a range for sort
   
-  verbose = True        #Set verbose
+  verbose = False        #Set verbose
   Round = 2
   
   #Min, Max(inclusive), Step

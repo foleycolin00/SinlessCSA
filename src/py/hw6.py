@@ -18,7 +18,7 @@ s.fromFile(myPath + Config.dataSet)
 prevVerbose = Config.verbose
 
 Config.verbose = False
-fft = Fft(s, prune = True)
+fft = Fft(s)
 Config.verbose = prevVerbose
 
 if Config.verbose:

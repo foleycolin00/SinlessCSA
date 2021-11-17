@@ -8,19 +8,22 @@ class Config:
   #dataSet = "/data/auto93.csv"
   #dataSet = "/data/pom3a.csv"
   
-  dataSet = "/data/heart_cleveland_upload.csv"
-  #dataSet = "/data/change_job.csv"
-  #dataSet = "/data/credit_card_leads.csv"
+  #dataSet = "/data/heart_cleveland_upload.csv"
+  #dataSet = "/data/pima-indians-diabetes.csv"
+  #dataSet = "/data/sonar.csv"
+  #dataSet = "/data/chronic_kidney_disease.csv"
+  #dataSet = "/data/occupancy.csv"
+  dataSet = "/data/riceGrains.csv"
   
   #Time
   DISCLESS = False
   SHORTTREES = False
   ShortTreesNum = 5
   #Impermanence
-  BASEBALLTREES = True
+  BASEBALLTREES = False
   BaseballStrikes = 2
   BaseballFFTLength = 10
-  SPILLTREES = True
+  SPILLTREES = False
   SpillPercent = .01
   #Explainability
   BINARYCHOPS = False

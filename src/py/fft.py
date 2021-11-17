@@ -20,7 +20,7 @@ class Fft():
   :param stop: the stop parameter
   :param level: the level of the tree
   '''
-  def __init__(self, sample, level=0, prune = False):
+  def __init__(self, sample, level=0):
     self.sample = sample
     self.trees = [] # the branches
     self.leaves =  [] # the leaves

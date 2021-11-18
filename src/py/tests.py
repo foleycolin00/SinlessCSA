@@ -86,6 +86,8 @@ if len(sys.argv) > 1:
     chosenDataset = int(sys.argv[1])
     Config.dataSet = Config.dataSets[chosenDataset]
     print(Config.dataSet)
+  except BaseException:
+    print("error")
 
 if len(sys.argv) > 2:
   chosenImprovements = sys.argv[2]

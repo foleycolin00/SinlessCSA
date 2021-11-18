@@ -89,6 +89,8 @@ if len(sys.argv) > 1:
     chosenDataset = int(sys.argv[1])
     Config.dataSet = Config.dataSets[chosenDataset]
     print(Config.dataSet)
+  except BaseException:
+    print("error")
 
 csvOutputHeader = ["Dataset " + sys.argv[1], "Mean", "Median", "StDev", "25th", "75th", "Min", "Max", "T Test"]
 csvOutputTime = [["Time"]]

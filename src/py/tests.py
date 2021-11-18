@@ -138,8 +138,10 @@ for i in range(0, 5):
     inputs.append(params)
 outputs = pool.map(runParallelTest, inputs)
 
+print("\n--------------Time------------")
+print((time.time() - startTime)/25)
 
-print("\n\n\n--------------ACCURACY------------")
+print("\n--------------ACCURACY------------")
 print(sum(map(lambda x: x[0], outputs))/25)
 
 print("\n--------------PRECISION------------")
@@ -150,6 +152,3 @@ print(sum(map(lambda x: x[2], outputs))/25)
 
 print("\n--------------RECALL------------")
 print(sum(map(lambda x: x[3], outputs))/25)
-
-print("\n--------------Time------------")
-print((time.time() - startTime)/25)

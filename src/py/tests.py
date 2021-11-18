@@ -82,9 +82,10 @@ def runParallelTest(params):
 
 #Set the arguments
 if len(sys.argv) > 1:
-  chosenDataset = int(sys.argv[1])
-  Config.dataSet = Config.dataSets[chosenDataset]
-  print(Config.dataSet)
+  try:
+    chosenDataset = int(sys.argv[1])
+    Config.dataSet = Config.dataSets[chosenDataset]
+    print(Config.dataSet)
 
 if len(sys.argv) > 2:
   chosenImprovements = sys.argv[2]

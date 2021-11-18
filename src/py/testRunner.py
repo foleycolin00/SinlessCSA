@@ -85,9 +85,10 @@ def runParallelTest(params):
 
 #Set the arguments
 if len(sys.argv) > 1:
-  chosenDataset = int(sys.argv[1])
-  Config.dataSet = Config.dataSets[chosenDataset]
-  print(Config.dataSet)
+  try:
+    chosenDataset = int(sys.argv[1])
+    Config.dataSet = Config.dataSets[chosenDataset]
+    print(Config.dataSet)
 
 csvOutputHeader = ["Dataset " + sys.argv[1], "Mean", "Median", "StDev", "25th", "75th", "Min", "Max", "T Test"]
 csvOutputTime = [["Time"]]

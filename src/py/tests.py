@@ -90,15 +90,16 @@ if len(sys.argv) > 1:
     print("error")
 
 if len(sys.argv) > 2:
-  chosenImprovements = sys.argv[2]
-  Config.DISCLESS = False if chosenImprovements[0] == '0' else True
-  Config.SHORTTREES = False if chosenImprovements[1] == '0' else True
-  Config.BASEBALLTREES = False if chosenImprovements[2] == '0' else True
-  Config.SPILLTREES = False if chosenImprovements[3] == '0' else True
-  Config.BINARYCHOPS = False if chosenImprovements[4] == '0' else True
-  Config.PRUNETREES = False if chosenImprovements[5] == '0' else True
-      
-
+  try:
+    chosenImprovements = sys.argv[2]
+    Config.DISCLESS = False if chosenImprovements[0] == '0' else True
+    Config.SHORTTREES = False if chosenImprovements[1] == '0' else True
+    Config.BASEBALLTREES = False if chosenImprovements[2] == '0' else True
+    Config.SPILLTREES = False if chosenImprovements[3] == '0' else True
+    Config.BINARYCHOPS = False if chosenImprovements[4] == '0' else True
+    Config.PRUNETREES = False if chosenImprovements[5] == '0' else True
+  except BaseException:
+    print("error")
 
 startTime = time.time()
 

@@ -7,6 +7,7 @@ from fft import Fft
 from prune import * 
 import math
 import multiprocessing
+import sys
 
 def runParallelTest(params):
   header = params[0]
@@ -78,6 +79,22 @@ def runParallelTest(params):
     accuracy = (TP+TN) / (TP+TN+FP+FN)
     calculatedTime = time.time() - startTime
     return [accuracy, 0, 0, 0]
+
+#Set the arguments
+if len(sys.argv) > 1:
+  chosenDataset = int(sys.argv[1])
+  Config.dataSet = Config.dataSets[chosenDataset]
+  print(Config.dataSet)
+
+if len(sys.argv) > 2:
+  chosenImprovements = sys.argv[2]
+  Config.DISCLESS = False if chosenImprovements[0] == '0' else True
+  Config.SHORTTREES = False if chosenImprovements[1] == '0' else True
+  Config.BASEBALLTREES = False if chosenImprovements[2] == '0' else True
+  Config.SPILLTREES = False if chosenImprovements[3] == '0' else True
+  Config.BINARYCHOPS = False if chosenImprovements[4] == '0' else True
+  Config.PRUNETREES = False if chosenImprovements[5] == '0' else True
+      
 
 
 startTime = time.time()

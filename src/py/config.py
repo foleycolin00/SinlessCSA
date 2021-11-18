@@ -8,6 +8,8 @@ class Config:
   #dataSet = "/data/auto93.csv"
   #dataSet = "/data/pom3a.csv"
   
+  dataSets = ["/data/heart_cleveland_upload.csv", "/data/pima-indians-diabetes.csv", "/data/sonar.csv", "/data/chronic_kidney_disease.csv", "/data/occupancy.csv", "/data/riceGrains.csv"]
+  
   #dataSet = "/data/heart_cleveland_upload.csv"
   #dataSet = "/data/pima-indians-diabetes.csv"
   #dataSet = "/data/sonar.csv"
@@ -24,7 +26,7 @@ class Config:
   BaseballStrikes = 2
   BaseballFFTLength = 10
   SPILLTREES = False
-  SpillPercent = .01
+  SpillPercent = .10
   #Explainability
   BINARYCHOPS = False
   PRUNETREES = False

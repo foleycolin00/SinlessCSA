@@ -8,12 +8,12 @@ class Config:
   #dataSet = "/data/auto93.csv"
   #dataSet = "/data/pom3a.csv"
   
-  dataSets = ["/data/heart_cleveland_upload.csv", "/data/pima-indians-diabetes.csv", "/data/sonar.csv", "/data/musk.csv", "/data/occupancy.csv", "/data/riceGrains.csv"]
+  dataSets = ["/data/heart_cleveland_upload.csv", "/data/pima-indians-diabetes.csv", "/data/sonar.csv", "/data/breast-cancer-wisconsin.csv", "/data/occupancy.csv", "/data/riceGrains.csv"]
   
   #dataSet = "/data/heart_cleveland_upload.csv"
   #dataSet = "/data/pima-indians-diabetes.csv"
   #dataSet = "/data/sonar.csv"
-  #dataSet = "/data/musk.csv"
+  #dataSet = "/data/breast-cancer-wisconsin.csv"
   #dataSet = "/data/occupancy.csv"
   dataSet = "/data/riceGrains.csv"
   

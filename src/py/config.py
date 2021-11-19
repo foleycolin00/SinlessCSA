@@ -15,7 +15,7 @@ class Config:
   #dataSet = "/data/sonar.csv"
   #dataSet = "/data/breast-cancer-wisconsin.csv"
   #dataSet = "/data/occupancy.csv"
-  dataSet = "/data/riceGrains.csv"
+  #dataSet = "/data/riceGrains.csv"
   
   #Time
   DISCLESS = False

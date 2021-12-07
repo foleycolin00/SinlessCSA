@@ -32,7 +32,7 @@ if (NEWHYPER):
     #Config.verbose = False
     branch=[]
     try:
-      fft = Fft(s, s, branch)
+      fft = Fft(s)
     except:
       print("ERROR")
       continue
@@ -57,7 +57,7 @@ print(s2.names)
 
 Config.verbose = False
 branch=[]
-fft = Fft(s2, s2, branch)
+fft = Fft(s2)
 Config.verbose = True
 
 #The final, final value

@@ -33,19 +33,43 @@ import math
 Class for all of the configurations/hyperparameters
 &#39;&#39;&#39;
 class Config:
+  #dataSet = &#34;/data/auto93.csv&#34;
+  #dataSet = &#34;/data/pom3a.csv&#34;
+  
+  dataSet = &#34;/data/heart_cleveland_upload.csv&#34;
+  #dataSet = &#34;/data/change_job.csv&#34;
+  #dataSet = &#34;/data/credit_card_leads.csv&#34;
+  
+  #Time
+  DISCLESS = False
+  SHORTTREES = False
+  ShortTreesNum = 5
+  #Impermanence
+  BASEBALLTREES = True
+  BaseballStrikes = 2
+  BaseballFFTLength = 10
+  SPILLTREES = True
+  SpillPercent = .01
+  #Explainability
+  BINARYCHOPS = False
+  PRUNETREES = False
+  
+  
+  COMPACTPRINT = False
+
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
   far = .9              #Where to look for far things
   FFTstop = .5          #Minimum size of the last leaf in FFT, calculated by n**FFTstop
   FFTLength = 5         #FFT Length
-  FFTType = &#39;11110&#39;     #Type of tree used for FFT
   iota = .3             #Minimum break span for discretization = sd * iota
   mergeVariance = .95   #Max variance needed to merge for discretization
   p = 2                 #Distance calculation exponent for rows
   samples = 128         #number of neighbors to explore
   support = 2           #support for discretization scoring a range for sort
   
-  verbose = True        #Set verbose
+  verbose = False        #Set verbose
+  Round = 2
   
   #Min, Max(inclusive), Step
   bins_range = [0.1, .9, .1]
@@ -60,41 +84,33 @@ class Config:
   support_range = [2, 10, 1]
   
   def generate(v):
-    if v == &#39;FFTType&#39;:
-      #Create the FFTType from the length
-      fft = &#34;&#34;
-      for i in range(int(Config.FFTLength) - 1):
-        fft+= random.choice([&#39;0&#39;, &#39;1&#39;])
-      fft += str(abs(int(fft[-1])-1))
-      setattr(Config, v, fft)
+    #Get the range of the attr
+    ranges = getattr(Config, v + &#39;_range&#39;)
+    
+    #Create the range of choices
+    choices = np.arange(ranges[0], ranges[1], ranges[2])
+    choices = np.append(choices, ranges[1])
+    
+    #Round to near values
+    if isinstance(ranges[2], int):
+      choices = choices.astype(int)
     else:
-      #Get the range of the attr
-      ranges = getattr(Config, v + &#39;_range&#39;)
-      
-      #Create the range of choices
-      choices = np.arange(ranges[0], ranges[1], ranges[2])
+      choices = np.around(choices, 2)
+    
+    if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
       choices = np.append(choices, ranges[1])
-      
-      #Round to near values
-      if isinstance(ranges[2], int):
-        choices = choices.astype(int)
-      else:
-        choices = np.around(choices, 2)
-      
-      if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
-        choices = np.append(choices, ranges[1])
-      
-      #Set the attribute
-      setattr(Config, v, random.choice(choices))
+    
+    #Set the attribute
+    setattr(Config, v, random.choice(choices))
       
     if Config.verbose:
       print(f&#34;{v}: {getattr(Config, v)}&#34;)
   
-  def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+  def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
     for v in variables:
       Config.generate(v)
   
-  def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+  def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
     arr = []
     line = []
     for v in variables:
@@ -123,19 +139,43 @@ class Config:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Config:
+  #dataSet = &#34;/data/auto93.csv&#34;
+  #dataSet = &#34;/data/pom3a.csv&#34;
+  
+  dataSet = &#34;/data/heart_cleveland_upload.csv&#34;
+  #dataSet = &#34;/data/change_job.csv&#34;
+  #dataSet = &#34;/data/credit_card_leads.csv&#34;
+  
+  #Time
+  DISCLESS = False
+  SHORTTREES = False
+  ShortTreesNum = 5
+  #Impermanence
+  BASEBALLTREES = True
+  BaseballStrikes = 2
+  BaseballFFTLength = 10
+  SPILLTREES = True
+  SpillPercent = .01
+  #Explainability
+  BINARYCHOPS = False
+  PRUNETREES = False
+  
+  
+  COMPACTPRINT = False
+
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
   far = .9              #Where to look for far things
   FFTstop = .5          #Minimum size of the last leaf in FFT, calculated by n**FFTstop
   FFTLength = 5         #FFT Length
-  FFTType = &#39;11110&#39;     #Type of tree used for FFT
   iota = .3             #Minimum break span for discretization = sd * iota
   mergeVariance = .95   #Max variance needed to merge for discretization
   p = 2                 #Distance calculation exponent for rows
   samples = 128         #number of neighbors to explore
   support = 2           #support for discretization scoring a range for sort
   
-  verbose = True        #Set verbose
+  verbose = False        #Set verbose
+  Round = 2
   
   #Min, Max(inclusive), Step
   bins_range = [0.1, .9, .1]
@@ -150,41 +190,33 @@ class Config:
   support_range = [2, 10, 1]
   
   def generate(v):
-    if v == &#39;FFTType&#39;:
-      #Create the FFTType from the length
-      fft = &#34;&#34;
-      for i in range(int(Config.FFTLength) - 1):
-        fft+= random.choice([&#39;0&#39;, &#39;1&#39;])
-      fft += str(abs(int(fft[-1])-1))
-      setattr(Config, v, fft)
+    #Get the range of the attr
+    ranges = getattr(Config, v + &#39;_range&#39;)
+    
+    #Create the range of choices
+    choices = np.arange(ranges[0], ranges[1], ranges[2])
+    choices = np.append(choices, ranges[1])
+    
+    #Round to near values
+    if isinstance(ranges[2], int):
+      choices = choices.astype(int)
     else:
-      #Get the range of the attr
-      ranges = getattr(Config, v + &#39;_range&#39;)
-      
-      #Create the range of choices
-      choices = np.arange(ranges[0], ranges[1], ranges[2])
+      choices = np.around(choices, 2)
+    
+    if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
       choices = np.append(choices, ranges[1])
-      
-      #Round to near values
-      if isinstance(ranges[2], int):
-        choices = choices.astype(int)
-      else:
-        choices = np.around(choices, 2)
-      
-      if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
-        choices = np.append(choices, ranges[1])
-      
-      #Set the attribute
-      setattr(Config, v, random.choice(choices))
+    
+    #Set the attribute
+    setattr(Config, v, random.choice(choices))
       
     if Config.verbose:
       print(f&#34;{v}: {getattr(Config, v)}&#34;)
   
-  def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+  def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
     for v in variables:
       Config.generate(v)
   
-  def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+  def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
     arr = []
     line = []
     for v in variables:
@@ -195,15 +227,35 @@ class Config:
 </details>
 <h3>Class variables</h3>
 <dl>
+<dt id="src.py.config.Config.BASEBALLTREES"><code class="name">var <span class="ident">BASEBALLTREES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.BINARYCHOPS"><code class="name">var <span class="ident">BINARYCHOPS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.BaseballFFTLength"><code class="name">var <span class="ident">BaseballFFTLength</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.BaseballStrikes"><code class="name">var <span class="ident">BaseballStrikes</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.COMPACTPRINT"><code class="name">var <span class="ident">COMPACTPRINT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.DISCLESS"><code class="name">var <span class="ident">DISCLESS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.py.config.Config.FFTLength"><code class="name">var <span class="ident">FFTLength</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="src.py.config.Config.FFTLength_range"><code class="name">var <span class="ident">FFTLength_range</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="src.py.config.Config.FFTType"><code class="name">var <span class="ident">FFTType</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -215,11 +267,39 @@ class Config:
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="src.py.config.Config.PRUNETREES"><code class="name">var <span class="ident">PRUNETREES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.Round"><code class="name">var <span class="ident">Round</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.SHORTTREES"><code class="name">var <span class="ident">SHORTTREES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.SPILLTREES"><code class="name">var <span class="ident">SPILLTREES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.ShortTreesNum"><code class="name">var <span class="ident">ShortTreesNum</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.SpillPercent"><code class="name">var <span class="ident">SpillPercent</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="src.py.config.Config.bins"><code class="name">var <span class="ident">bins</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 <dt id="src.py.config.Config.bins_range"><code class="name">var <span class="ident">bins_range</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="src.py.config.Config.dataSet"><code class="name">var <span class="ident">dataSet</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -296,39 +376,31 @@ class Config:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def generate(v):
-  if v == &#39;FFTType&#39;:
-    #Create the FFTType from the length
-    fft = &#34;&#34;
-    for i in range(int(Config.FFTLength) - 1):
-      fft+= random.choice([&#39;0&#39;, &#39;1&#39;])
-    fft += str(abs(int(fft[-1])-1))
-    setattr(Config, v, fft)
+  #Get the range of the attr
+  ranges = getattr(Config, v + &#39;_range&#39;)
+  
+  #Create the range of choices
+  choices = np.arange(ranges[0], ranges[1], ranges[2])
+  choices = np.append(choices, ranges[1])
+  
+  #Round to near values
+  if isinstance(ranges[2], int):
+    choices = choices.astype(int)
   else:
-    #Get the range of the attr
-    ranges = getattr(Config, v + &#39;_range&#39;)
-    
-    #Create the range of choices
-    choices = np.arange(ranges[0], ranges[1], ranges[2])
+    choices = np.around(choices, 2)
+  
+  if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
     choices = np.append(choices, ranges[1])
-    
-    #Round to near values
-    if isinstance(ranges[2], int):
-      choices = choices.astype(int)
-    else:
-      choices = np.around(choices, 2)
-    
-    if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
-      choices = np.append(choices, ranges[1])
-    
-    #Set the attribute
-    setattr(Config, v, random.choice(choices))
+  
+  #Set the attribute
+  setattr(Config, v, random.choice(choices))
     
   if Config.verbose:
     print(f&#34;{v}: {getattr(Config, v)}&#34;)</code></pre>
 </details>
 </dd>
 <dt id="src.py.config.Config.generateAll"><code class="name flex">
-<span>def <span class="ident">generateAll</span></span>(<span>variables=['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support'])</span>
+<span>def <span class="ident">generateAll</span></span>(<span>variables=['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'iota', 'mergeVariance', 'p', 'samples', 'support'])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -336,13 +408,13 @@ class Config:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+<pre><code class="python">def generateAll(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
   for v in variables:
     Config.generate(v)</code></pre>
 </details>
 </dd>
 <dt id="src.py.config.Config.getAsArray"><code class="name flex">
-<span>def <span class="ident">getAsArray</span></span>(<span>variables=['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support'])</span>
+<span>def <span class="ident">getAsArray</span></span>(<span>variables=['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'iota', 'mergeVariance', 'p', 'samples', 'support'])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -350,7 +422,7 @@ class Config:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;FFTType&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
+<pre><code class="python">def getAsArray(variables = [&#39;bins&#39;, &#39;enough&#39;, &#39;far&#39;, &#39;FFTstop&#39;, &#39;FFTLength&#39;, &#39;iota&#39;, &#39;mergeVariance&#39;, &#39;p&#39;, &#39;samples&#39;, &#39;support&#39;]):
   arr = []
   line = []
   for v in variables:
@@ -381,13 +453,25 @@ class Config:
 <li>
 <h4><code><a title="src.py.config.Config" href="#src.py.config.Config">Config</a></code></h4>
 <ul class="two-column">
+<li><code><a title="src.py.config.Config.BASEBALLTREES" href="#src.py.config.Config.BASEBALLTREES">BASEBALLTREES</a></code></li>
+<li><code><a title="src.py.config.Config.BINARYCHOPS" href="#src.py.config.Config.BINARYCHOPS">BINARYCHOPS</a></code></li>
+<li><code><a title="src.py.config.Config.BaseballFFTLength" href="#src.py.config.Config.BaseballFFTLength">BaseballFFTLength</a></code></li>
+<li><code><a title="src.py.config.Config.BaseballStrikes" href="#src.py.config.Config.BaseballStrikes">BaseballStrikes</a></code></li>
+<li><code><a title="src.py.config.Config.COMPACTPRINT" href="#src.py.config.Config.COMPACTPRINT">COMPACTPRINT</a></code></li>
+<li><code><a title="src.py.config.Config.DISCLESS" href="#src.py.config.Config.DISCLESS">DISCLESS</a></code></li>
 <li><code><a title="src.py.config.Config.FFTLength" href="#src.py.config.Config.FFTLength">FFTLength</a></code></li>
 <li><code><a title="src.py.config.Config.FFTLength_range" href="#src.py.config.Config.FFTLength_range">FFTLength_range</a></code></li>
-<li><code><a title="src.py.config.Config.FFTType" href="#src.py.config.Config.FFTType">FFTType</a></code></li>
 <li><code><a title="src.py.config.Config.FFTstop" href="#src.py.config.Config.FFTstop">FFTstop</a></code></li>
 <li><code><a title="src.py.config.Config.FFTstop_range" href="#src.py.config.Config.FFTstop_range">FFTstop_range</a></code></li>
+<li><code><a title="src.py.config.Config.PRUNETREES" href="#src.py.config.Config.PRUNETREES">PRUNETREES</a></code></li>
+<li><code><a title="src.py.config.Config.Round" href="#src.py.config.Config.Round">Round</a></code></li>
+<li><code><a title="src.py.config.Config.SHORTTREES" href="#src.py.config.Config.SHORTTREES">SHORTTREES</a></code></li>
+<li><code><a title="src.py.config.Config.SPILLTREES" href="#src.py.config.Config.SPILLTREES">SPILLTREES</a></code></li>
+<li><code><a title="src.py.config.Config.ShortTreesNum" href="#src.py.config.Config.ShortTreesNum">ShortTreesNum</a></code></li>
+<li><code><a title="src.py.config.Config.SpillPercent" href="#src.py.config.Config.SpillPercent">SpillPercent</a></code></li>
 <li><code><a title="src.py.config.Config.bins" href="#src.py.config.Config.bins">bins</a></code></li>
 <li><code><a title="src.py.config.Config.bins_range" href="#src.py.config.Config.bins_range">bins_range</a></code></li>
+<li><code><a title="src.py.config.Config.dataSet" href="#src.py.config.Config.dataSet">dataSet</a></code></li>
 <li><code><a title="src.py.config.Config.enough" href="#src.py.config.Config.enough">enough</a></code></li>
 <li><code><a title="src.py.config.Config.enough_range" href="#src.py.config.Config.enough_range">enough_range</a></code></li>
 <li><code><a title="src.py.config.Config.far" href="#src.py.config.Config.far">far</a></code></li>

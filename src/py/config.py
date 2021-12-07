@@ -5,19 +5,48 @@ import math
 Class for all of the configurations/hyperparameters
 '''
 class Config:
+  #dataSet = "/data/auto93.csv"
+  #dataSet = "/data/pom3a.csv"
+  
+  dataSets = ["/data/heart_cleveland_upload.csv", "/data/pima-indians-diabetes.csv", "/data/sonar.csv", "/data/breast-cancer-wisconsin.csv", "/data/occupancy.csv", "/data/riceGrains.csv"]
+  
+  #dataSet = "/data/heart_cleveland_upload.csv"
+  #dataSet = "/data/pima-indians-diabetes.csv"
+  #dataSet = "/data/sonar.csv"
+  #dataSet = "/data/breast-cancer-wisconsin.csv"
+  #dataSet = "/data/occupancy.csv"
+  #dataSet = "/data/riceGrains.csv"
+  
+  #Time
+  DISCLESS = False
+  SHORTTREES = False
+  ShortTreesNum = 5
+  #Impermanence
+  BASEBALLTREES = False
+  BaseballStrikes = 2
+  BaseballFFTLength = 10
+  SPILLTREES = False
+  SpillPercent = .10
+  #Explainability
+  BINARYCHOPS = False
+  PRUNETREES = False
+  
+  
+  COMPACTPRINT = False
+
   bins =  .5            #Min bin size n**bins for discretize
   enough = .5           #Min size for divs creating creating leafs using gausian projections
   far = .9              #Where to look for far things
   FFTstop = .5          #Minimum size of the last leaf in FFT, calculated by n**FFTstop
   FFTLength = 5         #FFT Length
-  FFTType = '11110'     #Type of tree used for FFT
   iota = .3             #Minimum break span for discretization = sd * iota
   mergeVariance = .95   #Max variance needed to merge for discretization
   p = 2                 #Distance calculation exponent for rows
   samples = 128         #number of neighbors to explore
   support = 2           #support for discretization scoring a range for sort
   
-  verbose = True        #Set verbose
+  verbose = False        #Set verbose
+  Round = 2
   
   #Min, Max(inclusive), Step
   bins_range = [0.1, .9, .1]
@@ -32,41 +61,33 @@ class Config:
   support_range = [2, 10, 1]
   
   def generate(v):
-    if v == 'FFTType':
-      #Create the FFTType from the length
-      fft = ""
-      for i in range(int(Config.FFTLength) - 1):
-        fft+= random.choice(['0', '1'])
-      fft += str(abs(int(fft[-1])-1))
-      setattr(Config, v, fft)
+    #Get the range of the attr
+    ranges = getattr(Config, v + '_range')
+    
+    #Create the range of choices
+    choices = np.arange(ranges[0], ranges[1], ranges[2])
+    choices = np.append(choices, ranges[1])
+    
+    #Round to near values
+    if isinstance(ranges[2], int):
+      choices = choices.astype(int)
     else:
-      #Get the range of the attr
-      ranges = getattr(Config, v + '_range')
-      
-      #Create the range of choices
-      choices = np.arange(ranges[0], ranges[1], ranges[2])
+      choices = np.around(choices, 2)
+    
+    if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
       choices = np.append(choices, ranges[1])
-      
-      #Round to near values
-      if isinstance(ranges[2], int):
-        choices = choices.astype(int)
-      else:
-        choices = np.around(choices, 2)
-      
-      if ranges[1] / ranges[2] == math.floor(ranges[1] / ranges[2]):
-        choices = np.append(choices, ranges[1])
-      
-      #Set the attribute
-      setattr(Config, v, random.choice(choices))
+    
+    #Set the attribute
+    setattr(Config, v, random.choice(choices))
       
     if Config.verbose:
       print(f"{v}: {getattr(Config, v)}")
   
-  def generateAll(variables = ['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support']):
+  def generateAll(variables = ['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'iota', 'mergeVariance', 'p', 'samples', 'support']):
     for v in variables:
       Config.generate(v)
   
-  def getAsArray(variables = ['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'FFTType', 'iota', 'mergeVariance', 'p', 'samples', 'support']):
+  def getAsArray(variables = ['bins', 'enough', 'far', 'FFTstop', 'FFTLength', 'iota', 'mergeVariance', 'p', 'samples', 'support']):
     arr = []
     line = []
     for v in variables:
